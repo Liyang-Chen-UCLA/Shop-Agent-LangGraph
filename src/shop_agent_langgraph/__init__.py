@@ -3,18 +3,22 @@
 from .intent_agent import build_intent_agent, intent_agent
 from .models import IntentResult, RouteResult, TaxonomyNode
 from .route_agent import build_route_agent, route_agent
+from .supervisor import SupervisorState, build_supervisor_graph, supervisor
 
 __all__ = [
     "IntentResult",
     "RouteResult",
+    "SupervisorState",
     "TaxonomyNode",
     "build_intent_agent",
     "build_route_agent",
+    "build_supervisor_graph",
     "intent_agent",
     "route_agent",
+    "supervisor",
 ]
 
 
 def main() -> None:
     """Keep the package script useful without starting an interactive runtime."""
-    print("Import `intent_agent` or `route_agent` and call `.invoke(...)`.")
+    print("Import `supervisor` and call `supervisor.invoke(user_input)`.")

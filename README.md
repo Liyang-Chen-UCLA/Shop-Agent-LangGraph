@@ -26,3 +26,16 @@ result = intent_agent.invoke("预算改成 800，最好轻一点")
 
 It returns an `IntentResult` with `action`, `category`,
 `criteria_preferences`, and `attribute_preferences`.
+
+The user-facing supervisor runs intent analysis first on every turn and keeps
+conversation state isolated by `thread_id`:
+
+```python
+from shop_agent_langgraph import supervisor
+
+reply = supervisor.invoke("我想买机械键盘，预算 500", thread_id="user-1")
+print(reply)
+
+reply = supervisor.invoke("最好是无线的", thread_id="user-1")
+print(reply)
+```
