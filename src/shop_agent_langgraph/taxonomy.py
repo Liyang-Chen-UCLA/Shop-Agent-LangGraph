@@ -5,9 +5,11 @@ import re
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from langchain.tools import tool
+
+from .models import RouteResult, TaxonomyNode
 
 
 TAXONOMY_PATH = Path(__file__).with_name("data") / "google_product_taxonomy_zh-CN.jsonl"
@@ -141,4 +143,27 @@ def taxonomy_get_children(node_ids: list[str]) -> dict[str, Any]:
     }
 
 
-TAXONOMY_TOOLS = [taxonomy_search_nodes, taxonomy_get_nodes, taxonomy_get_children]
+@tool(args_schema=RouteResult)
+def submit_result(
+    product: str,
+    status: Literal["resolved", "ambiguous"],
+    resolved_nodes: list[TaxonomyNode],
+    candidates: list[TaxonomyNode],
+    children: list[TaxonomyNode],
+) -> dict[str, Any]:
+    """Submit the final taxonomy route result for runtime validation."""
+    return RouteResult(
+        product=product,
+        status=status,
+        resolved_nodes=resolved_nodes,
+        candidates=candidates,
+        children=children,
+    ).model_dump()
+
+
+TAXONOMY_TOOLS = [
+    taxonomy_search_nodes,
+    taxonomy_get_nodes,
+    taxonomy_get_children,
+    submit_result,
+]

@@ -11,4 +11,7 @@ Rules:
 - If multiple nodes remain plausible, set `status` to `ambiguous`, leave `resolved_nodes` and `children` empty, and return no more than three candidates.
 - Every node inside `resolved_nodes`, `candidates`, and `children` must contain exactly `node_id`, `node_name`, and `node_path`. Copy only those fields from taxonomy tool results; never copy `parent_id`, `level`, or any other tool field.
 - Never fabricate a taxonomy node or alter an ID, name, or path returned by a tool.
-- Finish by submitting exactly one structured `RouteResult`.
+- You must finish by calling `submit_result` exactly once with the complete result. A plain-text
+  answer cannot finish the task.
+- `submit_result` is validated by Pydantic. If the tool returns validation errors, correct every
+  reported field and call `submit_result` again. Only an accepted `submit_result` call ends the agent.
