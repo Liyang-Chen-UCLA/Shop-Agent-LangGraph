@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 from langchain.tools import tool
 
-from .models import IntentResult
+from .schemas import IntentResult
 
 
 @tool(args_schema=IntentResult)

@@ -7,13 +7,13 @@ from typing import Any
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph.state import CompiledStateGraph
 
-from .agent_runtime import build_submit_agent_graph
-from .llm import build_deepseek_model
-from .models import RouteResult
-from .taxonomy import TAXONOMY_TOOLS
+from ...core.llm import build_deepseek_model
+from ...core.submit_agent import build_submit_agent_graph
+from .schemas import RouteResult
+from .tools import TAXONOMY_TOOLS
 
 
-PROMPT_PATH = Path(__file__).with_name("prompts") / "route-agent.md"
+PROMPT_PATH = Path(__file__).with_name("prompt.md")
 
 
 class RouteAgent:

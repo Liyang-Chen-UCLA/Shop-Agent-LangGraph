@@ -1,0 +1,1 @@
+"""Pure shopping domain services."""

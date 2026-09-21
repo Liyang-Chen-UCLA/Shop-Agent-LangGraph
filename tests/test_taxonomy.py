@@ -1,4 +1,4 @@
-from shop_agent_langgraph.taxonomy import (
+from shop_agent_langgraph.agents.route.tools import (
     taxonomy_get_children,
     taxonomy_get_nodes,
     taxonomy_search_nodes,

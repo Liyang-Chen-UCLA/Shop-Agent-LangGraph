@@ -7,13 +7,13 @@ from typing import Any
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph.state import CompiledStateGraph
 
-from .agent_runtime import build_submit_agent_graph
-from .intent_tools import INTENT_TOOLS
-from .llm import build_deepseek_model
-from .models import IntentResult
+from ...core.llm import build_deepseek_model
+from ...core.submit_agent import build_submit_agent_graph
+from .schemas import IntentResult
+from .tools import INTENT_TOOLS
 
 
-PROMPT_PATH = Path(__file__).with_name("prompts") / "intent-agent.md"
+PROMPT_PATH = Path(__file__).with_name("prompt.md")
 
 
 class IntentAgent:

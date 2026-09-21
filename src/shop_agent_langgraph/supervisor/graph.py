@@ -2,31 +2,22 @@ from __future__ import annotations
 
 from pathlib import Path
 from threading import Lock
-from typing import Annotated, Any, Literal, TypedDict
+from typing import Any, Literal
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, AnyMessage, SystemMessage
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.graph import END, START, StateGraph, add_messages
+from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
-from .intent_agent import intent_agent
-from .llm import build_deepseek_model
-from .models import IntentResult, RouteResult
-from .route_agent import route_agent
+from ..agents.intent.graph import intent_agent
+from ..agents.route.graph import route_agent
+from ..agents.route.schemas import RouteResult
+from ..core.llm import build_deepseek_model
+from .state import SupervisorState
 
 
-PROMPT_PATH = Path(__file__).with_name("prompts") / "supervisor.md"
-
-
-class SupervisorState(TypedDict):
-    messages: Annotated[list[AnyMessage], add_messages]
-
-    # 本轮解析结果
-    intent: IntentResult | None
-
-    # taxonomy 路由状态
-    route: RouteResult | None
+PROMPT_PATH = Path(__file__).with_name("prompt.md")
 
 
 def build_supervisor_graph(

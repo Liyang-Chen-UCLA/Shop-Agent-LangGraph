@@ -1,8 +1,7 @@
 """LangGraph-based shopping agents."""
 
-from .intent_agent import build_intent_agent, intent_agent
-from .models import IntentResult, RouteResult, TaxonomyNode
-from .route_agent import build_route_agent, route_agent
+from .agents.intent import IntentResult, build_intent_agent, intent_agent
+from .agents.route import RouteResult, TaxonomyNode, build_route_agent, route_agent
 from .supervisor import SupervisorState, build_supervisor_graph, supervisor
 
 __all__ = [

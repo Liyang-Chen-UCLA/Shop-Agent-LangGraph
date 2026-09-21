@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 
-from .supervisor import supervisor
+from .supervisor.graph import supervisor
 
 
 EXIT_COMMANDS = {"exit", "quit", "/exit", "/quit", "退出"}

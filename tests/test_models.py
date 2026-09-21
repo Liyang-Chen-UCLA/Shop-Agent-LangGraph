@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from shop_agent_langgraph import RouteResult, TaxonomyNode
+from shop_agent_langgraph.agents.route.schemas import RouteResult, TaxonomyNode
 
 
 NODE = TaxonomyNode(node_id="1", node_name="测试", node_path="测试")

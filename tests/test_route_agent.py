@@ -1,7 +1,7 @@
 from typing import Any
 
-from shop_agent_langgraph.models import RouteResult
-from shop_agent_langgraph.route_agent import RouteAgent
+from shop_agent_langgraph.agents.route.graph import RouteAgent
+from shop_agent_langgraph.agents.route.schemas import RouteResult
 
 
 class StubGraph:
