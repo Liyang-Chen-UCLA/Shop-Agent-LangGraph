@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from typing import Annotated, Any, Literal, NotRequired, Sequence, TypedDict, TypeVar
 
 from langchain_core.language_models import BaseChatModel
@@ -27,6 +28,7 @@ def build_submit_agent_graph(
     result_schema: type[ResultT],
     submit_tool_name: str,
     name: str,
+    validate_submission: Callable[[ResultT], None] | None = None,
 ) -> CompiledStateGraph[Any, Any, Any, Any]:
     """Build a tool-loop graph that ends only after a valid submission call."""
     chat_model = model.bind_tools(tools)
@@ -52,8 +54,11 @@ def build_submit_agent_graph(
             if tool_name == submit_tool_name:
                 try:
                     submitted_result = result_schema.model_validate(arguments)
+                    if validate_submission is not None:
+                        validate_submission(submitted_result)
                     content = "Result accepted by runtime."
-                except ValidationError as exc:
+                except (ValidationError, ValueError) as exc:
+                    submitted_result = None
                     content = (
                         f"{submit_tool_name} was rejected by Pydantic validation. "
                         f"Fix every error and call {submit_tool_name} again.\n{exc}"

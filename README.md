@@ -28,7 +28,8 @@ It returns an `IntentResult` with `action`, `category`,
 `criteria_preferences`, and `attribute_preferences`.
 
 The user-facing supervisor runs intent analysis first on every turn and keeps
-conversation state isolated by `thread_id`:
+conversation state isolated by `thread_id`. For supported resolved taxonomy
+routes it also runs Market Agent before replying:
 
 ```python
 from shop_agent_langgraph import supervisor
@@ -62,3 +63,28 @@ langgraph dev
 ```
 
 Fill in `DEEPSEEK_API_KEY` and `LANGSMITH_API_KEY` in `.env` before starting.
+
+## Market analysis MVP
+
+Configure Tavily for Research Agent when external evidence is needed:
+
+```dotenv
+TAVILY_API_KEY=tvly-...
+```
+
+Run the complete asynchronous pipeline:
+
+```python
+import asyncio
+
+from shop_agent_langgraph import market_agent
+
+result = asyncio.run(market_agent.ainvoke("游戏手柄"))
+print(result.model_dump())
+```
+
+Market Agent searches local item IDs and chooses a sample, Research Agent
+extracts each selected product concurrently, and Eval Agent merges adjacent
+results 2-to-2 in parallel at every reduction layer. Global runtime limits are
+defined in `core/config.py`; the current market search and selection maximum is
+4 products.
