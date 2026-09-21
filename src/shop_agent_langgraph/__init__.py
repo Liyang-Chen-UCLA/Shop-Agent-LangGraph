@@ -20,5 +20,7 @@ __all__ = [
 
 
 def main() -> None:
-    """Keep the package script useful without starting an interactive runtime."""
-    print("Import `supervisor` and call `supervisor.invoke(user_input)`.")
+    """Start the interactive Supervisor CLI."""
+    from .cli import main as cli_main
+
+    cli_main()

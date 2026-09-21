@@ -39,3 +39,17 @@ print(reply)
 reply = supervisor.invoke("最好是无线的", thread_id="user-1")
 print(reply)
 ```
+
+Start a continuous terminal conversation with the Supervisor:
+
+```powershell
+uv run shop-agent-langgraph
+```
+
+Alternatively:
+
+```powershell
+uv run python -m shop_agent_langgraph --thread-id local-chat
+```
+
+Enter `exit`, `quit`, or `退出` to end the conversation.
