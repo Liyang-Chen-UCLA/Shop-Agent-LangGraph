@@ -8,7 +8,7 @@ class StubGraph:
     def invoke(self, state: dict[str, Any], config: Any = None, **kwargs: Any) -> dict[str, Any]:
         product = state["messages"][0]["content"]
         return {
-            "route_result": {
+            "submitted_result": {
                 "product": product,
                 "status": "ambiguous",
                 "resolved_nodes": [],

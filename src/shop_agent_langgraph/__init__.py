@@ -1,11 +1,20 @@
 """LangGraph-based shopping agents."""
 
-from .models import RouteResult, TaxonomyNode
+from .intent_agent import build_intent_agent, intent_agent
+from .models import IntentResult, RouteResult, TaxonomyNode
 from .route_agent import build_route_agent, route_agent
 
-__all__ = ["RouteResult", "TaxonomyNode", "build_route_agent", "route_agent"]
+__all__ = [
+    "IntentResult",
+    "RouteResult",
+    "TaxonomyNode",
+    "build_intent_agent",
+    "build_route_agent",
+    "intent_agent",
+    "route_agent",
+]
 
 
 def main() -> None:
     """Keep the package script useful without starting an interactive runtime."""
-    print("Import `route_agent` and call `route_agent.invoke(product)`.")
+    print("Import `intent_agent` or `route_agent` and call `.invoke(...)`.")

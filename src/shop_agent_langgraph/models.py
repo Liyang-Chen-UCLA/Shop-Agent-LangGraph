@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+
+
+NormalizedText = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class TaxonomyNode(BaseModel):
@@ -34,3 +37,14 @@ class RouteResult(BaseModel):
         elif self.resolved_nodes or self.children:
             raise ValueError("ambiguous results cannot contain resolved nodes or children")
         return self
+
+
+class IntentResult(BaseModel):
+    """Structured interpretation of one user shopping request."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    action: Literal["create", "update", "remove", "confirm", "switch", "query"]
+    category: NormalizedText | None
+    criteria_preferences: list[NormalizedText]
+    attribute_preferences: list[NormalizedText]
