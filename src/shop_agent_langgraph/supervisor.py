@@ -29,7 +29,11 @@ class SupervisorState(TypedDict):
     route: RouteResult | None
 
 
-def build_supervisor_graph(model: BaseChatModel | None = None) -> CompiledStateGraph[Any, Any, Any, Any]:
+def build_supervisor_graph(
+    model: BaseChatModel | None = None,
+    *,
+    checkpointer: Any = None,
+) -> CompiledStateGraph[Any, Any, Any, Any]:
     """Build the top-level conversational graph."""
     chat_model = model or build_deepseek_model()
     supervisor_prompt = SystemMessage(PROMPT_PATH.read_text(encoding="utf-8"))
@@ -81,7 +85,7 @@ def build_supervisor_graph(model: BaseChatModel | None = None) -> CompiledStateG
     )
     builder.add_edge("route_agent", "supervisor")
     builder.add_edge("supervisor", END)
-    return builder.compile(checkpointer=InMemorySaver(), name="supervisor")
+    return builder.compile(checkpointer=checkpointer, name="supervisor")
 
 
 class Supervisor:
@@ -152,7 +156,9 @@ class LazySupervisor:
         if self._instance is None:
             with self._lock:
                 if self._instance is None:
-                    self._instance = Supervisor(build_supervisor_graph())
+                    self._instance = Supervisor(
+                        build_supervisor_graph(checkpointer=InMemorySaver())
+                    )
         return self._instance
 
     def invoke(

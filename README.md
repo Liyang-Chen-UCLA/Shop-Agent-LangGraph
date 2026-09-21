@@ -53,3 +53,12 @@ uv run python -m shop_agent_langgraph --thread-id local-chat
 ```
 
 Enter `exit`, `quit`, or `退出` to end the conversation.
+
+For LangGraph Studio, copy the environment template and start the local server:
+
+```powershell
+Copy-Item .env.example .env
+langgraph dev
+```
+
+Fill in `DEEPSEEK_API_KEY` and `LANGSMITH_API_KEY` in `.env` before starting.
