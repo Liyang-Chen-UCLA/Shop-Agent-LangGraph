@@ -10,8 +10,10 @@ requires-python = ">=3.13"
 dependencies = [
     "langchain>=1.4.2",
     "langchain-openai>=1.0.0",
+    "langchain-tavily>=0.2.0",
     "langgraph>=1.2.11",
     "langgraph-cli[inmem]>=0.4.31",
+    "pyarrow>=25.0.1",
     "pydantic>=2.13.5",
 ]
 
