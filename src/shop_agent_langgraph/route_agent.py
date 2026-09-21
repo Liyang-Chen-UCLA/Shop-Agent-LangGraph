@@ -6,7 +6,6 @@ from threading import Lock
 from typing import Any
 
 from langchain.agents import create_agent
-from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langgraph.graph.state import CompiledStateGraph
@@ -23,10 +22,11 @@ def _deepseek_model() -> ChatOpenAI:
     if not api_key:
         raise RuntimeError("DEEPSEEK_API_KEY is not set")
     return ChatOpenAI(
-        model=os.getenv("DEEPSEEK_MODEL", "deepseek-chat"),
+        model=os.getenv("DEEPSEEK_MODEL", "deepseek-flash"),
         api_key=api_key,
         base_url=os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
         temperature=0,
+        profile={"structured_output": True},
     )
 
 
@@ -72,7 +72,7 @@ def build_route_agent(model: BaseChatModel | None = None) -> RouteAgent:
         model=model or _deepseek_model(),
         tools=TAXONOMY_TOOLS,
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
-        response_format=ToolStrategy(RouteResult),
+        response_format=RouteResult,
         name="route_agent",
     )
     return RouteAgent(graph)
