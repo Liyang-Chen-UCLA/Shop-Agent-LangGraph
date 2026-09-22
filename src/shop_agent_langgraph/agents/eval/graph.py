@@ -25,7 +25,7 @@ class EvalAgent:
             tools=[],
             system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
             response_format=ToolStrategy(EvalReport),
-            name="relation_agent",
+            name="eval_agent",
         )
 
     def _build_run(

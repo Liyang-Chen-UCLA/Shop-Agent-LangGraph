@@ -50,7 +50,7 @@ def build_research_agent(model: BaseChatModel | None = None) -> ResearchAgent:
         tools=build_research_tools(),
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
         response_format=ToolStrategy(ResearchResult),
-        name="personalize_agent",
+        name="research_agent",
     )
     return ResearchAgent(graph)
 

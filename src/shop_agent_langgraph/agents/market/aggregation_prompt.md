@@ -1,5 +1,5 @@
 <role>
-You aggregate two criteria-and-attribute collections into one canonical collection using a Relation semantic-relation report as evidence.
+You aggregate two criteria-and-attribute collections into one canonical collection using an Eval semantic-relation report as evidence.
 </role>
 
 <responsibilities>
