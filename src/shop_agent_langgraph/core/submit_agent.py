@@ -29,6 +29,7 @@ def build_submit_agent_graph(
     submit_tool_name: str,
     name: str,
     validate_submission: Callable[[ResultT], None] | None = None,
+    execute_submit_tool: bool = False,
 ) -> CompiledStateGraph[Any, Any, Any, Any]:
     """Build a tool-loop graph that ends only after a valid submission call."""
     chat_model = model.bind_tools(tools)
@@ -46,6 +47,16 @@ def build_submit_agent_graph(
 
         tool_messages: list[ToolMessage] = []
         submitted_result: ResultT | None = None
+        if execute_submit_tool and len(message.tool_calls) > 1 and any(
+            call["name"] == submit_tool_name for call in message.tool_calls
+        ):
+            return {"messages": [
+                ToolMessage(
+                    content="No tools executed: final submission must be called alone.",
+                    tool_call_id=call["id"], name=call["name"],
+                )
+                for call in message.tool_calls
+            ]}
         for tool_call in message.tool_calls:
             tool_name = tool_call["name"]
             tool_call_id = tool_call["id"]
@@ -53,14 +64,21 @@ def build_submit_agent_graph(
 
             if tool_name == submit_tool_name:
                 try:
-                    submitted_result = result_schema.model_validate(arguments)
+                    payload = arguments
+                    if execute_submit_tool:
+                        submit_tool = tools_by_name[tool_name]
+                        # StructuredTool skips argument validation for empty schemas.
+                        # Validate explicitly so a model cannot supply a replacement result.
+                        submit_tool.get_input_schema().model_validate(arguments)
+                        payload = submit_tool.invoke(arguments)
+                    submitted_result = result_schema.model_validate(payload)
                     if validate_submission is not None:
                         validate_submission(submitted_result)
                     content = "Result accepted by runtime."
                 except (ValidationError, ValueError) as exc:
                     submitted_result = None
                     content = (
-                        f"{submit_tool_name} was rejected by Pydantic validation. "
+                        f"{submit_tool_name} was rejected by runtime validation. "
                         f"Fix every error and call {submit_tool_name} again.\n{exc}"
                     )
                 tool_messages.append(
@@ -97,7 +115,7 @@ def build_submit_agent_graph(
             "messages": [
                 HumanMessage(
                     f"Runtime constraint: you may only finish by calling {submit_tool_name}. "
-                    f"Continue working, then call {submit_tool_name} with the complete result."
+                    f"Continue working, then call {submit_tool_name} according to its schema."
                 )
             ]
         }
