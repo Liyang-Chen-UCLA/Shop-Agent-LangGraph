@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 from threading import Lock
+from typing import Any
 
 from langchain_core.language_models import BaseChatModel
 
@@ -70,6 +71,7 @@ class MarketAgent:
         results: list[CriteriaAttributeSet],
     ) -> MarketAggregationOutcome:
         current = results
+        audit: list[dict[str, Any]] = []
         while len(current) > 1:
             pairs = [
                 (current[index], current[index + 1])
@@ -78,6 +80,7 @@ class MarketAgent:
             outcomes = await asyncio.gather(
                 *(self._aggregate_pair(left, right) for left, right in pairs)
             )
+            audit.extend(entry for outcome in outcomes for entry in outcome.audit)
             pending = [outcome for outcome in outcomes if outcome.status == "pending"]
             if pending:
                 return MarketAggregationOutcome(
@@ -88,6 +91,7 @@ class MarketAgent:
                     unresolved=[
                         reference for outcome in pending for reference in outcome.unresolved
                     ],
+                    audit=audit,
                 )
             merged = [
                 outcome.collection
@@ -95,7 +99,11 @@ class MarketAgent:
                 if outcome.collection is not None
             ]
             current = [*merged, *([] if len(current) % 2 == 0 else [current[-1]])]
-        return MarketAggregationOutcome(status="completed", collection=current[0])
+        return MarketAggregationOutcome(
+            status="completed",
+            collection=current[0],
+            audit=audit,
+        )
 
     async def _aggregate_pair(
         self,
@@ -117,6 +125,7 @@ class MarketAgent:
                 criteria=[],
                 attributes=[],
                 pending_groups=aggregation.pending_groups,
+                audit=aggregation.audit,
             )
         merged = aggregation.collection
         if merged is None:
@@ -127,6 +136,7 @@ class MarketAgent:
             status="completed",
             criteria=merged.criteria,
             attributes=merged.attributes,
+            audit=aggregation.audit,
         )
 
     def invoke(self, query: str) -> MarketResult:

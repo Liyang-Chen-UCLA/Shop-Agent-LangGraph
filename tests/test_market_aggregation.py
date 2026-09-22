@@ -1,13 +1,14 @@
 import asyncio
+import json
 
 import pytest
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, ToolMessage
 
 from shop_agent_langgraph.agents.eval.schemas import EvalGroup, EvalReport
 from shop_agent_langgraph.agents.market.aggregation import (
+    AggregationRuntime,
     MarketAggregationAgent,
     build_market_aggregation_graph,
-    build_market_aggregation_tools,
 )
 from shop_agent_langgraph.agents.market.graph import MarketAgent
 from shop_agent_langgraph.agents.market.schemas import (
@@ -15,7 +16,11 @@ from shop_agent_langgraph.agents.market.schemas import (
     MarketSelection,
     PendingAggregation,
 )
-from shop_agent_langgraph.domain.criteria import BooleanAttribute, CriteriaAttributeSet
+from shop_agent_langgraph.domain.criteria import (
+    BooleanAttribute,
+    CategoricalAttribute,
+    CriteriaAttributeSet,
+)
 
 
 def attribute(item_id: str, description: str | None = None) -> BooleanAttribute:
@@ -34,7 +39,7 @@ def collections() -> tuple[CriteriaAttributeSet, CriteriaAttributeSet]:
             source_item_ids=["product_1"],
             criteria=[],
             attributes=[
-                attribute("vibration_bundle", "Has adjustable vibration"),
+                attribute("vibration", "Has adjustable vibration"),
                 attribute("lighting", "Has decorative lighting"),
             ],
         ),
@@ -43,14 +48,14 @@ def collections() -> tuple[CriteriaAttributeSet, CriteriaAttributeSet]:
             criteria=[],
             attributes=[
                 attribute("rumble", "Has vibration feedback"),
-                attribute("dynamic_light_bar", "Has a dynamic decorative light bar"),
+                attribute("light_bar", "Has a dynamic decorative light bar"),
             ],
         ),
     )
 
 
-L1, L2 = "left:attribute:vibration_bundle", "left:attribute:lighting"
-R1, R2 = "right:attribute:rumble", "right:attribute:dynamic_light_bar"
+L1, L2 = "left:attribute:vibration", "left:attribute:lighting"
+R1, R2 = "right:attribute:rumble", "right:attribute:light_bar"
 
 
 def item(item_id: str) -> dict[str, object]:
@@ -77,9 +82,47 @@ def output(
     }
 
 
+def eval_report(status: str = "uncertain") -> EvalReport:
+    return EvalReport(
+        groups=[
+            EvalGroup(
+                status=status,
+                left_ids=[L1, L2],
+                right_ids=[R1, R2],
+                reason="The definitions overlap at different granularity.",
+            )
+        ]
+    )
+
+
+def direct_report() -> EvalReport:
+    return EvalReport(
+        groups=[
+            EvalGroup(
+                status="match",
+                left_ids=[L1],
+                right_ids=[R1],
+                reason="Same feature.",
+            ),
+            EvalGroup(
+                status="independent",
+                left_ids=[L2],
+                right_ids=[],
+                reason="Only on the left.",
+            ),
+            EvalGroup(
+                status="independent",
+                left_ids=[],
+                right_ids=[R2],
+                reason="Only on the right.",
+            ),
+        ]
+    )
+
+
 def resolved_group() -> dict[str, object]:
     return {
-        "group_id": "features",
+        "group_id": "group_0",
         "left_ids": [L1, L2],
         "right_ids": [R1, R2],
         "relation": "overlap",
@@ -90,26 +133,18 @@ def resolved_group() -> dict[str, object]:
             output("has_vibration", [L1, R1]),
             output("vibration_adjustable", [L1], "independent"),
             output("has_lighting", [L2, R2]),
-            output("has_dynamic_light_bar", [R2], "independent"),
+            output("dynamic_light_bar", [R2], "independent"),
         ],
     }
 
 
-def eval_report() -> EvalReport:
-    return EvalReport(
-        groups=[
-            EvalGroup(
-                status="uncertain",
-                left_ids=[L1, L2],
-                right_ids=[R1, R2],
-                reason="The definitions overlap at different granularity.",
-            )
-        ]
-    )
-
-
-def call(name: str, args: dict[str, object], call_id: str) -> dict[str, object]:
-    return {"name": name, "args": args, "id": call_id, "type": "tool_call"}
+def call(args: dict[str, object], call_id: str = "plan") -> dict[str, object]:
+    return {
+        "name": "apply_aggregation_plan",
+        "args": args,
+        "id": call_id,
+        "type": "tool_call",
+    }
 
 
 class ScriptedModel:
@@ -118,7 +153,7 @@ class ScriptedModel:
         self.messages_seen: list[object] = []
 
     def bind_tools(self, tools):
-        self.tools = {tool.name for tool in tools}
+        self.tools = {value.name for value in tools}
         return self
 
     def invoke(self, messages):
@@ -126,225 +161,207 @@ class ScriptedModel:
         return AIMessage(content="", tool_calls=next(self.calls))
 
 
-def setup_tools():
-    tools, unresolved, criteria, attributes = build_market_aggregation_tools(
-        *collections()
-    )
-    return {tool.name: tool for tool in tools}, unresolved, criteria, attributes
+class FailIfCalledModel:
+    def bind_tools(self, tools):
+        raise AssertionError("ordinary groups must not invoke the aggregation model")
 
 
-def test_market_tools_execute_many_to_many_and_runtime_submission() -> None:
-    tools, unresolved, criteria, attributes = setup_tools()
-    result = tools["resolve_partial"].invoke(
-        {"resolutions": [resolved_group()]}
-    )
-    assert result["committed"] is True
-    assert result["status"] == "processed"
-    assert not unresolved and not criteria and len(attributes) == 4
-    final = tools["submit_aggregation"].invoke({})
-    assert final["source_item_ids"] == ["product_1", "product_2"]
-    assert {value["id"] for value in final["attributes"]} == {
-        "has_vibration",
-        "vibration_adjustable",
-        "has_lighting",
-        "has_dynamic_light_bar",
-    }
-
-
-def test_invalid_market_batch_is_atomic() -> None:
-    tools, unresolved, criteria, attributes = setup_tools()
-    before = dict(unresolved)
-    with pytest.raises(ValueError):
-        tools["match"].invoke(
-            {
-                "matches": [
-                    {
-                        "left_id": L1,
-                        "right_id": R1,
-                        "kind": "attribute",
-                        "item": item("vibration"),
-                    },
-                    {
-                        "left_id": L2,
-                        "right_id": "right:attribute:missing",
-                        "kind": "attribute",
-                        "item": item("lighting"),
-                    },
-                ]
-            }
-        )
-    assert unresolved == before and not criteria and not attributes
-
-
-def test_conflicting_output_ids_do_not_partially_mutate_state() -> None:
-    tools, unresolved, criteria, attributes = setup_tools()
-    before = dict(unresolved)
-    with pytest.raises(ValueError, match="canonical output IDs"):
-        tools["match"].invoke(
-            {
-                "matches": [
-                    {
-                        "left_id": L1,
-                        "right_id": R1,
-                        "kind": "attribute",
-                        "item": item("duplicate"),
-                    },
-                    {
-                        "left_id": L2,
-                        "right_id": R2,
-                        "kind": "attribute",
-                        "item": item("duplicate"),
-                    },
-                ]
-            }
-        )
-    assert unresolved == before and not criteria and not attributes
-
-
-def test_submit_rejects_unprocessed_sources() -> None:
-    tools, unresolved, criteria, attributes = setup_tools()
-    before = dict(unresolved)
-    with pytest.raises(ValueError, match="unresolved"):
-        tools["submit_aggregation"].invoke({})
-    assert unresolved == before and not criteria and not attributes
-
-
-def test_duplicate_inputs_are_rejected_before_state_creation() -> None:
-    left, right = collections()
-    left.attributes.append(left.attributes[0])
-    with pytest.raises(ValueError, match="duplicate input"):
-        build_market_aggregation_tools(left, right)
-
-
-def test_pair_tool_state_is_isolated() -> None:
-    first_tools, first_unresolved, _, _ = setup_tools()
-    _second_tools, second_unresolved, _, _ = setup_tools()
-    second_before = dict(second_unresolved)
-
-    first_tools["independent"].invoke({"item_ids": [L1]})
-
-    assert L1 not in first_unresolved
-    assert second_unresolved == second_before
-
-
-def test_market_aggregation_graph_builds_result_from_tool_state() -> None:
-    model = ScriptedModel(
-        [
-            [
-                call(
-                    "resolve_partial",
-                    {"resolutions": [resolved_group()]},
-                    "resolve",
-                )
-            ],
-            [call("submit_aggregation", {}, "submit")],
-        ]
-    )
-
-    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
-        *collections(), eval_report()
-    )
-
-    assert outcome.status == "completed"
-    assert outcome.collection is not None
-    assert len(outcome.collection.attributes) == 4
-
-
-def test_uncertain_report_does_not_force_partial_resolution() -> None:
-    model = ScriptedModel(
-        [
-            [
-                call(
-                    "match",
-                    {
-                        "matches": [
-                            {
-                                "left_id": L1,
-                                "right_id": R1,
-                                "kind": "attribute",
-                                "item": item("has_vibration"),
-                            }
-                        ]
-                    },
-                    "match",
-                )
-            ],
-            [
-                call(
-                    "independent",
-                    {"item_ids": [L2, R2]},
-                    "independent",
-                )
-            ],
-            [call("submit_aggregation", {}, "submit")],
-        ]
-    )
-
-    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
-        *collections(), eval_report()
-    )
-
-    assert outcome.status == "completed"
-    assert outcome.collection is not None
-    assert {item.id for item in outcome.collection.attributes} == {
-        "has_vibration",
-        "lighting",
-        "dynamic_light_bar",
-    }
-
-
-def test_market_aggregation_rejects_model_authored_final_result() -> None:
-    model = ScriptedModel(
-        [
-            [
-                call(
-                    "resolve_partial",
-                    {"resolutions": [resolved_group()]},
-                    "resolve",
-                )
-            ],
-            [
-                call(
-                    "submit_aggregation",
-                    {
-                        "source_item_ids": ["forged"],
-                        "criteria": [],
-                        "attributes": [],
-                    },
-                    "forged",
-                )
-            ],
-            [call("submit_aggregation", {}, "submit")],
-        ]
-    )
-
-    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
-        *collections(), eval_report()
+def test_ordinary_match_and_independent_skip_model() -> None:
+    outcome = MarketAggregationAgent(FailIfCalledModel()).invoke(  # type: ignore[arg-type]
+        *collections(), direct_report()
     )
 
     assert outcome.status == "completed"
     assert outcome.collection is not None
     assert outcome.collection.source_item_ids == ["product_1", "product_2"]
-    assert len(model.messages_seen) == 3
+    assert {value.id for value in outcome.collection.attributes} == {
+        "vibration",
+        "lighting",
+        "light_bar",
+    }
+    merged = next(value for value in outcome.collection.attributes if value.id == "vibration")
+    assert merged.aliases == ["rumble"]
+    assert [entry["operation"] for entry in outcome.audit] == [
+        "match",
+        "independent",
+        "independent",
+    ]
 
 
-def test_needs_review_returns_pending_without_retrying() -> None:
-    pending_group = resolved_group()
-    pending_group.update(
-        status="needs_review",
-        outputs=[],
-        missing_evidence=["Need component-level haptic evidence."],
+def test_one_mixed_plan_auto_finalizes_without_submit_round() -> None:
+    model = ScriptedModel(
+        [[call({
+            "matches": [{
+                "left_id": L1,
+                "right_id": R1,
+                "base_ref": L1,
+                "patch": {
+                    "id": "haptics",
+                    "description": "Canonical haptic support",
+                    "aliases": ["rumble"],
+                },
+            }],
+            "independent_ids": [L2, R2],
+            "resolutions": [],
+        })]]
+    )
+
+    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
+        *collections(), eval_report()
+    )
+
+    assert outcome.status == "completed"
+    assert outcome.collection is not None
+    assert {value.id for value in outcome.collection.attributes} == {
+        "haptics", "lighting", "light_bar"
+    }
+    haptics = next(value for value in outcome.collection.attributes if value.id == "haptics")
+    assert haptics.description == "Canonical haptic support"
+    assert len(model.messages_seen) == 1
+    assert model.tools == {"apply_aggregation_plan"}
+
+
+def test_multiple_plan_calls_are_combined_atomically() -> None:
+    model = ScriptedModel(
+        [[
+            call({
+                "matches": [{
+                    "left_id": L1,
+                    "right_id": R1,
+                    "base_ref": L1,
+                    "patch": {"id": "haptics"},
+                }],
+                "independent_ids": [],
+                "resolutions": [],
+            }, "match"),
+            call({
+                "matches": [],
+                "independent_ids": [L2, R2],
+                "resolutions": [],
+            }, "independent"),
+        ]]
+    )
+
+    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
+        *collections(), eval_report()
+    )
+
+    assert outcome.status == "completed"
+    assert outcome.collection is not None
+    assert len(model.messages_seen) == 1
+
+
+def test_incompatible_match_is_sent_to_model() -> None:
+    left = CriteriaAttributeSet(
+        source_item_ids=["left_product"],
+        criteria=[],
+        attributes=[attribute("feature")],
+    )
+    right = CriteriaAttributeSet(
+        source_item_ids=["right_product"],
+        criteria=[],
+        attributes=[
+            CategoricalAttribute(
+                id="feature_mode",
+                name="feature mode",
+                description="Feature mode",
+                aliases=[],
+                type="categorical",
+                values=["off", "on"],
+                value_domain="closed",
+            )
+        ],
+    )
+    report = EvalReport(
+        groups=[
+            EvalGroup(
+                status="match",
+                left_ids=["left:attribute:feature"],
+                right_ids=["right:attribute:feature_mode"],
+                reason="Same concept with incompatible schemas.",
+            )
+        ]
     )
     model = ScriptedModel(
-        [
-            [
-                call(
-                    "resolve_partial",
-                    {"resolutions": [pending_group]},
-                    "pending",
-                )
-            ]
-        ]
+        [[call({
+            "matches": [{
+                "left_id": "left:attribute:feature",
+                "right_id": "right:attribute:feature_mode",
+                "base_ref": "right:attribute:feature_mode",
+                "patch": {},
+            }],
+            "independent_ids": [],
+            "resolutions": [],
+        })]]
+    )
+
+    outcome = MarketAggregationAgent(model).invoke(left, right, report)  # type: ignore[arg-type]
+
+    assert outcome.status == "completed"
+    assert len(model.messages_seen) == 1
+    assert isinstance(outcome.collection.attributes[0], CategoricalAttribute)  # type: ignore[union-attr]
+
+
+def test_partial_plan_executes_and_tool_feedback_is_compact() -> None:
+    model = ScriptedModel(
+        [[call({"matches": [], "independent_ids": [], "resolutions": [resolved_group()]})]]
+    )
+    runtime = AggregationRuntime(*collections())
+    hard_groups = runtime.apply_direct_groups(eval_report())
+    graph = build_market_aggregation_graph(
+        model=model,  # type: ignore[arg-type]
+        runtime=runtime,
+        hard_groups=hard_groups,
+    )
+
+    state = graph.invoke(MarketAggregationAgent(model).graph_input(runtime, hard_groups))  # type: ignore[arg-type]
+    outcome = MarketAggregationOutcome.model_validate(state["outcome"])
+    tool_message = next(message for message in state["messages"] if isinstance(message, ToolMessage))
+
+    assert outcome.status == "completed"
+    assert outcome.collection is not None and len(outcome.collection.attributes) == 4
+    feedback = json.loads(tool_message.content)
+    assert set(feedback) == {
+        "committed", "status", "processed_group_ids", "remaining_group_ids", "pending_groups"
+    }
+    assert "description" not in tool_message.content
+    assert outcome.audit[0]["outputs"]
+
+
+def test_invalid_plan_is_atomic_then_can_retry() -> None:
+    invalid = {
+        "matches": [
+            {"left_id": L1, "right_id": R1, "base_ref": L1, "patch": {"id": "duplicate"}},
+            {"left_id": L2, "right_id": R2, "base_ref": L2, "patch": {"id": "duplicate"}},
+        ],
+        "independent_ids": [],
+        "resolutions": [],
+    }
+    valid = {"matches": [], "independent_ids": [], "resolutions": [resolved_group()]}
+    model = ScriptedModel([[call(invalid, "bad")], [call(valid, "good")]])
+
+    outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
+        *collections(), eval_report()
+    )
+
+    assert outcome.status == "completed"
+    assert outcome.collection is not None and len(outcome.collection.attributes) == 4
+    assert len(model.messages_seen) == 2
+    error = next(
+        message for message in model.messages_seen[1] if isinstance(message, ToolMessage)
+    )
+    assert "canonical output IDs must be unique" in error.content
+
+
+def test_needs_review_stops_after_one_plan() -> None:
+    pending = resolved_group()
+    pending.update(
+        status="needs_review",
+        outputs=[],
+        missing_evidence=["Need component-level evidence."],
+    )
+    model = ScriptedModel(
+        [[call({"matches": [], "independent_ids": [], "resolutions": [pending]})]]
     )
 
     outcome = MarketAggregationAgent(model).invoke(  # type: ignore[arg-type]
@@ -352,9 +369,7 @@ def test_needs_review_returns_pending_without_retrying() -> None:
     )
 
     assert outcome.status == "pending"
-    assert outcome.pending_groups[0].missing_evidence == [
-        "Need component-level haptic evidence."
-    ]
+    assert outcome.pending_groups[0].missing_evidence == ["Need component-level evidence."]
     assert len(model.messages_seen) == 1
 
 
@@ -370,28 +385,39 @@ class PlainResponseModel:
         return AIMessage(content="still reasoning", tool_calls=[])
 
 
-def test_aggregation_retry_limit_returns_pending() -> None:
-    tools, unresolved, _criteria, _attributes = build_market_aggregation_tools(
-        *collections()
-    )
+def test_retry_limit_returns_pending() -> None:
+    runtime = AggregationRuntime(*collections())
+    hard_groups = runtime.apply_direct_groups(eval_report())
     model = PlainResponseModel()
     graph = build_market_aggregation_graph(
         model=model,  # type: ignore[arg-type]
-        tools=tools,
-        unresolved=unresolved,
-        left_source_item_ids=["product_1"],
-        right_source_item_ids=["product_2", "product_1"],
+        runtime=runtime,
+        hard_groups=hard_groups,
         max_attempts=2,
     )
 
-    state = graph.invoke(
-        {"messages": [{"role": "user", "content": "aggregate"}], "attempts": 0}
-    )
+    state = graph.invoke(MarketAggregationAgent(model).graph_input(runtime, hard_groups))  # type: ignore[arg-type]
     outcome = MarketAggregationOutcome.model_validate(state["outcome"])
 
     assert outcome.status == "pending"
     assert outcome.pending_groups[0].group_id == "aggregation_retry_limit"
     assert model.calls == 2
+
+
+def test_duplicate_inputs_are_rejected_before_state_creation() -> None:
+    left, right = collections()
+    left.attributes.append(left.attributes[0])
+    with pytest.raises(ValueError, match="duplicate input"):
+        AggregationRuntime(left, right)
+
+
+def test_pair_runtime_state_is_isolated() -> None:
+    first = AggregationRuntime(*collections())
+    second = AggregationRuntime(*collections())
+    first.apply_direct_groups(direct_report())
+
+    assert not first.unresolved
+    assert set(second.unresolved) == {L1, L2, R1, R2}
 
 
 def singleton(index: int) -> CriteriaAttributeSet:
@@ -413,20 +439,20 @@ class RecordingEvaluator:
                 *[
                     EvalGroup(
                         status="independent",
-                        left_ids=[f"left:attribute:{item.id}"],
+                        left_ids=[f"left:attribute:{value.id}"],
                         right_ids=[],
                         reason="No corresponding right field.",
                     )
-                    for item in left.attributes
+                    for value in left.attributes
                 ],
                 *[
                     EvalGroup(
                         status="independent",
                         left_ids=[],
-                        right_ids=[f"right:attribute:{item.id}"],
+                        right_ids=[f"right:attribute:{value.id}"],
                         reason="No corresponding left field.",
                     )
-                    for item in right.attributes
+                    for value in right.attributes
                 ],
             ]
         )
@@ -457,16 +483,16 @@ class RecordingAggregator:
                     f"left:attribute:{left.attributes[0].id}",
                     f"right:attribute:{right.attributes[0].id}",
                 ],
+                audit=[{"pair": [*left.source_item_ids, *right.source_item_ids]}],
             )
         return MarketAggregationOutcome(
             status="completed",
             collection=CriteriaAttributeSet(
-                source_item_ids=list(
-                    dict.fromkeys([*left.source_item_ids, *right.source_item_ids])
-                ),
+                source_item_ids=list(dict.fromkeys([*left.source_item_ids, *right.source_item_ids])),
                 criteria=[*left.criteria, *right.criteria],
                 attributes=[*left.attributes, *right.attributes],
             ),
+            audit=[{"pair": [*left.source_item_ids, *right.source_item_ids]}],
         )
 
 
@@ -482,7 +508,7 @@ def test_market_reduction_evaluates_then_aggregates_each_pair() -> None:
     assert len(outcome.collection.source_item_ids) == 4
     assert len(evaluator.calls) == 3
     assert len(aggregator.calls) == 3
-    assert all(isinstance(call[2], EvalReport) for call in aggregator.calls)
+    assert len(outcome.audit) == 3
 
 
 def test_pending_pair_stops_later_reduction_rounds() -> None:
@@ -495,6 +521,7 @@ def test_pending_pair_stops_later_reduction_rounds() -> None:
     assert outcome.status == "pending"
     assert len(evaluator.calls) == 2
     assert len(aggregator.calls) == 2
+    assert len(outcome.audit) == 2
 
 
 class FixedMarketAgent(MarketAgent):
@@ -517,3 +544,4 @@ def test_public_market_result_exposes_pending_status() -> None:
     assert result.status == "pending"
     assert result.criteria == [] and result.attributes == []
     assert result.pending_groups[0].group_id == "needs_evidence"
+    assert result.audit

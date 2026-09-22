@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import Field, model_validator
 
@@ -38,17 +38,11 @@ class CanonicalOutput(SchemaModel):
         return self
 
 
-class MatchDecision(CanonicalOutput):
+class MatchPatch(SchemaModel):
     left_id: str
     right_id: str
-
-
-class MatchBatch(SchemaModel):
-    matches: list[MatchDecision] = Field(min_length=1)
-
-
-class IndependentBatch(SchemaModel):
-    item_ids: list[str] = Field(min_length=1)
+    base_ref: str
+    patch: dict[str, Any] = Field(default_factory=dict)
 
 
 class ResolvedOutput(CanonicalOutput):
@@ -81,12 +75,16 @@ class PartialResolution(SchemaModel):
         return self
 
 
-class PartialResolutionBatch(SchemaModel):
-    resolutions: list[PartialResolution] = Field(min_length=1)
+class AggregationPlan(SchemaModel):
+    matches: list[MatchPatch] = Field(default_factory=list)
+    independent_ids: list[str] = Field(default_factory=list)
+    resolutions: list[PartialResolution] = Field(default_factory=list)
 
-
-class FinalizeAggregation(SchemaModel):
-    """The runtime assembles the collection from accepted aggregation operations."""
+    @model_validator(mode="after")
+    def require_operations(self) -> AggregationPlan:
+        if not self.matches and not self.independent_ids and not self.resolutions:
+            raise ValueError("aggregation plan requires at least one operation")
+        return self
 
 
 class PendingAggregation(SchemaModel):
@@ -112,6 +110,7 @@ class MarketAggregationOutcome(SchemaModel):
     collection: CriteriaAttributeSet | None = None
     pending_groups: list[PendingAggregation] = Field(default_factory=list)
     unresolved: list[str] = Field(default_factory=list)
+    audit: list[dict[str, Any]] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def check_status(self) -> MarketAggregationOutcome:
@@ -130,6 +129,7 @@ class MarketResult(SchemaModel):
     criteria: list[Criterion]
     attributes: list[Attribute]
     pending_groups: list[PendingAggregation] = Field(default_factory=list)
+    audit: list[dict[str, Any]] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def check_status(self) -> MarketResult:

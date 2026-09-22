@@ -38,22 +38,34 @@ Eval never emits an item definition, mapping, merge, or partial decomposition.
 
 ## Market aggregation
 
-For each pair, Market creates fresh aggregation tools and mutable state. The graph
-receives the two original collections plus their validated `EvalReport`. It exposes:
+For each pair, Market creates fresh mutable state and first applies a deterministic
+fast path. Independent fields are retained directly. A one-to-one match is merged
+directly when both items use the same concrete schema and all structured fields other
+than ID, name, description, and aliases agree. The left item is reused and right-side
+names and aliases are appended as aliases. If every group takes this path, the Market
+aggregation model is not called.
 
-- `match` for canonical merging of synonymous left/right fields;
-- `independent` for retaining source definitions unchanged;
-- `resolve_partial` for actual containment, overlap, composite, or granularity repair;
-- `submit_aggregation({})` for runtime assembly of the final collection.
+Only uncertain groups, many-to-many matches, and matches that fail structured
+compatibility are sent to the aggregation model. It exposes one
+`apply_aggregation_plan` tool containing all match patches, independent references,
+and partial resolutions. Match decisions select a `base_ref` and supply only changed
+fields in `patch`; complete definitions are required only for newly decomposed
+outputs. Multiple plan calls in one response are combined and validated as one batch.
 
 An uncertain Eval group can become a match, independent fields, or a partial
 decomposition after Market inspects the original definitions. The report does not
 force one of these outcomes.
 
-All mutation tools validate the complete batch before changing state. Validation
+The complete plan is validated before changing state. Validation
 covers reference existence and side, duplicate consumption, output kind, source
 mapping, full structural coverage, canonical ID uniqueness, and model compatibility.
-Final submission rejects unresolved sources and accepts no model-authored collection.
+After a successful plan, the runtime automatically assembles the final collection;
+there is no model-authored collection and no separate submit round.
+
+Full definitions, mappings, reasons, and patches are stored in the runtime audit.
+Model-visible tool results contain only processed group IDs, remaining group IDs,
+pending groups, or concrete validation errors, so completed operations are not
+replayed into later model context.
 
 ## Pending results and retry limit
 
@@ -77,6 +89,7 @@ own Market aggregation graph. Tool closures, unresolved references, accumulated
 criteria, and accumulated attributes are created per pair, so concurrent pairs cannot
 consume or append to one another's state.
 
-The offline tests cover Eval immutability and exact report coverage, Market tool
-atomicity, runtime-only finalization, per-pair state isolation, pairwise orchestration,
-pending propagation, and the aggregation retry limit.
+The offline tests cover Eval immutability and exact report coverage, deterministic
+model skipping, mixed-plan atomicity, automatic runtime finalization, compact tool
+feedback, per-pair state isolation, pairwise orchestration, pending propagation, and
+the aggregation retry limit.

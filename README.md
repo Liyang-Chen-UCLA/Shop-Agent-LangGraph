@@ -95,11 +95,13 @@ Eval is a read-only semantic judge. For each pair of `CriteriaAttributeSet` valu
 returns an `EvalReport` that partitions every source-qualified field exactly once as
 `match`, `uncertain`, or `independent`; it never writes canonical definitions.
 
-Market then runs an isolated aggregation graph for that pair. The graph may merge,
-retain, or decompose fields with atomic tools and assembles the final collection from
-accepted operations. Insufficient evidence produces an explicit pending market result
-and stops later reduction rounds. Pair processing remains parallel at each reduction
-layer, with a fresh aggregation state for every pair.
+Market first handles ordinary independent fields and compatible one-to-one matches in
+program logic. Only uncertain or structurally incompatible groups reach the isolated
+aggregation model, which submits one atomic mixed plan using base-item patches for
+matches. Successful plans are finalized automatically without a separate model submit
+round. Insufficient evidence produces an explicit pending result and stops later
+reduction rounds. Pair processing remains parallel at each reduction layer, with a
+fresh aggregation state for every pair.
 
 See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md) for
 schemas, validation rules, pending behavior, and the reduction flow.
