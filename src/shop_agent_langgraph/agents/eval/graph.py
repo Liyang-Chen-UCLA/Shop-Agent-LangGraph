@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 from threading import Lock
 from typing import Any
@@ -9,11 +10,52 @@ from langchain_core.language_models import BaseChatModel
 
 from ...core.llm import build_deepseek_model
 from ...core.submit_agent import build_submit_agent_graph
-from ...domain.criteria import CriteriaAttributeSet
+from ...domain.criteria import Attribute, CriteriaAttributeSet, Criterion
 from .tools import build_eval_tools
 
 
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
+
+
+def _unordered_items(items: list[Criterion] | list[Attribute]) -> Counter[str]:
+    return Counter(
+        json.dumps(item.model_dump(mode="json"), ensure_ascii=False, sort_keys=True)
+        for item in items
+    )
+
+
+def _validate_submission(
+    result: CriteriaAttributeSet,
+    *,
+    left: CriteriaAttributeSet,
+    right: CriteriaAttributeSet,
+    unresolved: dict[str, Criterion | Attribute],
+    criteria: list[Criterion],
+    attributes: list[Attribute],
+) -> None:
+    if unresolved:
+        raise ValueError(f"unresolved item IDs remain: {list(unresolved)}")
+
+    expected_source_item_ids = list(
+        dict.fromkeys([*left.source_item_ids, *right.source_item_ids])
+    )
+    if Counter(result.source_item_ids) != Counter(expected_source_item_ids):
+        raise ValueError(
+            "source_item_ids must equal the deduplicated union of the left and right "
+            f"sources: {expected_source_item_ids}"
+        )
+
+    if _unordered_items(result.criteria) != _unordered_items(criteria):
+        raise ValueError("submitted criteria do not match the accepted operation results")
+    if _unordered_items(result.attributes) != _unordered_items(attributes):
+        raise ValueError("submitted attributes do not match the accepted operation results")
+
+    item_ids = [item.id for item in [*result.criteria, *result.attributes]]
+    duplicate_ids = sorted(
+        item_id for item_id, count in Counter(item_ids).items() if count > 1
+    )
+    if duplicate_ids:
+        raise ValueError(f"canonical item IDs must be unique: {duplicate_ids}")
 
 
 class EvalAgent:
@@ -25,11 +67,17 @@ class EvalAgent:
         left: CriteriaAttributeSet,
         right: CriteriaAttributeSet,
     ) -> tuple[Any, dict[str, Any]]:
-        tools, unresolved, _criteria, _attributes = build_eval_tools(left, right)
+        tools, unresolved, criteria, attributes = build_eval_tools(left, right)
 
-        def validate_submission(_result: CriteriaAttributeSet) -> None:
-            if unresolved:
-                raise ValueError(f"unresolved item IDs remain: {list(unresolved)}")
+        def validate_submission(result: CriteriaAttributeSet) -> None:
+            _validate_submission(
+                result,
+                left=left,
+                right=right,
+                unresolved=unresolved,
+                criteria=criteria,
+                attributes=attributes,
+            )
 
         graph = build_submit_agent_graph(
             model=self.model,
@@ -47,7 +95,14 @@ class EvalAgent:
                 item_id: item.model_dump(mode="json") for item_id, item in unresolved.items()
             },
         }
-        return graph, {"messages": [{"role": "user", "content": json.dumps(context, ensure_ascii=False)}]}
+        return graph, {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": json.dumps(context, ensure_ascii=False),
+                }
+            ]
+        }
 
     def invoke(
         self,

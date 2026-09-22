@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from typing import Any
 
 from langchain.tools import tool
@@ -8,21 +9,61 @@ from ...domain.criteria import Attribute, CriteriaAttributeSet, Criterion
 from .schemas import DiffRequest, IndependentBatch, MatchBatch, MatchDecision
 
 
+def _duplicates(values: list[str]) -> list[str]:
+    return sorted(value for value, count in Counter(values).items() if count > 1)
+
+
+def _ensure_references_available(
+    references: list[str],
+    unresolved: dict[str, Criterion | Attribute],
+) -> None:
+    duplicate_references = _duplicates(references)
+    if duplicate_references:
+        raise ValueError(f"references must be unique within a batch: {duplicate_references}")
+
+    missing_references = sorted(set(references) - unresolved.keys())
+    if missing_references:
+        raise ValueError(f"unresolved references do not exist: {missing_references}")
+
+
+def _ensure_output_ids_available(
+    new_items: list[Criterion | Attribute],
+    criteria: list[Criterion],
+    attributes: list[Attribute],
+) -> None:
+    output_ids = [item.id for item in [*criteria, *attributes, *new_items]]
+    duplicate_ids = _duplicates(output_ids)
+    if duplicate_ids:
+        raise ValueError(f"canonical output IDs would conflict: {duplicate_ids}")
+
+
 def build_eval_tools(
     left: CriteriaAttributeSet,
     right: CriteriaAttributeSet,
-) -> tuple[list[Any], dict[str, Criterion | Attribute], list[Criterion], list[Attribute]]:
+) -> tuple[
+    list[Any],
+    dict[str, Criterion | Attribute],
+    list[Criterion],
+    list[Attribute],
+]:
     unresolved: dict[str, Criterion | Attribute] = {}
     kinds: dict[str, str] = {}
+    sides: dict[str, str] = {}
     for side, value in (("left", left), ("right", right)):
-        for item in value.criteria:
-            reference = f"{side}:criterion:{item.id}"
-            unresolved[reference] = item
-            kinds[reference] = "criterion"
-        for item in value.attributes:
-            reference = f"{side}:attribute:{item.id}"
-            unresolved[reference] = item
-            kinds[reference] = "attribute"
+        source_items = [*value.criteria, *value.attributes]
+        duplicate_source_ids = _duplicates([item.id for item in source_items])
+        if duplicate_source_ids:
+            raise ValueError(
+                f"duplicate item IDs in {side} input: {duplicate_source_ids}"
+            )
+
+        source_groups = (("criterion", value.criteria), ("attribute", value.attributes))
+        for kind, items in source_groups:
+            for item in items:
+                reference = f"{side}:{kind}:{item.id}"
+                unresolved[reference] = item
+                kinds[reference] = kind
+                sides[reference] = side
 
     criteria: list[Criterion] = []
     attributes: list[Attribute] = []
@@ -42,25 +83,55 @@ def build_eval_tools(
     @tool("match", args_schema=MatchBatch)
     def match(matches: list[MatchDecision]) -> dict[str, Any]:
         """Batch-merge semantically matching unresolved items."""
-        for raw_decision in matches:
-            decision = MatchDecision.model_validate(raw_decision)
-            unresolved.pop(decision.left_id)
-            unresolved.pop(decision.right_id)
-            if decision.kind == "criterion":
-                criteria.append(decision.item)  # type: ignore[arg-type]
-            else:
-                attributes.append(decision.item)  # type: ignore[arg-type]
-        return {"accepted": len(matches), "unresolved": list(unresolved)}
+        decisions = [MatchDecision.model_validate(decision) for decision in matches]
+        references = [
+            reference
+            for decision in decisions
+            for reference in (decision.left_id, decision.right_id)
+        ]
+
+        # Validate the entire batch before mutating any captured state.
+        _ensure_references_available(references, unresolved)
+        invalid_sides = [
+            f"{decision.left_id} -> {decision.right_id}"
+            for decision in decisions
+            if sides[decision.left_id] != "left" or sides[decision.right_id] != "right"
+        ]
+        if invalid_sides:
+            raise ValueError(
+                "match requires a left reference followed by a right reference: "
+                f"{invalid_sides}"
+            )
+        _ensure_output_ids_available(
+            [decision.item for decision in decisions], criteria, attributes
+        )
+
+        for reference in references:
+            del unresolved[reference]
+        criteria.extend(
+            decision.item for decision in decisions if decision.kind == "criterion"
+        )
+        attributes.extend(
+            decision.item for decision in decisions if decision.kind == "attribute"
+        )
+        return {"accepted": len(decisions), "unresolved": list(unresolved)}
 
     @tool("independent", args_schema=IndependentBatch)
     def independent(item_ids: list[str]) -> dict[str, Any]:
         """Batch-accept unresolved items that represent independent concepts."""
+        # Resolve and validate the entire batch before mutating any captured state.
+        _ensure_references_available(item_ids, unresolved)
+        items = [unresolved[item_id] for item_id in item_ids]
+        _ensure_output_ids_available(items, criteria, attributes)
+
         for item_id in item_ids:
-            item = unresolved.pop(item_id)
+            item = unresolved[item_id]
             if kinds[item_id] == "criterion":
                 criteria.append(item)  # type: ignore[arg-type]
             else:
                 attributes.append(item)  # type: ignore[arg-type]
+        for item_id in item_ids:
+            del unresolved[item_id]
         return {"accepted": len(item_ids), "unresolved": list(unresolved)}
 
     @tool("submit", args_schema=CriteriaAttributeSet)
