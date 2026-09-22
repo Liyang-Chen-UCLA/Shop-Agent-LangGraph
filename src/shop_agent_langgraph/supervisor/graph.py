@@ -2,25 +2,32 @@ from __future__ import annotations
 
 from pathlib import Path
 from threading import Lock
-from typing import Any, Literal
+from typing import Any
 
+from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import AIMessage, AnyMessage, SystemMessage
+from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
-from ..agents.intent.graph import intent_agent
-from ..agents.market.graph import market_agent
-from ..agents.market.schemas import MarketResult
-from ..agents.route.graph import route_agent
-from ..agents.route.schemas import RouteResult
 from ..core.llm import build_deepseek_model
-from ..domain.market_mapping import NODE_TO_DATASET_CATEGORY, dataset_category_for_node
 from .state import SupervisorState
+from .tools import SUPERVISOR_TOOLS
 
 
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
+
+
+def build_supervisor_agent(
+    model: BaseChatModel | None = None,
+) -> CompiledStateGraph[Any, Any, Any, Any]:
+    return create_agent(
+        model=model or build_deepseek_model(),
+        tools=SUPERVISOR_TOOLS,
+        system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
+        name="supervisor_agent",
+    )
 
 
 def build_supervisor_graph(
@@ -28,89 +35,22 @@ def build_supervisor_graph(
     *,
     checkpointer: Any = None,
 ) -> CompiledStateGraph[Any, Any, Any, Any]:
-    """Build the top-level conversational graph."""
-    chat_model = model or build_deepseek_model()
-    supervisor_prompt = SystemMessage(PROMPT_PATH.read_text(encoding="utf-8"))
+    """Build the messages-only entry graph: START -> supervisor -> END."""
+    supervisor_agent = build_supervisor_agent(model)
 
-    def analyze_intent(state: SupervisorState) -> dict[str, Any]:
-        parsed = intent_agent.invoke({"messages": state["messages"]})
-        update: dict[str, Any] = {"intent": parsed}
-        if parsed.action in {"create", "switch"}:
-            update["route"] = None
-            update["market"] = None
-        return update
-
-    def should_route(state: SupervisorState) -> Literal["route", "respond"]:
-        parsed = state["intent"]
-        if parsed and parsed.action in {"create", "switch"} and parsed.category:
-            return "route"
-        return "respond"
-
-    def resolve_route(state: SupervisorState) -> dict[str, RouteResult]:
-        parsed = state["intent"]
-        if parsed is None or parsed.category is None:
-            raise RuntimeError("route node requires an intent category")
-        return {"route": route_agent.invoke(parsed.category)}
-
-    def should_analyze_market(state: SupervisorState) -> Literal["market", "respond"]:
-        route = state["route"]
-        if route and route.status == "resolved":
-            node_id = route.resolved_nodes[0].node_id
-            if node_id in NODE_TO_DATASET_CATEGORY:
-                return "market"
-        return "respond"
-
-    def analyze_market(state: SupervisorState) -> dict[str, MarketResult]:
-        route = state["route"]
-        if route is None or route.status != "resolved":
-            raise RuntimeError("market node requires a resolved route")
-        node_id = route.resolved_nodes[0].node_id
-        query = dataset_category_for_node(node_id)
-        return {"market": market_agent.invoke(query)}
-
-    def respond(state: SupervisorState) -> dict[str, list[AnyMessage]]:
-        intent_context = (
-            state["intent"].model_dump_json(indent=2) if state.get("intent") else "null"
-        )
-        route_context = (
-            state["route"].model_dump_json(indent=2) if state.get("route") else "null"
-        )
-        market_context = (
-            state["market"].model_dump_json(indent=2) if state.get("market") else "null"
-        )
-        runtime_context = SystemMessage(
-            "Current runtime state for this turn:\n"
-            f"intent = {intent_context}\n"
-            f"route = {route_context}\n"
-            f"market = {market_context}\n"
-            "Answer the user's latest original message directly."
-        )
-        response = chat_model.invoke([supervisor_prompt, runtime_context, *state["messages"]])
-        return {"messages": [response]}
+    def run_supervisor(state: SupervisorState) -> dict[str, list[Any]]:
+        result = supervisor_agent.invoke({"messages": state["messages"]})
+        return {"messages": result["messages"][len(state["messages"]):]}
 
     builder = StateGraph(SupervisorState)
-    builder.add_node("intent_agent", analyze_intent)
-    builder.add_node("route_agent", resolve_route)
-    builder.add_node("market_agent", analyze_market)
-    builder.add_node("supervisor", respond)
-    builder.add_edge(START, "intent_agent")
-    builder.add_conditional_edges(
-        "intent_agent",
-        should_route,
-        {"route": "route_agent", "respond": "supervisor"},
-    )
-    builder.add_conditional_edges(
-        "route_agent",
-        should_analyze_market,
-        {"market": "market_agent", "respond": "supervisor"},
-    )
-    builder.add_edge("market_agent", "supervisor")
+    builder.add_node("supervisor", run_supervisor)
+    builder.add_edge(START, "supervisor")
     builder.add_edge("supervisor", END)
-    return builder.compile(checkpointer=checkpointer, name="supervisor")
+    return builder.compile(checkpointer=checkpointer, name="shop_agent")
 
 
 class Supervisor:
-    """User-facing conversational entry point backed by a persistent graph."""
+    """User-facing conversational entry point backed by the outer graph."""
 
     def __init__(self, graph: CompiledStateGraph[Any, Any, Any, Any]) -> None:
         self.graph = graph
@@ -167,8 +107,6 @@ class Supervisor:
 
 
 class LazySupervisor:
-    """Delay graph and model construction until the first conversation turn."""
-
     def __init__(self) -> None:
         self._instance: Supervisor | None = None
         self._lock = Lock()

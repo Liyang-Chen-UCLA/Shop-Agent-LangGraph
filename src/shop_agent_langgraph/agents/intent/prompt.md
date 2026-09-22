@@ -17,5 +17,4 @@ Extraction rules:
 - For `remove`, put the preference being removed in its corresponding list without inventing a value, for example `criteria_preferences: ["预算"]` or `attribute_preferences: ["颜色"]`.
 - Preserve only information supported by the user or conversation. Do not infer unstated preferences.
 - Always include all four fields. Use empty lists when no preferences are present.
-- You must finish by calling `submit_intent_result`. A plain-text answer cannot finish the task.
-- If `submit_intent_result` returns Pydantic validation errors, fix every error and call it again. Only an accepted call ends the agent.
+- Return exactly one `IntentResult` matching the configured structured schema.

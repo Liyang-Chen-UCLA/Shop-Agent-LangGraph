@@ -30,5 +30,4 @@ def build_research_tools() -> list[Any]:
             topic="general",
             api_key=os.getenv("TAVILY_API_KEY"),
         ),
-        submit_research_result,
     ]

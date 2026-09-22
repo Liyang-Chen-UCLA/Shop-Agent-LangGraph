@@ -27,9 +27,9 @@ result = intent_agent.invoke("预算改成 800，最好轻一点")
 It returns an `IntentResult` with `action`, `category`,
 `criteria_preferences`, and `attribute_preferences`.
 
-The user-facing supervisor runs intent analysis first on every turn and keeps
-conversation state isolated by `thread_id`. For supported resolved taxonomy
-routes it also runs Market Agent before replying:
+The user-facing `create_agent` supervisor orchestrates Intent, Route, Market,
+Relation, and Personalize agents through high-level tools. The outer LangGraph
+only retains conversation messages and keeps them isolated by `thread_id`:
 
 ```python
 from shop_agent_langgraph import supervisor
@@ -83,8 +83,9 @@ result = asyncio.run(market_agent.ainvoke("游戏手柄"))
 print(result.model_dump())
 ```
 
-Market Agent searches local item IDs and chooses a sample, Research Agent
-extracts each selected product concurrently, and Eval Agent merges adjacent
+Market Agent searches local item IDs and chooses a sample, Personalize Agent
+(the existing `research` module) extracts each selected product concurrently,
+and Relation Agent (the existing `eval` module) compares adjacent
 results 2-to-2 in parallel at every reduction layer. Global runtime limits are
 defined in `core/config.py`; the current market search and selection maximum is
 4 products.

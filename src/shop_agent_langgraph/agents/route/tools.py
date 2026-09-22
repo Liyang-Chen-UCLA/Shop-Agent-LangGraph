@@ -60,3 +60,9 @@ TAXONOMY_TOOLS = [
     taxonomy_get_children,
     submit_result,
 ]
+
+ROUTE_TOOLS = [
+    taxonomy_search_nodes,
+    taxonomy_get_nodes,
+    taxonomy_get_children,
+]

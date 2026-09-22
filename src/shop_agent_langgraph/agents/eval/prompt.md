@@ -22,6 +22,5 @@ You compare two criteria-and-attribute collections and report semantic relations
 <workflow>
 1. Compare the meaning, component scope, qualifiers, units, and granularity of every input field.
 2. Partition all source IDs into match, uncertain, and independent groups according to the rules above.
-3. Call submit_eval_report with the complete groups array. A plain-text response cannot finish the task.
-4. If runtime validation rejects the report, correct its coverage or grouping and submit again.
+3. Return exactly one `EvalReport` containing the complete groups array.
 </workflow>

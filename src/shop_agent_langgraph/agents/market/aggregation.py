@@ -3,16 +3,13 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Annotated, Any, Literal, NotRequired, TypedDict
+from typing import Any
 
-from langchain.tools import tool
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
-from langchain_core.tools import BaseTool
-from langgraph.graph import END, START, StateGraph, add_messages
 from langgraph.graph.state import CompiledStateGraph
 
-from ...core.config import CONFIG
 from ...domain.criteria import Attribute, CriteriaAttributeSet, Criterion
 from ..eval.schemas import EvalReport
 from ..eval.tools import validate_eval_report
@@ -21,7 +18,6 @@ from .schemas import (
     CanonicalOutput,
     MarketAggregationOutcome,
     MatchPatch,
-    PartialResolution,
     PendingAggregation,
 )
 
@@ -353,184 +349,21 @@ class AggregationRuntime:
         }
 
 
-def build_apply_aggregation_plan_tool(
-    runtime: AggregationRuntime,
-    hard_groups: list[dict[str, Any]],
-) -> BaseTool:
-    @tool("apply_aggregation_plan", args_schema=AggregationPlan)
-    def apply_aggregation_plan(
-        matches: list[MatchPatch],
-        independent_ids: list[str],
-        resolutions: list[PartialResolution],
-    ) -> dict[str, Any]:
-        """Atomically apply all remaining aggregation decisions in one plan."""
-        plan = AggregationPlan(
-            matches=matches,
-            independent_ids=independent_ids,
-            resolutions=resolutions,
-        )
-        try:
-            return runtime.apply_plan(plan, hard_groups)
-        except ValueError as exc:
-            return {
-                "committed": False,
-                "errors": [str(exc)],
-                "remaining_group_ids": [group["group_id"] for group in hard_groups],
-            }
-
-    return apply_aggregation_plan
-
-
-class AggregationGraphState(TypedDict):
-    messages: Annotated[list[AnyMessage], add_messages]
-    attempts: int
-    outcome: NotRequired[MarketAggregationOutcome]
-
-
 def build_market_aggregation_graph(
     *,
     model: BaseChatModel,
     runtime: AggregationRuntime,
     hard_groups: list[dict[str, Any]],
-    max_attempts: int = CONFIG.market.max_aggregation_attempts,
+    max_attempts: int | None = None,
 ) -> CompiledStateGraph[Any, Any, Any, Any]:
-    plan_tool = build_apply_aggregation_plan_tool(runtime, hard_groups)
-    chat_model = model.bind_tools([plan_tool])
-    system_message = SystemMessage(PROMPT_PATH.read_text(encoding="utf-8"))
-
-    def call_model(state: AggregationGraphState) -> dict[str, Any]:
-        response = chat_model.invoke([system_message, *state["messages"]])
-        return {"messages": [response], "attempts": state["attempts"] + 1}
-
-    def call_tools(state: AggregationGraphState) -> dict[str, Any]:
-        message = state["messages"][-1]
-        if not isinstance(message, AIMessage):
-            raise RuntimeError("aggregation tools node requires an AIMessage")
-        if any(call["name"] != "apply_aggregation_plan" for call in message.tool_calls):
-            content = "No plan applied: use apply_aggregation_plan."
-            return {
-                "messages": [
-                    ToolMessage(
-                        content=content,
-                        tool_call_id=call["id"],
-                        name=call["name"],
-                    )
-                    for call in message.tool_calls
-                ]
-            }
-        try:
-            plans = [AggregationPlan.model_validate(call["args"]) for call in message.tool_calls]
-            combined = AggregationPlan(
-                matches=[decision for plan in plans for decision in plan.matches],
-                independent_ids=[ref for plan in plans for ref in plan.independent_ids],
-                resolutions=[group for plan in plans for group in plan.resolutions],
-            )
-            output = plan_tool.invoke(combined.model_dump(mode="python"))
-        except ValueError as exc:
-            output = {
-                "committed": False,
-                "errors": [str(exc)],
-                "remaining_group_ids": [group["group_id"] for group in hard_groups],
-            }
-        content = json.dumps(output, ensure_ascii=False)
-        update: dict[str, Any] = {
-            "messages": [
-                ToolMessage(
-                    content=content,
-                    tool_call_id=call["id"],
-                    name=call["name"],
-                )
-                for call in message.tool_calls
-            ]
-        }
-        if output.get("committed"):
-            if output["status"] == "pending":
-                update["outcome"] = MarketAggregationOutcome(
-                    status="pending",
-                    pending_groups=output["pending_groups"],
-                    unresolved=list(runtime.unresolved),
-                    audit=runtime.audit,
-                )
-            else:
-                update["outcome"] = MarketAggregationOutcome(
-                    status="completed",
-                    collection=runtime.collection(),
-                    audit=runtime.audit,
-                )
-        return update
-
-    def reject_plain_response(_state: AggregationGraphState) -> dict[str, Any]:
-        return {
-            "messages": [
-                HumanMessage(
-                    "Runtime constraint: submit one complete apply_aggregation_plan."
-                )
-            ]
-        }
-
-    def stop_at_limit(_state: AggregationGraphState) -> dict[str, Any]:
-        return {
-            "outcome": MarketAggregationOutcome(
-                status="pending",
-                pending_groups=[
-                    PendingAggregation(
-                        group_id="aggregation_retry_limit",
-                        left_source_item_ids=runtime.left.source_item_ids,
-                        right_source_item_ids=runtime.right.source_item_ids,
-                        left_ids=[
-                            ref for ref in runtime.unresolved if ref.startswith("left:")
-                        ],
-                        right_ids=[
-                            ref for ref in runtime.unresolved if ref.startswith("right:")
-                        ],
-                        reason="Market aggregation did not produce a valid plan.",
-                        missing_evidence=[
-                            f"Aggregation retry limit reached after {max_attempts} attempts."
-                        ],
-                    )
-                ],
-                unresolved=list(runtime.unresolved),
-                audit=runtime.audit,
-            )
-        }
-
-    def after_model(state: AggregationGraphState) -> Literal["tools", "retry", "limit"]:
-        message = state["messages"][-1]
-        if isinstance(message, AIMessage) and message.tool_calls:
-            return "tools"
-        return "limit" if state["attempts"] >= max_attempts else "retry"
-
-    def after_tools(state: AggregationGraphState) -> Literal["end", "model", "limit"]:
-        if state.get("outcome") is not None:
-            return "end"
-        return "limit" if state["attempts"] >= max_attempts else "model"
-
-    def after_retry(state: AggregationGraphState) -> Literal["model", "limit"]:
-        return "limit" if state["attempts"] >= max_attempts else "model"
-
-    builder = StateGraph(AggregationGraphState)
-    builder.add_node("model", call_model)
-    builder.add_node("tools", call_tools)
-    builder.add_node("retry", reject_plain_response)
-    builder.add_node("limit", stop_at_limit)
-    builder.add_edge(START, "model")
-    builder.add_conditional_edges(
-        "model",
-        after_model,
-        {"tools": "tools", "retry": "retry", "limit": "limit"},
+    _ = runtime, hard_groups, max_attempts
+    return create_agent(
+        model=model,
+        tools=[],
+        system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
+        response_format=ToolStrategy(AggregationPlan),
+        name="market_aggregation_agent",
     )
-    builder.add_conditional_edges(
-        "tools",
-        after_tools,
-        {"end": END, "model": "model", "limit": "limit"},
-    )
-    builder.add_conditional_edges(
-        "retry",
-        after_retry,
-        {"model": "model", "limit": "limit"},
-    )
-    builder.add_edge("limit", END)
-    return builder.compile(name="market_aggregation")
 
 
 class MarketAggregationAgent:
@@ -571,8 +404,7 @@ class MarketAggregationAgent:
                     "role": "user",
                     "content": json.dumps(context, ensure_ascii=False),
                 }
-            ],
-            "attempts": 0,
+            ]
         }
 
     def completed_outcome(self, runtime: AggregationRuntime) -> MarketAggregationOutcome:
@@ -597,7 +429,7 @@ class MarketAggregationAgent:
             hard_groups=hard_groups,
         )
         state = graph.invoke(self.graph_input(runtime, hard_groups))
-        return MarketAggregationOutcome.model_validate(state["outcome"])
+        return self.apply_plan(runtime, hard_groups, state["structured_response"])
 
     async def ainvoke(
         self,
@@ -614,4 +446,25 @@ class MarketAggregationAgent:
             hard_groups=hard_groups,
         )
         state = await graph.ainvoke(self.graph_input(runtime, hard_groups))
-        return MarketAggregationOutcome.model_validate(state["outcome"])
+        return self.apply_plan(runtime, hard_groups, state["structured_response"])
+
+    def apply_plan(
+        self,
+        runtime: AggregationRuntime,
+        hard_groups: list[dict[str, Any]],
+        raw_plan: Any,
+    ) -> MarketAggregationOutcome:
+        plan = (
+            raw_plan
+            if isinstance(raw_plan, AggregationPlan)
+            else AggregationPlan.model_validate(raw_plan)
+        )
+        output = runtime.apply_plan(plan, hard_groups)
+        if output["status"] == "pending":
+            return MarketAggregationOutcome(
+                status="pending",
+                pending_groups=output["pending_groups"],
+                unresolved=list(runtime.unresolved),
+                audit=runtime.audit,
+            )
+        return self.completed_outcome(runtime)

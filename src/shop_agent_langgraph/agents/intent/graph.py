@@ -4,13 +4,13 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph.state import CompiledStateGraph
 
 from ...core.llm import build_deepseek_model
-from ...core.submit_agent import build_submit_agent_graph
 from .schemas import IntentResult
-from .tools import INTENT_TOOLS
 
 
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
@@ -38,9 +38,7 @@ class IntentAgent:
 
     @staticmethod
     def _result(state: dict[str, Any]) -> IntentResult:
-        result = state.get("submitted_result")
-        if result is None:
-            raise RuntimeError("intent graph completed without a validated submission")
+        result = state["structured_response"]
         return result if isinstance(result, IntentResult) else IntentResult.model_validate(result)
 
     def invoke(self, request: str | dict[str, Any], config: Any = None, **kwargs: Any) -> IntentResult:
@@ -54,12 +52,11 @@ class IntentAgent:
 
 
 def build_intent_agent(model: BaseChatModel | None = None) -> IntentAgent:
-    graph = build_submit_agent_graph(
+    graph = create_agent(
         model=model or build_deepseek_model(),
-        tools=INTENT_TOOLS,
+        tools=[],
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
-        result_schema=IntentResult,
-        submit_tool_name="submit_intent_result",
+        response_format=ToolStrategy(IntentResult),
         name="intent_agent",
     )
     return IntentAgent(graph)

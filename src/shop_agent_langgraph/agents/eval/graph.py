@@ -5,13 +5,14 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 
 from ...core.llm import build_deepseek_model
-from ...core.submit_agent import build_submit_agent_graph
 from ...domain.criteria import CriteriaAttributeSet
 from .schemas import EvalReport
-from .tools import source_references, submit_eval_report, validate_eval_report
+from .tools import source_references, validate_eval_report
 
 
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
@@ -19,27 +20,20 @@ PROMPT_PATH = Path(__file__).with_name("prompt.md")
 
 class EvalAgent:
     def __init__(self, model: BaseChatModel) -> None:
-        self.model = model
+        self.graph = create_agent(
+            model=model,
+            tools=[],
+            system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
+            response_format=ToolStrategy(EvalReport),
+            name="relation_agent",
+        )
 
     def _build_run(
         self,
         left: CriteriaAttributeSet,
         right: CriteriaAttributeSet,
-    ) -> tuple[Any, dict[str, Any]]:
+    ) -> dict[str, Any]:
         items, _left_refs, _right_refs = source_references(left, right)
-
-        def validate_submission(report: EvalReport) -> None:
-            validate_eval_report(report, left, right)
-
-        graph = build_submit_agent_graph(
-            model=self.model,
-            tools=[submit_eval_report],
-            system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
-            result_schema=EvalReport,
-            submit_tool_name="submit_eval_report",
-            name="eval_agent",
-            validate_submission=validate_submission,
-        )
         context = {
             "left_source_item_ids": left.source_item_ids,
             "right_source_item_ids": right.source_item_ids,
@@ -48,7 +42,7 @@ class EvalAgent:
                 for reference, item in items.items()
             },
         }
-        return graph, {
+        return {
             "messages": [
                 {
                     "role": "user",
@@ -62,20 +56,22 @@ class EvalAgent:
         left: CriteriaAttributeSet,
         right: CriteriaAttributeSet,
     ) -> EvalReport:
-        graph, graph_input = self._build_run(left, right)
-        state = graph.invoke(graph_input)
-        result = state["submitted_result"]
-        return result if isinstance(result, EvalReport) else EvalReport.model_validate(result)
+        state = self.graph.invoke(self._build_run(left, right))
+        raw = state["structured_response"]
+        result = raw if isinstance(raw, EvalReport) else EvalReport.model_validate(raw)
+        validate_eval_report(result, left, right)
+        return result
 
     async def ainvoke(
         self,
         left: CriteriaAttributeSet,
         right: CriteriaAttributeSet,
     ) -> EvalReport:
-        graph, graph_input = self._build_run(left, right)
-        state = await graph.ainvoke(graph_input)
-        result = state["submitted_result"]
-        return result if isinstance(result, EvalReport) else EvalReport.model_validate(result)
+        state = await self.graph.ainvoke(self._build_run(left, right))
+        raw = state["structured_response"]
+        result = raw if isinstance(raw, EvalReport) else EvalReport.model_validate(raw)
+        validate_eval_report(result, left, right)
+        return result
 
 
 def build_eval_agent(model: BaseChatModel | None = None) -> EvalAgent:

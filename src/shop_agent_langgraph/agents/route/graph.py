@@ -4,13 +4,14 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph.state import CompiledStateGraph
 
 from ...core.llm import build_deepseek_model
-from ...core.submit_agent import build_submit_agent_graph
 from .schemas import RouteResult
-from .tools import TAXONOMY_TOOLS
+from .tools import ROUTE_TOOLS
 
 
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
@@ -38,9 +39,7 @@ class RouteAgent:
 
     @staticmethod
     def _result(state: dict[str, Any]) -> RouteResult:
-        result = state.get("submitted_result")
-        if result is None:
-            raise RuntimeError("route graph completed without a validated submit_result call")
+        result = state["structured_response"]
         return result if isinstance(result, RouteResult) else RouteResult.model_validate(result)
 
     def invoke(self, product: str | dict[str, Any], config: Any = None, **kwargs: Any) -> RouteResult:
@@ -53,13 +52,12 @@ class RouteAgent:
 
 
 def build_route_agent(model: BaseChatModel | None = None) -> RouteAgent:
-    """Build the LangGraph route agent, allowing an injected model for tests."""
-    graph = build_submit_agent_graph(
+    """Build the route agent, allowing an injected model for tests."""
+    graph = create_agent(
         model=model or build_deepseek_model(),
-        tools=TAXONOMY_TOOLS,
+        tools=ROUTE_TOOLS,
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
-        result_schema=RouteResult,
-        submit_tool_name="submit_result",
+        response_format=ToolStrategy(RouteResult),
         name="route_agent",
     )
     return RouteAgent(graph)

@@ -4,12 +4,13 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage
 from langgraph.graph.state import CompiledStateGraph
 
 from ...core.llm import build_deepseek_model
-from ...core.submit_agent import build_submit_agent_graph
 from ...domain.market_env import get_product_raw_text
 from .schemas import ResearchResult
 from .tools import build_research_tools
@@ -33,7 +34,7 @@ class ResearchAgent:
 
     @staticmethod
     def _result(state: dict[str, Any]) -> ResearchResult:
-        result = state["submitted_result"]
+        result = state["structured_response"]
         return result if isinstance(result, ResearchResult) else ResearchResult.model_validate(result)
 
     def invoke(self, item_id: str) -> ResearchResult:
@@ -44,13 +45,12 @@ class ResearchAgent:
 
 
 def build_research_agent(model: BaseChatModel | None = None) -> ResearchAgent:
-    graph = build_submit_agent_graph(
+    graph = create_agent(
         model=model or build_deepseek_model(),
         tools=build_research_tools(),
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
-        result_schema=ResearchResult,
-        submit_tool_name="submit_research_result",
-        name="research_agent",
+        response_format=ToolStrategy(ResearchResult),
+        name="personalize_agent",
     )
     return ResearchAgent(graph)
 
