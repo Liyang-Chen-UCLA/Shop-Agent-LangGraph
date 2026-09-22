@@ -4,73 +4,30 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
-from ...domain.criteria import (
-    Attribute,
-    BooleanCriterion,
-    CategoricalCriterion,
-    Criterion,
-    NumericCriterion,
-    SchemaModel,
-)
+from ...domain.criteria import SchemaModel
 
 
-CRITERION_TYPES = (NumericCriterion, BooleanCriterion, CategoricalCriterion)
-
-
-class CanonicalOutput(SchemaModel):
-    kind: Literal["criterion", "attribute"]
-    item: Criterion | Attribute
-
-    @model_validator(mode="after")
-    def check_kind(self) -> CanonicalOutput:
-        item_is_criterion = isinstance(self.item, CRITERION_TYPES)
-        if (self.kind == "criterion") != item_is_criterion:
-            raise ValueError("kind must agree with the item's criterion/attribute schema")
-        return self
-
-
-class MatchDecision(CanonicalOutput):
-    left_id: str
-    right_id: str
-
-
-class MatchBatch(SchemaModel):
-    matches: list[MatchDecision] = Field(min_length=1)
-
-
-class IndependentBatch(SchemaModel):
-    item_ids: list[str] = Field(min_length=1)
-
-
-class ResolvedOutput(CanonicalOutput):
-    alignment: Literal["match", "independent"]
-    source_refs: list[str] = Field(min_length=1)
-    preserved_aspects: list[str] = Field(min_length=1)
-
-
-class PartialResolution(SchemaModel):
-    group_id: str = Field(min_length=1)
-    left_ids: list[str] = Field(min_length=1)
-    right_ids: list[str] = Field(min_length=1)
-    relation: Literal["left_more_specific", "right_more_specific", "overlap"]
+class EvalGroup(SchemaModel):
+    status: Literal["match", "uncertain", "independent"]
+    left_ids: list[str]
+    right_ids: list[str]
     reason: str = Field(min_length=1)
-    status: Literal["resolved", "needs_review"]
-    outputs: list[ResolvedOutput]
-    missing_evidence: list[str]
 
     @model_validator(mode="after")
-    def check_status(self) -> PartialResolution:
-        if self.status == "resolved":
-            if not self.outputs or self.missing_evidence:
-                raise ValueError("resolved groups require outputs and no missing_evidence")
-        elif self.outputs or not self.missing_evidence:
-            raise ValueError("needs_review groups require missing_evidence and no outputs")
+    def validate_shape(self) -> EvalGroup:
+        if not self.reason.strip():
+            raise ValueError("reason must be nonblank")
+        if len(self.left_ids) != len(set(self.left_ids)) or len(self.right_ids) != len(
+            set(self.right_ids)
+        ):
+            raise ValueError("source IDs must be unique within a group")
+        if self.status in {"match", "uncertain"}:
+            if not self.left_ids or not self.right_ids:
+                raise ValueError(f"{self.status} groups require sources from both sides")
+        elif bool(self.left_ids) == bool(self.right_ids):
+            raise ValueError("independent groups require sources from exactly one side")
         return self
 
 
-class PartialResolutionBatch(SchemaModel):
-    resolutions: list[PartialResolution] = Field(min_length=1)
-
-
-class FinalizeRequest(SchemaModel):
-    """No model-authored collection: the runtime assembles the result."""
+class EvalReport(SchemaModel):
+    groups: list[EvalGroup]

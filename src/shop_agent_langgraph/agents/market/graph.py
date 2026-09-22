@@ -10,9 +10,10 @@ from ...core.config import CONFIG
 from ...core.llm import build_deepseek_model
 from ...core.submit_agent import build_submit_agent_graph
 from ...domain.criteria import CriteriaAttributeSet
-from ..eval.graph import eval_agent
+from ..eval.graph import EvalAgent
 from ..research.graph import research_agent
-from .schemas import MarketResult, MarketSelection
+from .aggregation import MarketAggregationAgent
+from .schemas import MarketAggregationOutcome, MarketResult, MarketSelection
 from .tools import MARKET_TOOLS, submit_market_selection
 
 
@@ -20,8 +21,15 @@ PROMPT_PATH = Path(__file__).with_name("prompt.md")
 
 
 class MarketAgent:
-    def __init__(self, selection_graph: object) -> None:
+    def __init__(
+        self,
+        selection_graph: object,
+        evaluator: EvalAgent,
+        aggregator: MarketAggregationAgent,
+    ) -> None:
         self.selection_graph = selection_graph
+        self.evaluator = evaluator
+        self.aggregator = aggregator
 
     async def _select(self, query: str) -> MarketSelection:
         state = await self.selection_graph.ainvoke(
@@ -38,7 +46,11 @@ class MarketAgent:
             }
         )
         result = state["submitted_result"]
-        return result if isinstance(result, MarketSelection) else MarketSelection.model_validate(result)
+        return (
+            result
+            if isinstance(result, MarketSelection)
+            else MarketSelection.model_validate(result)
+        )
 
     async def _research(self, item_ids: list[str]) -> list[CriteriaAttributeSet]:
         results = await asyncio.gather(
@@ -56,26 +68,63 @@ class MarketAgent:
     async def _aggregate(
         self,
         results: list[CriteriaAttributeSet],
-    ) -> CriteriaAttributeSet:
+    ) -> MarketAggregationOutcome:
         current = results
         while len(current) > 1:
             pairs = [
                 (current[index], current[index + 1])
                 for index in range(0, len(current) - 1, 2)
             ]
-            merged = await asyncio.gather(
-                *(eval_agent.ainvoke(left, right) for left, right in pairs)
+            outcomes = await asyncio.gather(
+                *(self._aggregate_pair(left, right) for left, right in pairs)
             )
+            pending = [outcome for outcome in outcomes if outcome.status == "pending"]
+            if pending:
+                return MarketAggregationOutcome(
+                    status="pending",
+                    pending_groups=[
+                        group for outcome in pending for group in outcome.pending_groups
+                    ],
+                    unresolved=[
+                        reference for outcome in pending for reference in outcome.unresolved
+                    ],
+                )
+            merged = [
+                outcome.collection
+                for outcome in outcomes
+                if outcome.collection is not None
+            ]
             current = [*merged, *([] if len(current) % 2 == 0 else [current[-1]])]
-        return current[0]
+        return MarketAggregationOutcome(status="completed", collection=current[0])
+
+    async def _aggregate_pair(
+        self,
+        left: CriteriaAttributeSet,
+        right: CriteriaAttributeSet,
+    ) -> MarketAggregationOutcome:
+        report = await self.evaluator.ainvoke(left, right)
+        return await self.aggregator.ainvoke(left, right, report)
 
     async def ainvoke(self, query: str) -> MarketResult:
         selection = await self._select(query)
         researched = await self._research(selection.item_ids)
-        merged = await self._aggregate(researched)
+        aggregation = await self._aggregate(researched)
+        if aggregation.status == "pending":
+            return MarketResult(
+                query=query,
+                item_ids=selection.item_ids,
+                status="pending",
+                criteria=[],
+                attributes=[],
+                pending_groups=aggregation.pending_groups,
+            )
+        merged = aggregation.collection
+        if merged is None:
+            raise RuntimeError("completed aggregation is missing its collection")
         return MarketResult(
             query=query,
             item_ids=selection.item_ids,
+            status="completed",
             criteria=merged.criteria,
             attributes=merged.attributes,
         )
@@ -85,15 +134,20 @@ class MarketAgent:
 
 
 def build_market_agent(model: BaseChatModel | None = None) -> MarketAgent:
+    selected_model = model or build_deepseek_model()
     graph = build_submit_agent_graph(
-        model=model or build_deepseek_model(),
+        model=selected_model,
         tools=[*MARKET_TOOLS, submit_market_selection],
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
         result_schema=MarketSelection,
         submit_tool_name="submit_market_selection",
         name="market_agent",
     )
-    return MarketAgent(graph)
+    return MarketAgent(
+        graph,
+        evaluator=EvalAgent(selected_model),
+        aggregator=MarketAggregationAgent(selected_model),
+    )
 
 
 class LazyMarketAgent:

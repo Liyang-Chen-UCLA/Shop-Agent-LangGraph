@@ -89,13 +89,17 @@ results 2-to-2 in parallel at every reduction layer. Global runtime limits are
 defined in `core/config.py`; the current market search and selection maximum is
 4 products.
 
-## Semantic partial resolution
+## Eval and Market aggregation
 
-Eval uses batch `resolve_partial` calls for many-to-many semantic overlap repair.
-Each group accepts `left_ids`, `right_ids`, and multiple canonical outputs labeled
-`match` or `independent`, with explicit source mappings. Invalid batches are atomic;
-review-needed inputs remain unresolved. `get_diff` has been removed from the tools.
-Final `submit({})` builds the result from runtime state rather than model-authored arrays.
+Eval is a read-only semantic judge. For each pair of `CriteriaAttributeSet` values it
+returns an `EvalReport` that partitions every source-qualified field exactly once as
+`match`, `uncertain`, or `independent`; it never writes canonical definitions.
 
-See [the partial-resolution protocol](docs/eval-partial-protocol.md) for responsibilities,
-request fields, validation rules, and a many-to-many example.
+Market then runs an isolated aggregation graph for that pair. The graph may merge,
+retain, or decompose fields with atomic tools and assembles the final collection from
+accepted operations. Insufficient evidence produces an explicit pending market result
+and stops later reduction rounds. Pair processing remains parallel at each reduction
+layer, with a fresh aggregation state for every pair.
+
+See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md) for
+schemas, validation rules, pending behavior, and the reduction flow.

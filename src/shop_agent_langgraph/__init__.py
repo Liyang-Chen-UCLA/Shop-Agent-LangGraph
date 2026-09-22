@@ -1,6 +1,6 @@
 """LangGraph-based shopping agents."""
 
-from .agents.eval import EvalAgent, build_eval_agent, eval_agent
+from .agents.eval import EvalAgent, EvalGroup, EvalReport, build_eval_agent, eval_agent
 from .agents.intent import IntentResult, build_intent_agent, intent_agent
 from .agents.market import MarketResult, build_market_agent, market_agent
 from .agents.research import ResearchResult, build_research_agent, research_agent
@@ -13,6 +13,8 @@ __all__ = [
     "CriteriaAttributeSet",
     "CONFIG",
     "EvalAgent",
+    "EvalGroup",
+    "EvalReport",
     "IntentResult",
     "MarketResult",
     "ResearchResult",
