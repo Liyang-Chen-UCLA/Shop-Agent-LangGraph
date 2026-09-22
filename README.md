@@ -84,24 +84,21 @@ print(result.model_dump())
 ```
 
 Market Agent searches local item IDs and chooses a sample, Research Agent
-extracts each selected product concurrently, and Eval Agent compares adjacent
-results 2-to-2 in parallel at every reduction layer. Global runtime limits are
-defined in `core/config.py`; the current market search and selection maximum is
-4 products.
+extracts each selected product concurrently, a conservative deterministic pass
+removes obvious duplicates, and one aggregation call produces the canonical
+result. Global runtime limits are defined in `core/config.py`; the current
+market search and selection maximum is 4 products.
 
 ## Eval and Market aggregation
 
-Eval is a read-only semantic judge. For each pair of `CriteriaAttributeSet` values it
-returns an `EvalReport` that partitions every source-qualified field exactly once as
-`match`, `uncertain`, or `independent`; it never writes canonical definitions.
+Eval remains an independent, read-only semantic judge for comparing two
+`CriteriaAttributeSet` values, but Market Agent no longer invokes it.
 
-Market first handles ordinary independent fields and compatible one-to-one matches in
-program logic. Only uncertain or structurally incompatible groups reach the isolated
-aggregation model, which submits one atomic mixed plan using base-item patches for
-matches. Successful plans are finalized automatically without a separate model submit
-round. Insufficient evidence produces an explicit pending result and stops later
-reduction rounds. Pair processing remains parallel at each reduction layer, with a
-fresh aggregation state for every pair.
+Market's deterministic pre-merge only combines items whose normalized ID,
+name, description, kind, schema, and non-text semantic fields agree. One final
+aggregation call receives every pre-merged research collection. It merges clear
+synonyms and keeps different, conflicting, or uncertain items independent; there
+is no pairwise evaluation, partial-resolution protocol, or tree reduce.
 
 See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md) for
 schemas, validation rules, pending behavior, and the reduction flow.

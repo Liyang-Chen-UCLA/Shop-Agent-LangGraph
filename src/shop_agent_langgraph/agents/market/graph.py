@@ -11,10 +11,9 @@ from langchain_core.language_models import BaseChatModel
 from ...core.config import CONFIG
 from ...core.llm import build_deepseek_model
 from ...domain.criteria import CriteriaAttributeSet
-from ..eval.graph import EvalAgent
 from ..research.graph import research_agent
-from .aggregation import MarketAggregationAgent
-from .schemas import MarketAggregationOutcome, MarketResult, MarketSelection
+from .aggregation import MarketAggregationAgent, deterministic_premerge
+from .schemas import MarketResult, MarketSelection
 from .tools import MARKET_TOOLS
 
 
@@ -25,11 +24,9 @@ class MarketAgent:
     def __init__(
         self,
         selection_graph: object,
-        evaluator: EvalAgent,
         aggregator: MarketAggregationAgent,
     ) -> None:
         self.selection_graph = selection_graph
-        self.evaluator = evaluator
         self.aggregator = aggregator
 
     async def _select(self, query: str) -> MarketSelection:
@@ -66,77 +63,17 @@ class MarketAgent:
             for result in results
         ]
 
-    async def _aggregate(
-        self,
-        results: list[CriteriaAttributeSet],
-    ) -> MarketAggregationOutcome:
-        current = results
-        audit: list[dict[str, object]] = []
-        while len(current) > 1:
-            pairs = [
-                (current[index], current[index + 1])
-                for index in range(0, len(current) - 1, 2)
-            ]
-            outcomes = await asyncio.gather(
-                *(self._aggregate_pair(left, right) for left, right in pairs)
-            )
-            audit.extend(entry for outcome in outcomes for entry in outcome.audit)
-            pending = [outcome for outcome in outcomes if outcome.status == "pending"]
-            if pending:
-                return MarketAggregationOutcome(
-                    status="pending",
-                    pending_groups=[
-                        group for outcome in pending for group in outcome.pending_groups
-                    ],
-                    unresolved=[
-                        reference for outcome in pending for reference in outcome.unresolved
-                    ],
-                    audit=audit,
-                )
-            merged = [
-                outcome.collection
-                for outcome in outcomes
-                if outcome.collection is not None
-            ]
-            current = [*merged, *([] if len(current) % 2 == 0 else [current[-1]])]
-        return MarketAggregationOutcome(
-            status="completed",
-            collection=current[0],
-            audit=audit,
-        )
-
-    async def _aggregate_pair(
-        self,
-        left: CriteriaAttributeSet,
-        right: CriteriaAttributeSet,
-    ) -> MarketAggregationOutcome:
-        report = await self.evaluator.ainvoke(left, right)
-        return await self.aggregator.ainvoke(left, right, report)
-
     async def ainvoke(self, query: str) -> MarketResult:
         selection = await self._select(query)
         researched = await self._research(selection.item_ids)
-        aggregation = await self._aggregate(researched)
-        if aggregation.status == "pending":
-            return MarketResult(
-                query=query,
-                item_ids=selection.item_ids,
-                status="pending",
-                criteria=[],
-                attributes=[],
-                pending_groups=aggregation.pending_groups,
-                audit=aggregation.audit,
-            )
-        merged = aggregation.collection
-        if merged is None:
-            raise RuntimeError("completed aggregation is missing its collection")
+        premerged = deterministic_premerge(researched)
+        merged = await self.aggregator.ainvoke(premerged)
         return MarketResult(
             query=query,
             item_ids=selection.item_ids,
             status="completed",
             criteria=merged.criteria,
             attributes=merged.attributes,
-            audit=aggregation.audit,
         )
 
     def invoke(self, query: str) -> MarketResult:
@@ -154,7 +91,6 @@ def build_market_agent(model: BaseChatModel | None = None) -> MarketAgent:
     )
     return MarketAgent(
         graph,
-        evaluator=EvalAgent(selected_model),
         aggregator=MarketAggregationAgent(selected_model),
     )
 
