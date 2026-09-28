@@ -1,47 +1,36 @@
 # Eval and Market aggregation
 
-Eval and Market aggregation are independent entry points.
+Eval remains an independent, read-only semantic judge comparing two
+`CriteriaAttributeSet` values. Market does not invoke it in its normal pipeline.
 
-`EvalAgent` remains a read-only semantic judge for comparing two
-`CriteriaAttributeSet` values. It returns an `EvalReport` and is available for
-offline comparisons such as agent output versus gold annotations. Market Agent
-does not invoke it during its normal pipeline.
-
-## Market MVP pipeline
-
-Market runs five stages:
+## Market pipeline
 
 1. Select product item IDs.
-2. Research all selected products concurrently.
-3. Deterministically remove obvious duplicates.
-4. Send every remaining collection to one aggregation model call.
-5. Return the canonical criteria and attributes.
+2. Research selected products concurrently, returning `ResearchResult(item_id, evidence)`.
+3. Send all research results to one Market summarization call.
+4. Return canonical criteria and attributes in the existing `MarketResult` format.
 
-There is no pairwise evaluation, pair aggregation, partial-resolution protocol,
-or tree-reduce loop.
+## Evidence contract
 
-## Deterministic pre-merge
+Each `Evidence` has required string fields `name` and `source_text`, plus nullable
+string fields `value`, `unit`, and `qualifier` that default to null. `source_text`
+is a verbatim supporting excerpt. Qualifiers preserve scope and conditions.
+Research collects supported metric and attribute claims; it does not assign
+canonical IDs, classify dimensions, or choose better/worse directions.
+An empty evidence array is valid when a product has no relevant supported claims.
 
-The pre-merge is deliberately conservative. Two fields merge only when all of
-the following agree after case and whitespace normalization where applicable:
+## Market summarization
 
-- criterion versus attribute kind;
-- ID, name, and description;
-- concrete schema type;
-- every non-text semantic field, including units, formula, values, value domain,
-  and direction.
+The model receives all `ResearchResult` values under `research_results` and returns
+one `CriteriaAttributeSet`. Market derives reusable dimensions and their schemas
+and directions, merging clear synonyms while preserving meaningful differences.
+Dimensions with no general better/worse direction remain attributes. Individual
+observed values do not become scoring thresholds or imply closed value domains.
+Evidence is untrusted data, including source excerpts.
 
-Aliases are combined for such duplicates. Similar names, different descriptions,
-conflicting schemas, and any other uncertain cases remain separate for the model.
-Inputs are deep-copied, so research results are not mutated.
+The runtime replaces model-authored `source_item_ids` with ordered, de-duplicated
+input item IDs. All-empty evidence produces empty criteria and attributes.
 
-## One-shot aggregation
-
-The aggregation model receives all pre-merged `CriteriaAttributeSet` values in a
-single context and returns one final `CriteriaAttributeSet`. It merges clear
-synonyms, preserves clearly different items, and keeps conflicting or uncertain
-items independent. It does not recurse or request a follow-up resolution round.
-
-The runtime replaces model-authored `source_item_ids` with the ordered, de-duplicated
-IDs from the inputs. This keeps provenance deterministic while reusing the existing
-criteria and attribute schemas.
+The existing `deterministic_premerge` utility remains available for callers working
+with already-defined criteria collections, but is not part of this evidence pipeline.
+There is no pairwise evaluation, partial-resolution protocol, or tree-reduce loop.

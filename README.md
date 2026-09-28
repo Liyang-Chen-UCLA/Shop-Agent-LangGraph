@@ -16,6 +16,12 @@ returns a `RouteResult` Pydantic model. `DEEPSEEK_MODEL` and
 `DEEPSEEK_BASE_URL` may optionally override `deepseek-flash` and
 `https://api.deepseek.com`.
 
+The shared model explicitly disables DeepSeek thinking mode. Agents use
+LangChain `ToolStrategy` for structured output, which sends
+`tool_choice="required"`; DeepSeek rejects that choice in thinking mode.
+Restart the running server after changing model configuration so cached agent
+instances are rebuilt.
+
 The intent agent is an independent entry point for parsing user requests:
 
 ```python
@@ -83,10 +89,13 @@ result = asyncio.run(market_agent.ainvoke("游戏手柄"))
 print(result.model_dump())
 ```
 
-Market Agent searches local item IDs and chooses a sample, Research Agent
-extracts each selected product concurrently, a conservative deterministic pass
-removes obvious duplicates, and one aggregation call produces the canonical
-result. Global runtime limits are defined in `core/config.py`; the current
+Market Agent searches local item IDs and chooses a sample. Research Agent
+collects metric and attribute evidence for each selected product concurrently.
+Each `ResearchResult` contains `item_id` and `evidence: list[Evidence]`.
+Evidence carries `name`, optional `value`, `unit`, and `qualifier`, and required
+verbatim `source_text`. Research does not define criteria or preference directions.
+Market summarizes all evidence in one model call into canonical criteria and
+attributes. Global runtime limits are defined in `core/config.py`; the current
 market search and selection maximum is 4 products.
 
 ## Eval and Market aggregation
@@ -94,11 +103,9 @@ market search and selection maximum is 4 products.
 Eval remains an independent, read-only semantic judge for comparing two
 `CriteriaAttributeSet` values, but Market Agent no longer invokes it.
 
-Market's deterministic pre-merge only combines items whose normalized ID,
-name, description, kind, schema, and non-text semantic fields agree. One final
-aggregation call receives every pre-merged research collection. It merges clear
-synonyms and keeps different, conflicting, or uncertain items independent; there
-is no pairwise evaluation, partial-resolution protocol, or tree reduce.
+Market receives every product's evidence without pre-merging it. It derives
+reusable dimensions, merges clear synonyms, and preserves meaningful conditions
+and units. Descriptive dimensions without a general better/worse direction remain
+attributes. There is no pairwise evaluation or tree reduce.
 
-See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md) for
-schemas, validation rules, pending behavior, and the reduction flow.
+See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md).

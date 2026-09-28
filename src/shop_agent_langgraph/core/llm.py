@@ -15,4 +15,7 @@ def build_deepseek_model() -> ChatOpenAI:
         api_key=api_key,
         base_url=os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
         temperature=0,
+        # ToolStrategy forces tool_choice="required", which DeepSeek rejects
+        # in thinking mode. Disable it explicitly instead of relying on defaults.
+        extra_body={"thinking": {"type": "disabled"}},
     )

@@ -12,14 +12,12 @@ from .schemas import ResearchResult
 @tool(args_schema=ResearchResult)
 def submit_research_result(
     item_id: str,
-    criteria: list[Any],
-    attributes: list[Any],
+    evidence: list[Any],
 ) -> dict[str, Any]:
-    """Submit one product's extracted criteria and attributes."""
+    """Submit one product's metric and attribute evidence."""
     return ResearchResult(
         item_id=item_id,
-        criteria=criteria,
-        attributes=attributes,
+        evidence=evidence,
     ).model_dump()
 
 

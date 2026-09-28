@@ -10,6 +10,7 @@ from .agents.eval import (
 from .agents.intent import IntentResult, build_intent_agent, intent_agent
 from .agents.market import MarketResult, build_market_agent, market_agent
 from .agents.research import (
+    Evidence,
     ResearchResult,
     build_research_agent,
     research_agent,
@@ -30,6 +31,7 @@ __all__ = [
     "EvalAgent",
     "EvalGroup",
     "EvalReport",
+    "Evidence",
     "IntentResult",
     "MarketResult",
     "ResearchResult",

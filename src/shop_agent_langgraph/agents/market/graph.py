@@ -10,9 +10,9 @@ from langchain_core.language_models import BaseChatModel
 
 from ...core.config import CONFIG
 from ...core.llm import build_deepseek_model
-from ...domain.criteria import CriteriaAttributeSet
 from ..research.graph import research_agent
-from .aggregation import MarketAggregationAgent, deterministic_premerge
+from ..research.schemas import ResearchResult
+from .aggregation import MarketAggregationAgent
 from .schemas import MarketResult, MarketSelection
 from .tools import MARKET_TOOLS
 
@@ -50,24 +50,16 @@ class MarketAgent:
             else MarketSelection.model_validate(result)
         )
 
-    async def _research(self, item_ids: list[str]) -> list[CriteriaAttributeSet]:
+    async def _research(self, item_ids: list[str]) -> list[ResearchResult]:
         results = await asyncio.gather(
             *(research_agent.ainvoke(item_id) for item_id in item_ids)
         )
-        return [
-            CriteriaAttributeSet(
-                source_item_ids=[result.item_id],
-                criteria=result.criteria,
-                attributes=result.attributes,
-            )
-            for result in results
-        ]
+        return list(results)
 
     async def ainvoke(self, query: str) -> MarketResult:
         selection = await self._select(query)
         researched = await self._research(selection.item_ids)
-        premerged = deterministic_premerge(researched)
-        merged = await self.aggregator.ainvoke(premerged)
+        merged = await self.aggregator.ainvoke(researched)
         return MarketResult(
             query=query,
             item_ids=selection.item_ids,

@@ -11,6 +11,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.graph.state import CompiledStateGraph
 
 from ...domain.criteria import Attribute, CriteriaAttributeSet, Criterion
+from ..research.schemas import ResearchResult
 
 
 PROMPT_PATH = Path(__file__).with_name("aggregation_prompt.md")
@@ -92,13 +93,13 @@ def build_market_aggregation_graph(
 
 
 class MarketAggregationAgent:
-    """Canonicalize all researched collections in one model call."""
+    """Summarize product evidence into criteria and attributes in one model call."""
 
     def __init__(self, model: BaseChatModel) -> None:
         self.graph = build_market_aggregation_graph(model)
 
     @staticmethod
-    def _input(collections: list[CriteriaAttributeSet]) -> dict[str, Any]:
+    def _input(collections: list[ResearchResult]) -> dict[str, Any]:
         if not collections:
             raise ValueError("aggregation requires at least one collection")
         context = [collection.model_dump(mode="json") for collection in collections]
@@ -106,7 +107,7 @@ class MarketAggregationAgent:
             "messages": [
                 HumanMessage(
                     content=json.dumps(
-                        {"researched_collections": context},
+                        {"research_results": context},
                         ensure_ascii=False,
                     )
                 )
@@ -116,7 +117,7 @@ class MarketAggregationAgent:
     @staticmethod
     def _result(
         state: dict[str, Any],
-        collections: list[CriteriaAttributeSet],
+        collections: list[ResearchResult],
     ) -> CriteriaAttributeSet:
         raw = state["structured_response"]
         result = (
@@ -126,23 +127,22 @@ class MarketAggregationAgent:
         )
         source_item_ids = list(
             dict.fromkeys(
-                item_id
+                collection.item_id
                 for collection in collections
-                for item_id in collection.source_item_ids
             )
         )
         return result.model_copy(update={"source_item_ids": source_item_ids})
 
     def invoke(
         self,
-        collections: list[CriteriaAttributeSet],
+        collections: list[ResearchResult],
     ) -> CriteriaAttributeSet:
         state = self.graph.invoke(self._input(collections))
         return self._result(state, collections)
 
     async def ainvoke(
         self,
-        collections: list[CriteriaAttributeSet],
+        collections: list[ResearchResult],
     ) -> CriteriaAttributeSet:
         state = await self.graph.ainvoke(self._input(collections))
         return self._result(state, collections)
