@@ -297,17 +297,57 @@ def test_pending_search_prevents_finalization():
         draft.finalize()
 
 
-def test_failed_search_does_not_count_as_completed():
+def test_failed_search_retries_and_does_not_count_as_completed(monkeypatch):
     draft = RelationDraft(valid_graph(), profile())
     class FailingSearch:
+        calls = 0
+
         def invoke(self, args):
+            self.calls += 1
             raise RuntimeError("network failure")
-    tools = {t.name: t for t in build_relation_tools(draft, FailingSearch())}
-    with pytest.raises(RuntimeError, match="network failure"):
-        tools["search_relation_evidence"].invoke({"query": "test"})
+    search = FailingSearch()
+    relation_tools = importlib.import_module("shop_agent_langgraph.agents.relation.tools")
+    monkeypatch.setattr(relation_tools.time, "sleep", lambda _: None)
+    tools = {t.name: t for t in build_relation_tools(draft, search)}
+    result = tools["search_relation_evidence"].invoke({"query": "test"})
+    assert "network failure" in result["error"]
+    assert "3 attempt(s)" in result["error"]
+    assert search.calls == 3
     assert draft.pending_searches == 0
     assert draft.completed_searches == 0
     assert "error" in tools["finalize_relation_graph"].invoke({})
+
+
+@pytest.mark.parametrize(("response", "expected_calls"), [
+    ({"error": ValueError("Error 503: unavailable")}, 3),
+    ({"error": ValueError("Error 401: invalid API key")}, 1),
+    ({"unexpected": "payload"}, 3),
+    ("not JSON", 3),
+])
+def test_search_response_failures_preserve_cause_and_retry_selectively(
+    monkeypatch, response, expected_calls,
+):
+    draft = RelationDraft(valid_graph(), profile())
+
+    class StaticSearch:
+        calls = 0
+
+        def invoke(self, args):
+            self.calls += 1
+            return response
+
+    search = StaticSearch()
+    relation_tools = importlib.import_module("shop_agent_langgraph.agents.relation.tools")
+    monkeypatch.setattr(relation_tools.time, "sleep", lambda _: None)
+    tools = {t.name: t for t in build_relation_tools(draft, search)}
+
+    result = tools["search_relation_evidence"].invoke({"query": "test"})
+
+    assert "error" in result
+    assert str(expected_calls) in result["error"]
+    assert search.calls == expected_calls
+    assert draft.pending_searches == 0
+    assert draft.completed_searches == 0
 
 
 def test_condition_matching_and_paths_do_not_infer_missing_values_or_causality():

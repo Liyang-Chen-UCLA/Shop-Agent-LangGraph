@@ -18,6 +18,10 @@ from .agents.research import (
 from .agents.route import RouteResult, TaxonomyNode, build_route_agent, route_agent
 from .agents.relation import RelationAgent, RelationGraph, build_relation_agent, relation_agent
 from .core.config import CONFIG
+from .agents.personalization import (
+    PersonalizationAgent, PersonalizedProfile, QuestionSet,
+    build_personalization_agent, personalization_agent,
+)
 from .domain.criteria import CriteriaAttributeSet
 from .supervisor import (
     SupervisorState,
@@ -27,6 +31,11 @@ from .supervisor import (
 )
 
 __all__ = [
+    "PersonalizationAgent",
+    "PersonalizedProfile",
+    "QuestionSet",
+    "build_personalization_agent",
+    "personalization_agent",
     "CriteriaAttributeSet",
     "CONFIG",
     "EvalAgent",

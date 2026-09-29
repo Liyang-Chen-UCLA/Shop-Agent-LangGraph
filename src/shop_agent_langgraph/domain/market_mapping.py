@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Final
 
+from .taxonomy import load_taxonomy
+
 
 NODE_TO_DATASET_CATEGORY: Final[dict[str, str]] = {
     "3375": "乒乓底板",
@@ -22,4 +24,24 @@ NODE_TO_DATASET_CATEGORY: Final[dict[str, str]] = {
 
 
 def dataset_category_for_node(node_id: str) -> str:
-    return NODE_TO_DATASET_CATEGORY[str(node_id)]
+    requested_id = str(node_id)
+    _, nodes_by_id, _ = load_taxonomy()
+    current_id: str | None = requested_id
+    visited: set[str] = set()
+
+    while current_id is not None:
+        category = NODE_TO_DATASET_CATEGORY.get(current_id)
+        if category is not None:
+            return category
+        if current_id in visited:
+            raise ValueError(f"cycle in taxonomy parent chain at node ID: {current_id}")
+        visited.add(current_id)
+
+        node = nodes_by_id.get(current_id)
+        if node is None:
+            raise ValueError(f"unknown taxonomy node ID: {current_id}")
+        current_id = node["parent_id"]
+
+    raise ValueError(
+        f"no market dataset mapping for taxonomy node ID: {requested_id}"
+    )

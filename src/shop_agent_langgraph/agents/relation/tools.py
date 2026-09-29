@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import time
 from datetime import datetime, timezone
 
 from langchain.tools import tool
@@ -12,6 +14,66 @@ from .schemas import (
     ContextVariable, DerivedVariable, OpenQuestion, ProfileSuggestion,
     Relation, RelationEvidence, UtilityRule,
 )
+
+
+SEARCH_MAX_ATTEMPTS = 3
+SEARCH_RETRY_BASE_DELAY_SECONDS = 0.25
+
+
+def _search_error_text(error) -> str:
+    if isinstance(error, BaseException):
+        return f"{type(error).__name__}: {error}"
+    return str(error)
+
+
+def _retryable_search_error(error) -> bool:
+    text = _search_error_text(error).casefold()
+    status_match = re.search(r"(?:error|status(?: code)?)\s*[: ]\s*(\d{3})", text)
+    if status_match:
+        status = int(status_match.group(1))
+        return status in {408, 425, 429} or status >= 500
+    if "no search results found" in text:
+        return False
+    permanent_markers = (
+        "api key", "api_key", "unauthorized", "forbidden", "invalid request",
+        "quota exceeded", "usage limit", "insufficient credits",
+    )
+    return not any(marker in text for marker in permanent_markers)
+
+
+def _invoke_search(search, query: str) -> dict:
+    last_error = None
+    for attempt in range(1, SEARCH_MAX_ATTEMPTS + 1):
+        try:
+            response = search.invoke({"query": query})
+            if isinstance(response, str):
+                response = json.loads(response)
+            if isinstance(response, dict) and isinstance(response.get("results"), list):
+                return response
+            if isinstance(response, dict) and "error" in response:
+                last_error = response["error"]
+            elif isinstance(response, dict):
+                keys = ", ".join(sorted(str(key) for key in response)) or "none"
+                last_error = RuntimeError(
+                    f"search response omitted results (payload keys: {keys})"
+                )
+            else:
+                last_error = RuntimeError(
+                    f"unexpected search response type: {type(response).__name__}"
+                )
+        except Exception as error:
+            last_error = error
+
+        if attempt == SEARCH_MAX_ATTEMPTS or not _retryable_search_error(last_error):
+            return {
+                "error": (
+                    f"search failed after {attempt} attempt(s): "
+                    f"{_search_error_text(last_error)}"
+                )
+            }
+        time.sleep(SEARCH_RETRY_BASE_DELAY_SECONDS * (2 ** (attempt - 1)))
+
+    raise AssertionError("unreachable")
 
 
 def build_relation_tools(draft: RelationDraft, search=None):
@@ -37,11 +99,9 @@ def build_relation_tools(draft: RelationDraft, search=None):
             draft.search_count += 1
             draft.pending_searches += 1
         try:
-            response = search.invoke({"query": query})
-            if isinstance(response, str):
-                response = json.loads(response)
-            if not isinstance(response, dict) or "results" not in response:
-                raise RuntimeError("search did not return a results payload")
+            response = _invoke_search(search, query)
+            if "error" in response:
+                return response
             now = datetime.now(timezone.utc)
             results = []
             with draft.lock:

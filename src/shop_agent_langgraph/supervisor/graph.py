@@ -7,6 +7,7 @@ from typing import Any
 from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage
+from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
@@ -38,8 +39,8 @@ def build_supervisor_graph(
     """Build the messages-only entry graph: START -> supervisor -> END."""
     supervisor_agent = build_supervisor_agent(model)
 
-    def run_supervisor(state: SupervisorState) -> dict[str, list[Any]]:
-        result = supervisor_agent.invoke({"messages": state["messages"]})
+    def run_supervisor(state: SupervisorState, config: RunnableConfig) -> dict[str, list[Any]]:
+        result = supervisor_agent.invoke({"messages": state["messages"]}, config=config)
         return {"messages": result["messages"][len(state["messages"]):]}
 
     builder = StateGraph(SupervisorState)

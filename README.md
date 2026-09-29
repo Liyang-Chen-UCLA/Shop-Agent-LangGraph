@@ -154,3 +154,19 @@ suggestions remain distinct. Numeric scoring and automatic causal propagation
 are outside this version.
 
 See [Relation Graph schemas and delivery protocol](docs/relation-graph.md).
+
+## Personalization Agent
+
+After Relation Agent, Supervisor asks up to three product-specific questions and
+uses the user's feedback to save personalized criteria and attributes. Existing
+market definitions and relation graphs stay read-only. Later preference changes
+regenerate the result from the task's user messages.
+
+The independent `personalization_agent` exposes `prepare_questions` and
+`personalize` (and async equivalents), with explicit thread/task IDs. Questions,
+feedback and the latest result are saved under `.cache/personalization`, configurable
+with `PERSONALIZATION_CACHE_DIR`. Input hashes, references, user quotes and context
+types/units are validated before publication. The MVP uses natural-language
+preferences, not executable scoring rules, and supports one active task per conversation.
+
+See [Personalization MVP schemas and usage](docs/personalization.md).
