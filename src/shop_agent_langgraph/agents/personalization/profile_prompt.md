@@ -11,7 +11,7 @@ earlier statements, and removed preferences must disappear.
   matching types and units. Preserve approximate qualifiers in user_quote; do not pretend an
   approximate answer establishes an exact filtering threshold.
 - Criteria describe user-specific comparative preferences; attributes describe requirements
-  or filters. Both reference existing market dimensions. An attribute may become a criterion
+  or filters. Reference market dimensions or local:<id> definitions. An attribute may become a criterion
   when the user assigns it an explicit preference. Never duplicate a source_ref across lists.
 - Every context/preference/requirement includes a verbatim quote from a user message. Graph
   evidence and the assistant's questions cannot establish a user's preference. Do not assume
@@ -26,8 +26,23 @@ earlier statements, and removed preferences must disappear.
   is present, regenerate the output and review the rejected assertion as well as its reference.
   Do not replace an invalid citation with an unrelated allowed ID to pass validation.
 - Include only dimensions relevant to the user. Unknown values, ambiguous answers, conflicting
-  requirements and requests with no existing reference go into unresolved, never invented IDs.
+  requirements go into unresolved. Missing shared references are NOT unresolved user requirements:
+  define local_criteria/local_attributes with unique IDs, types and units, referenced as local:<id>.
   A skipped answer stays unknown. Do not force another questioning round.
 - preference and requirement are natural language, not executable filters or numeric scores.
 - This MVP represents one shopping scenario. If incompatible scenarios cannot be expressed
   faithfully, record the ambiguity in unresolved rather than merging them silently.
+
+- Local definitions belong only to this task. Reuse existing equivalent dimensions when possible.
+- Encode explicit filters in constraints with operator eq/lte/gte/in, values, unit, strength and
+  verbatim user_quote. Budget 500 CNY maximum becomes local:price numeric, unit CNY, lte [500], hard.
+  Explicit platform compatibility is a requirement, not merely low-priority ranking. Do not infer
+  a hard bound from an approximate amount. Missing product values remain unknown at filtering time.
+- ready_to_search is true when enough information exists to retrieve useful candidates.
+  blocking_questions contains only essential missing user information that prevents retrieval.
+  PC + casual games + wireless + budget 500 is sufficient: do not require Bluetooth vs 2.4G.
+  Unstated optional features are not blockers and need not be listed in unresolved.
+- candidate_scope may select ONE supplied candidate_children node only when explicit user words
+  entail that subtype, with user_quote. Otherwise null. It is a retrieval hint, not an exclusive
+  taxonomy filter: include multi-mode products meeting the constraints. Keep the knowledge node
+  unchanged. Never choose a subtype merely because it exists or because a preference is correlated.

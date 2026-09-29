@@ -30,7 +30,7 @@ def test_cache_miss_saves_then_new_instance_reuses_without_market(tmp_path, monk
     monkeypatch.setenv("MARKET_CACHE_DIR", str(tmp_path))
     calls = []
 
-    def research(query):
+    def research(query, **kwargs):
         calls.append(query)
         return completed()
 
@@ -70,7 +70,7 @@ def test_nodes_sharing_dataset_still_have_separate_cache(tmp_path):
 def test_invalid_cache_is_rebuilt(tmp_path, monkeypatch, contents):
     monkeypatch.setenv("MARKET_CACHE_DIR", str(tmp_path))
     (tmp_path / "301.json").write_text(contents, encoding="utf-8")
-    monkeypatch.setattr(tools.market_agent, "invoke", lambda query: completed())
+    monkeypatch.setattr(tools.market_agent, "invoke", lambda query, **kwargs: completed())
     tools.call_market_agent.invoke({"node_id": "301"})
     cache = MarketCache()
     assert cache.load(cache.node("301")) == completed()
@@ -93,7 +93,7 @@ def test_pending_result_is_not_saved(tmp_path, monkeypatch):
             "reason": "missing units", "missing_evidence": ["units"],
         }],
     )
-    monkeypatch.setattr(tools.market_agent, "invoke", lambda query: result)
+    monkeypatch.setattr(tools.market_agent, "invoke", lambda query, **kwargs: result)
     assert json.loads(tools.call_market_agent.invoke({"node_id": "301"}))["status"] == "pending"
     assert not (tmp_path / "301.json").exists()
     cache = MarketCache()
@@ -104,7 +104,7 @@ def test_pending_result_is_not_saved(tmp_path, monkeypatch):
 def test_unknown_node_and_market_failure_leave_no_cache(tmp_path, monkeypatch):
     monkeypatch.setenv("MARKET_CACHE_DIR", str(tmp_path))
 
-    def fail(query):
+    def fail(query, **kwargs):
         raise RuntimeError("market unavailable")
 
     monkeypatch.setattr(tools.market_agent, "invoke", fail)

@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import Field, StrictBool, StrictFloat, StrictInt, StrictStr
 
-from ...domain.criteria import SchemaModel
+from ...domain.criteria import SchemaModel, Criterion, Attribute
 from ..market.schemas import MarketResult
 from ..relation.schemas import Identifier, NodeRef, RelationGraph, Text
 
@@ -12,7 +12,7 @@ from ..relation.schemas import Identifier, NodeRef, RelationGraph, Text
 class Question(SchemaModel):
     id: Identifier
     text: Text
-    target_refs: list[NodeRef] = Field(min_length=1)
+    target_refs: list[Text] = Field(default_factory=list)
     claim_ids: list[Identifier]
     purpose: Text
 
@@ -29,7 +29,7 @@ class ContextFact(SchemaModel):
 
 
 class PersonalizedCriterion(SchemaModel):
-    source_ref: NodeRef
+    source_ref: Text
     preference: Text
     priority: Literal["high", "medium", "low", "unspecified"]
     strength: Literal["hard", "soft"]
@@ -38,13 +38,33 @@ class PersonalizedCriterion(SchemaModel):
 
 
 class PersonalizedAttribute(SchemaModel):
-    source_ref: NodeRef
+    source_ref: Text
     requirement: Text
     strength: Literal["hard", "soft"]
     user_quote: Text
 
 
+class Constraint(SchemaModel):
+    source_ref: Text
+    operator: Literal["eq", "lte", "gte", "in"]
+    values: list[StrictStr | StrictInt | StrictFloat | StrictBool] = Field(min_length=1)
+    unit: Text | None = None
+    strength: Literal["hard", "soft"]
+    user_quote: Text
+
+
+class CandidateScope(SchemaModel):
+    node_id: str
+    user_quote: Text
+
+
 class PersonalizationContent(SchemaModel):
+    local_criteria: list[Criterion] = Field(default_factory=list)
+    local_attributes: list[Attribute] = Field(default_factory=list)
+    constraints: list[Constraint] = Field(default_factory=list)
+    candidate_scope: CandidateScope | None = None
+    blocking_questions: list[Text] = Field(default_factory=list, max_length=3)
+    ready_to_search: bool = False
     context: list[ContextFact]
     criteria: list[PersonalizedCriterion]
     attributes: list[PersonalizedAttribute]
@@ -114,11 +134,33 @@ def validate_output(output: QuestionSet | PersonalizationContent, profile: Marke
             claims(question.claim_ids, f"question {question.id}.claim_ids")
         return
     unique([f.ref for f in output.context], "context references")
+    local_items = output.local_criteria + output.local_attributes
+    unique([item.id for item in local_items], "local dimension IDs")
+    dimensions.update({f"local:{item.id}": item for item in local_items})
+    if output.ready_to_search and output.blocking_questions:
+        raise OutputValidationError("ready_to_search cannot have blocking questions")
+    if output.candidate_scope and not any(output.candidate_scope.user_quote in m for m in user_messages):
+        raise OutputValidationError("candidate scope requires a user quote")
+    for constraint in output.constraints:
+        dimension = dimensions.get(constraint.source_ref)
+        if dimension is None:
+            raise OutputValidationError("unknown constraint dimension")
+        if constraint.operator != "in" and len(constraint.values) != 1:
+            raise OutputValidationError("scalar constraint requires exactly one value")
+        if dimension.type == "numeric":
+            if constraint.unit not in dimension.units or any(type(v) not in (int, float) for v in constraint.values):
+                raise OutputValidationError("numeric constraint requires matching units and numeric values")
+        else:
+            if constraint.operator in {"lte", "gte"} or constraint.unit is not None:
+                raise OutputValidationError("non-numeric constraint requires equality/set and no unit")
+            expected = bool if dimension.type == "boolean" else str
+            if any(type(v) is not expected for v in constraint.values):
+                raise OutputValidationError("constraint value type mismatch")
     unique(
         [p.source_ref for p in output.criteria + output.attributes],
         "criteria/attributes source_ref values",
     )
-    for item in output.context + output.criteria + output.attributes:
+    for item in output.context + output.criteria + output.attributes + output.constraints:
         if not any(item.user_quote in message for message in user_messages):
             raise OutputValidationError("user_quote must occur verbatim in a user message")
     for fact in output.context:

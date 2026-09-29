@@ -20,7 +20,7 @@ DEFAULT_CACHE_DIR = Path(__file__).resolve().parents[3] / ".cache" / "market_nod
 
 
 class CachedMarketResult(SchemaModel):
-    schema_version: Literal[1] = 1
+    schema_version: Literal[2] = 2
     node: TaxonomyNode
     saved_at: datetime
     result: MarketResult

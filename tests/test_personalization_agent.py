@@ -241,7 +241,8 @@ def test_invalid_claim_is_returned_to_model_for_correction(tmp_path, stage):
     assert correction["allowed_claim_ids"] == ["power_runtime"]
     assert "invented_claim" in correction["validation_feedback"]["error"]
     assert "unknown ID" in correction["validation_feedback"]["error"]
-    assert correction["validation_feedback"]["rejected_output"] == bad
+    expected = (QuestionSet if stage == "questions" else PersonalizationContent).model_validate(bad)
+    assert correction["validation_feedback"]["rejected_output"] == expected.model_dump(mode="json")
     assert correction["user_messages"] == history
     assert agent.store.load("a", "t").user_messages == history
 

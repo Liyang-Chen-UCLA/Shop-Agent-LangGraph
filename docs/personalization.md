@@ -89,3 +89,26 @@ Changed upstream versions block completion: rerun preparation with the full task
 history through the direct API. Upstream inputs are checked again before saving,
 but the stores are not a cross-file transaction. As with RelationStore, a leftover
 lock after a process crash requires inspection and manual recovery.
+# Task-scoped constraints and category boundaries
+
+Personalization can define local_criteria/local_attributes referenced as local:<id>.
+These definitions and typed constraints never mutate the shared Market Profile.
+Constraints contain an operator, typed values, unit, strength and verbatim user quote.
+The constraint evaluator returns match/no_match/unknown; missing product facts or
+incompatible units are unknown, never implicit matches. Candidate retrieval must
+map normalized product facts to these references before applying filters.
+
+ready_to_search and blocking_questions distinguish retrieval blockers from optional
+preferences. The supervisor must not append optional questions when ready.
+candidate_scope is an optional direct-child retrieval hint with a user quote;
+knowledge node identity remains unchanged and multimode products are not excluded.
+
+Market research receives the target taxonomy path. Only confirmed relevant products
+and product/variant evidence enter aggregation; rejected identities remain in audit.
+Market cache schema 2 invalidates older unaudited profiles without deleting their files.
+Existing personalization tasks referencing rebuilt profiles must be prepared again.
+
+Relation proposals receive one Market review before graph publication. Accepted
+additions update shared definitions and trigger one relation rebuild; that rebuild
+cannot trigger a second review. Rejections and reasons remain in the Market audit.
+This does not implement semantic repair of incorrect relation endpoints.

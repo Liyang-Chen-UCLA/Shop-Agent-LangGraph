@@ -21,7 +21,7 @@ CRITERION_TYPES = (NumericCriterion, BooleanCriterion, CategoricalCriterion)
 
 class MarketSelection(SchemaModel):
     item_ids: list[str] = Field(
-        min_length=1,
+        min_length=0,
         max_length=CONFIG.market.max_search_products,
     )
 

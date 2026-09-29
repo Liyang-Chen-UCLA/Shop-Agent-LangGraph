@@ -62,6 +62,17 @@ class RelationAgent:
         if current_profile is None or profile_hash(current_profile) != fingerprint:
             raise RevisionConflict("Market Profile changed during research; rerun on the new profile")
         validate_graph(draft.graph, current_profile)
+        # Review once before publication. A fresh relation run uses the new profile;
+        # that run cannot initiate another review, so agents never recurse unboundedly.
+        if getattr(self, "review_enabled", True) and draft.graph.profile_suggestions:
+            from ..market.review import review_suggestions
+            reviewed = review_suggestions(current_profile, draft.graph, node, self.model)
+            self.market_cache.save(node, reviewed)
+            if profile_hash(reviewed) != fingerprint:
+                followup = RelationAgent(self.model, store=self.store,
+                    market_cache=self.market_cache, search=self.search)
+                followup.review_enabled = False
+                return followup.invoke(node_id, refresh=True)
         self.store.save(draft.graph, base_revision)
         return draft.graph
 

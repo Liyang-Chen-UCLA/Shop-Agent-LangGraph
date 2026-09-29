@@ -109,7 +109,7 @@ def test_premerge_leaves_different_descriptions_for_the_model() -> None:
 
 
 def research_result(item_id: str) -> ResearchResult:
-    return ResearchResult(item_id=item_id, evidence=[Evidence(
+    return ResearchResult(item_id=item_id, relevance="relevant", evidence=[Evidence(
         name="Polling rate", value="1000", unit="Hz", qualifier="Wired mode",
         source_text="Wired mode supports a polling rate of 1000 Hz.",
     )])
@@ -119,16 +119,16 @@ class RecordingAggregator:
     def __init__(self) -> None:
         self.calls: list[list[ResearchResult]] = []
 
-    async def ainvoke(self, results: list[ResearchResult]) -> CriteriaAttributeSet:
+    async def ainvoke(self, results: list[ResearchResult], target="") -> CriteriaAttributeSet:
         self.calls.append(results)
         return collection(results[0].item_id, boolean_attribute("wireless"))
 
 
 class FixedMarketAgent(MarketAgent):
-    async def _select(self, query: str) -> MarketSelection:
+    async def _select(self, query: str, target="") -> MarketSelection:
         return MarketSelection(item_ids=["product_1", "product_2"])
 
-    async def _research(self, item_ids: list[str]) -> list[ResearchResult]:
+    async def _research(self, item_ids: list[str], target="") -> list[ResearchResult]:
         return [
             research_result("product_1"),
             research_result("product_2"),
@@ -222,7 +222,7 @@ def test_market_research_returns_evidence_unchanged(monkeypatch) -> None:
     module = importlib.import_module("shop_agent_langgraph.agents.market.graph")
     results = {item_id: research_result(item_id) for item_id in ["p1", "p2"]}
 
-    async def research(item_id):
+    async def research(item_id, target=""):
         return results[item_id]
 
     monkeypatch.setattr(module.research_agent, "ainvoke", research)

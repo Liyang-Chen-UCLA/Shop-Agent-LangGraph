@@ -13,11 +13,15 @@ from .schemas import ResearchResult
 def submit_research_result(
     item_id: str,
     evidence: list[Any],
+    relevance: str = "uncertain",
+    relevance_reason: str = "Not assessed",
 ) -> dict[str, Any]:
     """Submit one product's metric and attribute evidence."""
     return ResearchResult(
         item_id=item_id,
         evidence=evidence,
+        relevance=relevance,
+        relevance_reason=relevance_reason,
     ).model_dump()
 
 

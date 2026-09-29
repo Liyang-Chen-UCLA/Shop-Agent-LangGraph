@@ -29,7 +29,7 @@ class MarketAgent:
         self.selection_graph = selection_graph
         self.aggregator = aggregator
 
-    async def _select(self, query: str) -> MarketSelection:
+    async def _select(self, query: str, target: str = "") -> MarketSelection:
         state = await self.selection_graph.ainvoke(
             {
                 "messages": [
@@ -37,6 +37,7 @@ class MarketAgent:
                         "role": "user",
                         "content": (
                             f"Product query: {query}\n"
+                            f"Target category: {target or query}\n"
                             f"Maximum products: {CONFIG.market.max_search_products}"
                         ),
                     }
@@ -50,26 +51,39 @@ class MarketAgent:
             else MarketSelection.model_validate(result)
         )
 
-    async def _research(self, item_ids: list[str]) -> list[ResearchResult]:
+    async def _research(self, item_ids: list[str], target: str = "") -> list[ResearchResult]:
         results = await asyncio.gather(
-            *(research_agent.ainvoke(item_id) for item_id in item_ids)
+            *(research_agent.ainvoke(item_id, target) for item_id in item_ids)
         )
         return list(results)
 
-    async def ainvoke(self, query: str) -> MarketResult:
-        selection = await self._select(query)
-        researched = await self._research(selection.item_ids)
-        merged = await self.aggregator.ainvoke(researched)
+    async def ainvoke(self, query: str, target: str = "") -> MarketResult:
+        selection = await self._select(query, target)
+        researched = await self._research(selection.item_ids, target or query)
+        accepted = [r.model_copy(update={"evidence": [e for e in r.evidence
+                    if e.subject in {"product", "variant"}]})
+                    for r in researched if r.relevance == "relevant"]
+        audit = [{"item_id": r.item_id, "relevance": r.relevance,
+                  "reason": r.relevance_reason} for r in researched]
+        if not accepted:
+            from .schemas import PendingAggregation
+            return MarketResult(query=query, item_ids=[], status="pending", criteria=[],
+                attributes=[], audit=audit, pending_groups=[PendingAggregation(
+                    group_id="category_scope", left_source_item_ids=selection.item_ids,
+                    right_source_item_ids=[], left_ids=[], right_ids=[],
+                    reason="No confirmed in-scope products", missing_evidence=["Relevant product evidence"])])
+        merged = await self.aggregator.ainvoke(accepted, target or query)
         return MarketResult(
             query=query,
-            item_ids=selection.item_ids,
+            item_ids=[r.item_id for r in accepted],
+            audit=audit,
             status="completed",
             criteria=merged.criteria,
             attributes=merged.attributes,
         )
 
-    def invoke(self, query: str) -> MarketResult:
-        return asyncio.run(self.ainvoke(query))
+    def invoke(self, query: str, target: str = "") -> MarketResult:
+        return asyncio.run(self.ainvoke(query, target))
 
 
 def build_market_agent(model: BaseChatModel | None = None) -> MarketAgent:
@@ -99,11 +113,11 @@ class LazyMarketAgent:
                     self._instance = build_market_agent()
         return self._instance
 
-    def invoke(self, query: str) -> MarketResult:
-        return self._get().invoke(query)
+    def invoke(self, query: str, target: str = "") -> MarketResult:
+        return self._get().invoke(query, target)
 
-    async def ainvoke(self, query: str) -> MarketResult:
-        return await self._get().ainvoke(query)
+    async def ainvoke(self, query: str, target: str = "") -> MarketResult:
+        return await self._get().ainvoke(query, target)
 
 
 market_agent = LazyMarketAgent()

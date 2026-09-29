@@ -10,6 +10,7 @@ from langchain_core.language_models import BaseChatModel
 
 from ...core.llm import build_deepseek_model
 from ...domain.market_cache import MarketCache
+from ...domain.taxonomy import get_children
 from ..relation.schemas import validate_graph
 from ..relation.store import RelationStore, RevisionConflict
 from .schemas import (ClaimReferenceError, OutputValidationError,
@@ -54,6 +55,10 @@ class PersonalizationAgent:
             result = schema.model_validate(result)
             try:
                 validate_output(result, profile, graph, messages)
+                if isinstance(result, PersonalizationContent) and result.candidate_scope:
+                    allowed = {n["node_id"] for n in payload.get("candidate_children", [])}
+                    if result.candidate_scope.node_id not in allowed:
+                        raise OutputValidationError("candidate scope must be a supplied direct child")
             except OutputValidationError as error:
                 if attempt == 2:
                     error_type = (ClaimReferenceError if isinstance(error, ClaimReferenceError)
@@ -124,6 +129,7 @@ class PersonalizationAgent:
         if (session.profile_hash, session.graph_revision) != (graph.profile_hash, graph.revision):
             raise RevisionConflict("upstream inputs changed; prepare questions again")
         content = self._generate(PersonalizationContent, "profile_prompt.md", {
+            "candidate_children": get_children([node_id])[0]["children"],
             "market_profile": profile.model_dump(mode="json"),
             "relation_graph": graph.model_dump(mode="json"),
             "question_set": session.question_set.model_dump(mode="json"),

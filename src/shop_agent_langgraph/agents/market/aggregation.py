@@ -99,7 +99,7 @@ class MarketAggregationAgent:
         self.graph = build_market_aggregation_graph(model)
 
     @staticmethod
-    def _input(collections: list[ResearchResult]) -> dict[str, Any]:
+    def _input(collections: list[ResearchResult], target: str = "") -> dict[str, Any]:
         if not collections:
             raise ValueError("aggregation requires at least one collection")
         context = [collection.model_dump(mode="json") for collection in collections]
@@ -107,7 +107,7 @@ class MarketAggregationAgent:
             "messages": [
                 HumanMessage(
                     content=json.dumps(
-                        {"research_results": context},
+                        {"target_category": target, "research_results": context},
                         ensure_ascii=False,
                     )
                 )
@@ -143,6 +143,7 @@ class MarketAggregationAgent:
     async def ainvoke(
         self,
         collections: list[ResearchResult],
+        target: str = "",
     ) -> CriteriaAttributeSet:
-        state = await self.graph.ainvoke(self._input(collections))
+        state = await self.graph.ainvoke(self._input(collections, target))
         return self._result(state, collections)

@@ -35,7 +35,7 @@ def call_market_agent(node_id: str) -> str:
     if cached is not None:
         return cached.model_dump_json()
     query = dataset_category_for_node(node_id)
-    result = market_agent.invoke(query)
+    result = market_agent.invoke(query, target=node.node_path)
     if result.status == "completed":
         cache.save(node, result)
     return result.model_dump_json()

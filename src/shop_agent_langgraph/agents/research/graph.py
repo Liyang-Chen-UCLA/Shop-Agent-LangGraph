@@ -24,10 +24,10 @@ class ResearchAgent:
         self.graph = graph
 
     @staticmethod
-    def _input(item_id: str) -> dict[str, Any]:
+    def _input(item_id: str, target: str = "") -> dict[str, Any]:
         raw_text = get_product_raw_text(item_id)
         content = (
-            f"Analyze market item `{item_id}`.\n"
+            f"Target category: {target}\nAnalyze market item `{item_id}`.\n"
             f"<product_context item_id=\"{item_id}\">\n{raw_text}\n</product_context>"
         )
         return {"messages": [HumanMessage(content)]}
@@ -40,8 +40,11 @@ class ResearchAgent:
     def invoke(self, item_id: str) -> ResearchResult:
         return self._result(self.graph.invoke(self._input(str(item_id))))
 
-    async def ainvoke(self, item_id: str) -> ResearchResult:
-        return self._result(await self.graph.ainvoke(self._input(str(item_id))))
+    async def ainvoke(self, item_id: str, target: str = "") -> ResearchResult:
+        result = self._result(await self.graph.ainvoke(self._input(str(item_id), target)))
+        if result.item_id != str(item_id):
+            raise ValueError("research returned a different product ID")
+        return result
 
 
 def build_research_agent(model: BaseChatModel | None = None) -> ResearchAgent:
@@ -70,8 +73,8 @@ class LazyResearchAgent:
     def invoke(self, item_id: str) -> ResearchResult:
         return self._get().invoke(item_id)
 
-    async def ainvoke(self, item_id: str) -> ResearchResult:
-        return await self._get().ainvoke(item_id)
+    async def ainvoke(self, item_id: str, target: str = "") -> ResearchResult:
+        return await self._get().ainvoke(item_id, target)
 
 
 research_agent = LazyResearchAgent()
