@@ -98,6 +98,26 @@ Market summarizes all evidence in one model call into canonical criteria and
 attributes. Global runtime limits are defined in `core/config.py`; the current
 market search and selection maximum is 4 products.
 
+### Reuse market definitions by taxonomy node
+
+In the Supervisor flow, `call_market_agent(node_id)` first checks the local cache
+using the exact node ID returned by Route. A hit returns the saved result without
+running Market, Research, or aggregation. A miss runs Market and saves only a
+completed result. Pending results and failed runs are not cached.
+
+Files default to `.cache/market_nodes/<node_id>.json` in the project directory
+(for example, `.cache/market_nodes/301.json`). Set `MARKET_CACHE_DIR` to override
+the directory. Each JSON contains a schema version, canonical node ID/name/path,
+save time, and the Market result with `criteria`, `attributes`, and source item IDs.
+Writes are atomic; invalid or mismatched cache entries are treated as misses.
+Different node IDs remain separate even when they map to the same dataset category.
+
+The cache persists across conversations and server restarts and has no automatic
+expiry. Delete a node's JSON file to regenerate its definitions on the next request.
+Existing definitions are not regenerated after prompt changes unless their file is
+removed. Direct `market_agent.invoke(query)` calls remain uncached because they do
+not receive a taxonomy node ID. Local cache files are excluded from Git.
+
 ## Eval and Market aggregation
 
 Eval remains an independent, read-only semantic judge for comparing two
@@ -109,3 +129,28 @@ and units. Descriptive dimensions without a general better/worse direction remai
 attributes. There is no pairwise evaluation or tree reduce.
 
 See [the Eval and Market aggregation protocol](docs/eval-market-aggregation.md).
+
+## Relation Agent
+
+After Market Profile is saved for a resolved taxonomy node, Supervisor invokes
+Relation Agent. It searches Tavily for evidence, constructs conditional relations
+and scenario-dependent utility rules through validated draft tools, and publishes
+a versioned `RelationGraph`. Matching node/Profile hashes are reused without model
+or search calls. Profile changes require rebuilding and rechecking the graph.
+
+```python
+from shop_agent_langgraph import relation_agent
+
+graph = relation_agent.invoke("301")
+# Explicitly research updates while preserving revision history:
+# graph = relation_agent.invoke("301", refresh=True)
+```
+
+Graphs are saved under `.cache/relation_nodes/<node_id>/current.json` and
+`revisions/<revision>.json`; override the root with `RELATION_CACHE_DIR`.
+A completed local Market Profile and Tavily/DeepSeek credentials are required on a
+cache miss. Supported findings, uncertainty, contrary evidence, and profile change
+suggestions remain distinct. Numeric scoring and automatic causal propagation
+are outside this version.
+
+See [Relation Graph schemas and delivery protocol](docs/relation-graph.md).

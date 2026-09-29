@@ -16,6 +16,7 @@ from .agents.research import (
     research_agent,
 )
 from .agents.route import RouteResult, TaxonomyNode, build_route_agent, route_agent
+from .agents.relation import RelationAgent, RelationGraph, build_relation_agent, relation_agent
 from .core.config import CONFIG
 from .domain.criteria import CriteriaAttributeSet
 from .supervisor import (
@@ -35,6 +36,8 @@ __all__ = [
     "IntentResult",
     "MarketResult",
     "ResearchResult",
+    "RelationAgent",
+    "RelationGraph",
     "RouteResult",
     "SupervisorState",
     "TaxonomyNode",
@@ -42,6 +45,7 @@ __all__ = [
     "build_intent_agent",
     "build_market_agent",
     "build_research_agent",
+    "build_relation_agent",
     "build_route_agent",
     "build_supervisor_agent",
     "build_supervisor_graph",
@@ -49,6 +53,7 @@ __all__ = [
     "intent_agent",
     "market_agent",
     "research_agent",
+    "relation_agent",
     "route_agent",
     "supervisor",
 ]
