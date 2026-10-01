@@ -68,6 +68,14 @@ def render_report(report: EvalReport) -> str:
     lines += ["", "## 字段平均分", "", "| 字段 | 适用项平均分 |", "|---|---|"]
     for field, score in m.field_scores.items():
         lines.append(f"| {field} | {'null' if score is None else f'{score:.3f}'} |")
+    if report.judge_details:
+        details = report.judge_details
+        decisions = [d for d in details.get("decisions", []) if d.get("source") == "jev"]
+        unresolved = sum(d.get("candidate_score") is None for d in decisions)
+        disagreements = sum(d.get("candidate_score") is not None and d["candidate_score"] != d["baseline_score"] for d in decisions)
+        lines += ["", "## Jev shadow", "",
+                  f"模型：{details.get('model')}；语义字段判断：{len(decisions)}；未决：{unresolved}；与 baseline 不一致：{disagreements}。",
+                  "Jev 未替换上述 baseline 分数。完整选择、置信度和概率保存在 report.json；上线仍需人工校准。"]
     for name, entries in (("missing", report.missing), ("extra", report.extra)):
         lines += ["", f"## {name}", ""]
         lines.extend(f"- {label(e.ref)}：{e.reason}" for e in entries)

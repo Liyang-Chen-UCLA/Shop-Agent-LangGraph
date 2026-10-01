@@ -11,13 +11,14 @@ dependencies = [
     "langchain>=1.4.2",
     "langchain-openai>=1.0.0",
     "langchain-tavily>=0.2.0",
-    "langfuse>=4.15.6",
+    "langfuse==4.15.6",
     "langgraph>=1.2.11",
     "langgraph-checkpoint-postgres>=3.1.2",
     "langgraph-cli[inmem]>=0.4.31",
     "pyarrow>=25.0.1",
     "pydantic>=2.13.5",
     "python-dotenv>=1.2.3",
+    "typesafe-sdk==0.7.2",
 ]
 
 [project.scripts]

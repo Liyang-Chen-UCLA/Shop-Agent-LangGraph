@@ -67,3 +67,4 @@ class EvalReport(MatchingReport):
     reviews: list[ItemReview]
     metrics: EvalMetrics
     gold_metadata: dict[str, Any] = Field(default_factory=dict)
+    judge_details: dict[str, Any] = Field(default_factory=dict)

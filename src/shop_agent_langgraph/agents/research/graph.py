@@ -25,8 +25,8 @@ class ResearchAgent:
         self.graph = graph
 
     @staticmethod
-    def _input(item_id: str, target: str = "", pre_read: dict | None = None) -> dict[str, Any]:
-        raw_text = get_product_raw_text(item_id)
+    def _input(item_id: str, target: str = "", pre_read: dict | None = None, *, raw_text: str | None = None) -> dict[str, Any]:
+        raw_text = get_product_raw_text(item_id) if raw_text is None else raw_text
         content = (
             f"Target category: {target}\nAnalyze market item `{item_id}`.\n"
             f"<product_context item_id=\"{item_id}\">\n{raw_text}\n</product_context>"
@@ -44,17 +44,19 @@ class ResearchAgent:
     def invoke(self, item_id: str) -> ResearchResult:
         return self._result(self.graph.invoke(self._input(str(item_id))))
 
-    async def ainvoke(self, item_id: str, target: str = "", *, pre_read: dict | None = None) -> ResearchResult:
-        result = self._result(await self.graph.ainvoke(self._input(str(item_id), target, pre_read)))
+    async def ainvoke(self, item_id: str, target: str = "", *, pre_read: dict | None = None,
+                      raw_text: str | None = None, config: dict | None = None) -> ResearchResult:
+        result = self._result(await self.graph.ainvoke(
+            self._input(str(item_id), target, pre_read, raw_text=raw_text), config=config))
         if result.item_id != str(item_id):
             raise ValueError("research returned a different product ID")
         return result
 
 
-def build_research_agent(model: BaseChatModel | None = None) -> ResearchAgent:
+def build_research_agent(model: BaseChatModel | None = None, *, allow_external_search: bool = True) -> ResearchAgent:
     graph = create_agent(
         model=model or build_deepseek_model(),
-        tools=build_research_tools(),
+        tools=build_research_tools() if allow_external_search else [],
         system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
         response_format=ToolStrategy(ResearchResult),
         name="research_agent",

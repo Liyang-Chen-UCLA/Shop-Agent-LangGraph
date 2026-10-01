@@ -144,6 +144,8 @@ class MarketAggregationAgent:
         self,
         collections: list[ResearchResult],
         target: str = "",
+        *, config: dict | None = None,
     ) -> CriteriaAttributeSet:
-        state = await self.graph.ainvoke(self._input(collections, target))
+        kwargs = {"config": config} if config is not None else {}
+        state = await self.graph.ainvoke(self._input(collections, target), **kwargs)
         return self._result(state, collections)

@@ -31,6 +31,30 @@ class MarketAgent:
         self.selection_graph = selection_graph
         self.aggregator = aggregator
 
+    async def ainvoke_fixed_products(self, item_ids: list[str], target: str, *,
+                                    product_contexts: dict[str, str], research,
+                                    config: dict | None = None, concurrency: int = 3) -> MarketResult:
+        """Evaluate delivery on an explicit snapshot without search or resampling."""
+        if not item_ids or len(item_ids) != len(set(item_ids)):
+            raise ValueError("fixed products require nonempty distinct IDs")
+        if set(product_contexts) != set(item_ids) or not target.strip() or concurrency < 1:
+            raise ValueError("fixed snapshot must cover every product and have a target and positive concurrency")
+        semaphore = asyncio.Semaphore(concurrency)
+
+        async def read(item_id):
+            async with semaphore:
+                result = await research.ainvoke(item_id, target, raw_text=product_contexts[item_id], config=config)
+                if result.item_id != item_id or result.relevance != "relevant":
+                    raise ValueError(f"fixed product research did not confirm the requested product: {item_id}")
+                return result.model_copy(update={"evidence": [e for e in result.evidence
+                                           if e.subject in {"product", "variant"}]})
+
+        results = await asyncio.gather(*(read(item_id) for item_id in item_ids))
+        merged = await self.aggregator.ainvoke(results, target, config=config)
+        return MarketResult(query=target, item_ids=list(item_ids), status="completed",
+                            criteria=merged.criteria, attributes=merged.attributes,
+                            audit=[{"stage": "fixed_research", **r.model_dump(mode="json")} for r in results])
+
     async def _select(self, query: str, target: str = "") -> MarketSelection:
         with screening_session() as session:
             state = await self.selection_graph.ainvoke(

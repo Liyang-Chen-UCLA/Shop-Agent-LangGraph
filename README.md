@@ -231,3 +231,9 @@ types/units are validated before publication. The MVP uses natural-language
 preferences, not executable scoring rules, and supports one active task per conversation.
 
 See [Personalization MVP schemas and usage](docs/personalization.md).
+
+## Market Evaluation
+
+Fixed-product experiments evaluate Research and Market delivery against a versioned
+gold draft, with TypeSafe Jev shadow judgments and native Langfuse annotation tasks.
+See [the evaluation lifecycle and commands](docs/market-evaluation-lifecycle.md).
