@@ -10,10 +10,12 @@ from langchain_core.language_models import BaseChatModel
 
 from ...core.config import CONFIG
 from ...core.llm import build_deepseek_model
+from ...domain.market_env import get_product_pages
 from ..research.graph import research_agent
 from ..research.schemas import ResearchResult
 from .aggregation import MarketAggregationAgent
 from .schemas import MarketResult, MarketSelection
+from .screening import screening_session
 from .tools import MARKET_TOOLS
 
 
@@ -30,41 +32,93 @@ class MarketAgent:
         self.aggregator = aggregator
 
     async def _select(self, query: str, target: str = "") -> MarketSelection:
-        state = await self.selection_graph.ainvoke(
-            {
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": (
-                            f"Product query: {query}\n"
-                            f"Target category: {target or query}\n"
-                            f"Maximum products: {CONFIG.market.max_search_products}"
-                        ),
-                    }
-                ]
-            }
-        )
-        result = state["structured_response"]
-        return (
-            result
-            if isinstance(result, MarketSelection)
-            else MarketSelection.model_validate(result)
-        )
+        with screening_session() as session:
+            state = await self.selection_graph.ainvoke(
+                {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": (
+                                f"Product query: {query}\n"
+                                f"Target category: {target or query}\n"
+                                f"Maximum research sample: {CONFIG.market.max_search_products}\n"
+                                f"Maximum search candidates: {CONFIG.market.max_search_candidates}\n"
+                                f"Page reading calls per product: {CONFIG.market.max_page_reads_per_product}\n"
+                                f"Pages per call: {CONFIG.market.max_pages_per_read}\n"
+                                "Full-context fallback: once per product after focused reading.\n"
+                                "Screen only against Target category, not personal preferences."
+                            ),
+                        }
+                    ]
+                },
+                config={"recursion_limit": 2 * CONFIG.market.max_search_candidates * (
+                    CONFIG.market.max_page_reads_per_product + 3) + 10},
+            )
+            raw = state["structured_response"]
+            selection = raw if isinstance(raw, MarketSelection) else MarketSelection.model_validate(raw)
+            if len(selection.item_ids) != len(set(selection.item_ids)):
+                raise ValueError("research sample must contain distinct product IDs")
+            decisions = {s.item_id: s for s in selection.screenings}
+            if (len(decisions) != len(selection.screenings)
+                    or set(decisions) != session.inspected):
+                raise ValueError("screening must decide every inspected product exactly once")
+            for decision in selection.screenings:
+                session.require_candidate(decision.item_id)
+                if not decision.reason.strip():
+                    raise ValueError("screening reason must be nonblank")
+                pages = session.pages.get(decision.item_id, {})
+                if (decision.relevance == "uncertain"
+                        and decision.item_id not in session.full_reads
+                        and len(pages) < len(get_product_pages(decision.item_id))):
+                    raise ValueError("uncertain products require full-context escalation or all pages read")
+                for evidence in decision.evidence:
+                    page = pages.get(evidence.page_id)
+                    if (page is None or not evidence.source_text.strip()
+                            or evidence.source_text not in page["text"]):
+                        raise ValueError("screening evidence must quote an actually read OCR page")
+            for item_id in selection.item_ids:
+                if item_id not in decisions or decisions[item_id].relevance != "relevant":
+                    raise ValueError("selected products require confirmed node relevance")
+            selection._read_context = {item_id: dict(
+                pages=list(session.pages.get(item_id, {}).values()),
+                page_read_calls=session.page_reads.get(item_id, 0),
+                full_context_read=item_id in session.full_reads,
+            ) for item_id in session.candidates}
+            return selection
 
-    async def _research(self, item_ids: list[str], target: str = "") -> list[ResearchResult]:
+    async def _research(self, item_ids: list[str], target: str = "", *,
+                        pre_read: dict | None = None) -> list[ResearchResult]:
         results = await asyncio.gather(
-            *(research_agent.ainvoke(item_id, target) for item_id in item_ids)
+            *(research_agent.ainvoke(item_id, target, pre_read=pre_read[item_id])
+              if pre_read else research_agent.ainvoke(item_id, target) for item_id in item_ids)
         )
         return list(results)
 
     async def ainvoke(self, query: str, target: str = "") -> MarketResult:
         selection = await self._select(query, target)
-        researched = await self._research(selection.item_ids, target or query)
+        if selection._read_context:
+            decisions = {s.item_id: s.model_dump() for s in selection.screenings}
+            pre_read = {item_id: {"screening": decisions[item_id],
+                                 **selection._read_context[item_id]}
+                        for item_id in selection.item_ids}
+            researched = await self._research(selection.item_ids, target or query, pre_read=pre_read)
+        else:
+            researched = await self._research(selection.item_ids, target or query)
         accepted = [r.model_copy(update={"evidence": [e for e in r.evidence
                     if e.subject in {"product", "variant"}]})
                     for r in researched if r.relevance == "relevant"]
-        audit = [{"item_id": r.item_id, "relevance": r.relevance,
+        audit = [{"stage": "research", "item_id": r.item_id, "relevance": r.relevance,
                   "reason": r.relevance_reason} for r in researched]
+        audit.extend({"stage": "screening", **s.model_dump(),
+                      "selected": s.item_id in selection.item_ids,
+                      "read_page_ids": [p["page_id"] for p in selection._read_context[s.item_id]["pages"]],
+                      "page_read_calls": selection._read_context[s.item_id]["page_read_calls"],
+                      "full_context_read": selection._read_context[s.item_id]["full_context_read"]}
+                     for s in selection.screenings)
+        screened = {s.item_id for s in selection.screenings}
+        audit.extend({"stage": "screening", "item_id": item_id, "relevance": "not_assessed",
+                      "selected": False, "reason": "Not inspected for the bounded sample"}
+                     for item_id in sorted(selection._read_context.keys() - screened))
         if not accepted:
             from .schemas import PendingAggregation
             return MarketResult(query=query, item_ids=[], status="pending", criteria=[],

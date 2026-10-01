@@ -127,7 +127,28 @@ Evidence carries `name`, optional `value`, `unit`, and `qualifier`, and required
 verbatim `source_text`. Research does not define criteria or preference directions.
 Market summarizes all evidence in one model call into canonical criteria and
 attributes. Global runtime limits are defined in `core/config.py`; the current
-market search and selection maximum is 4 products.
+research sample maximum is 4 products. Search can inspect up to 20 candidates,
+so unrelated early results do not consume all sample slots.
+
+Market screening uses the canonical target node, independently of personal
+preferences. `search_market_products` returns titles and OCR page directories
+with short source previews; `get_market_product_info` returns the same summary
+for one candidate. `read_market_product_pages` exposes original OCR and image
+paths for up to 4 pages per call, with at most 3 calls per product. Unresolved
+identity can escalate once to `read_market_product_full_context`. Products still
+uncertain after full reading stay out of the sample.
+
+Selection must cite text from pages actually read and provide a relevance reason
+for every individually inspected product. Runtime rejects unsearched, unread,
+duplicate or unconfirmed selected IDs. Research receives the prior reading
+context and independently verifies relevance before evidence aggregation.
+The result audit includes screening decisions, read-page provenance and research
+decisions; candidates left uninspected are explicitly marked `not_assessed`.
+Legacy custom Parquet files with only `context_text` remain supported through
+OCR heading parsing, or a single page when no headings exist.
+
+Market cache schema version 3 invalidates older profiles so the next node lookup
+uses this screening policy. Caching remains by node, not by personal preferences.
 
 ### Reuse market definitions by taxonomy node
 

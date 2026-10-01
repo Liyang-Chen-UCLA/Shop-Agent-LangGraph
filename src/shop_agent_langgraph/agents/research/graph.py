@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from threading import Lock
 from typing import Any
@@ -24,12 +25,15 @@ class ResearchAgent:
         self.graph = graph
 
     @staticmethod
-    def _input(item_id: str, target: str = "") -> dict[str, Any]:
+    def _input(item_id: str, target: str = "", pre_read: dict | None = None) -> dict[str, Any]:
         raw_text = get_product_raw_text(item_id)
         content = (
             f"Target category: {target}\nAnalyze market item `{item_id}`.\n"
             f"<product_context item_id=\"{item_id}\">\n{raw_text}\n</product_context>"
         )
+        if pre_read:
+            content += "\n<market_screening_context>\n" + json.dumps(
+                pre_read, ensure_ascii=False) + "\n</market_screening_context>"
         return {"messages": [HumanMessage(content)]}
 
     @staticmethod
@@ -40,8 +44,8 @@ class ResearchAgent:
     def invoke(self, item_id: str) -> ResearchResult:
         return self._result(self.graph.invoke(self._input(str(item_id))))
 
-    async def ainvoke(self, item_id: str, target: str = "") -> ResearchResult:
-        result = self._result(await self.graph.ainvoke(self._input(str(item_id), target)))
+    async def ainvoke(self, item_id: str, target: str = "", *, pre_read: dict | None = None) -> ResearchResult:
+        result = self._result(await self.graph.ainvoke(self._input(str(item_id), target, pre_read)))
         if result.item_id != str(item_id):
             raise ValueError("research returned a different product ID")
         return result
@@ -73,8 +77,8 @@ class LazyResearchAgent:
     def invoke(self, item_id: str) -> ResearchResult:
         return self._get().invoke(item_id)
 
-    async def ainvoke(self, item_id: str, target: str = "") -> ResearchResult:
-        return await self._get().ainvoke(item_id, target)
+    async def ainvoke(self, item_id: str, target: str = "", *, pre_read: dict | None = None) -> ResearchResult:
+        return await self._get().ainvoke(item_id, target, pre_read=pre_read)
 
 
 research_agent = LazyResearchAgent()

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, PrivateAttr, model_validator
 
 from ...core.config import CONFIG
 from ...domain.criteria import (
@@ -19,11 +19,25 @@ from ...domain.criteria import (
 CRITERION_TYPES = (NumericCriterion, BooleanCriterion, CategoricalCriterion)
 
 
+class ScreeningEvidence(SchemaModel):
+    page_id: str
+    source_text: str = Field(min_length=1)
+
+
+class ProductScreening(SchemaModel):
+    item_id: str
+    relevance: Literal["relevant", "irrelevant", "uncertain"]
+    reason: str = Field(min_length=1)
+    evidence: list[ScreeningEvidence] = Field(min_length=1)
+
+
 class MarketSelection(SchemaModel):
     item_ids: list[str] = Field(
         min_length=0,
         max_length=CONFIG.market.max_search_products,
     )
+    screenings: list[ProductScreening] = Field(default_factory=list)
+    _read_context: dict[str, Any] = PrivateAttr(default_factory=dict)
 
 
 class CanonicalOutput(SchemaModel):
