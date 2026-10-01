@@ -1,0 +1,4046 @@
+{
+  "annotation_metadata": {
+    "status": "draft_pending_human_review",
+    "authoring": "AI辅助逐页证据整理，尚非已完成的人工gold",
+    "created_date": "2026-10-01",
+    "source_path": "src/shop_agent_langgraph/data/products.parquet",
+    "source_sha256": "bdf26b572d7693f9ff218d491e649e549fcfdbf9ffe8813ee9a464bc09f19a02",
+    "selection_rule": "category == 游戏手柄，并限定独立手持完整控制器；明确选定9个item_id，按rank排序；不包含failures.parquet",
+    "product_form": "独立手柄",
+    "scope_pending_confirmation": false,
+    "evidence_policy": "evidence_item_ids仅列有原文支持此维度的商品；支持维度不要求具备数值测量；未列出不表示功能不存在。证据是商品页/OCR声明，不是独立实测。",
+    "field_policy": "完整采用domain/criteria.py按type所需字段，额外增加evidence_item_ids及evidence；strict模型使用前需剥离额外字段。"
+  },
+  "node": {
+    "id": "301",
+    "name": "游戏手柄",
+    "path": [
+      "电子产品",
+      "电子配件",
+      "计算机组件",
+      "输入设备",
+      "游戏手柄"
+    ]
+  },
+  "source_item_ids": [
+    "788146516430",
+    "855048143554",
+    "844285076150",
+    "837987833992",
+    "7835436172",
+    "830675215338",
+    "688995695211",
+    "855985116346",
+    "876074628579"
+  ],
+  "products": [
+    {
+      "item_id": "788146516430",
+      "record_id": "788146516430@2026-08-31",
+      "rank": 1,
+      "title": "适用比亚迪海鸥海豚海豹腾势D9车机车载游戏手柄双打街机游戏",
+      "source_url": "https://item.taobao.com/item.htm?id=788146516430",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "5eac38297a8a096ec94d29e98f9ba87a40b3b0648300fe1edc28f7672ccc60fc",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "788146516430",
+        "record_id": "788146516430@2026-08-31",
+        "page_id": "page-0001",
+        "source_image_paths": [
+          "images/游戏手柄/788146516430/001.jpg"
+        ],
+        "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+        "quote": "支持2个蓝牙手柄同时连车机双打",
+        "source_context": "蓝牙手柄支持哪些车型和设备？\nA 蓝牙手柄支持比亚迪王朝系列/海洋系列/驱逐舰系列/腾势D系列等车型蓝牙无线连接，支持2个蓝牙手柄同时连车机双打（已实测）；支持鸿蒙/安卓/iOS13+等手机/平板、Switch等设备蓝牙无线连接；\nQ 电脑/电视/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更",
+        "note": "完整独立手柄的多设备输入用途；同链接不同版本单独保留。"
+      }
+    },
+    {
+      "item_id": "855048143554",
+      "record_id": "855048143554@2026-08-31",
+      "rank": 2,
+      "title": "北通斯巴达2无线usb游戏pc手柄艾尔登法环只狼双人成行电脑steam",
+      "source_url": "https://item.taobao.com/item.htm?id=855048143554",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "59c4cbca804d4cb2aa76cfdbef3f0c853453ecd3eeccd71b94fc997b808b8e4e",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "855048143554",
+        "record_id": "855048143554@2026-08-31",
+        "page_id": "page-0018",
+        "source_image_paths": [
+          "images/游戏手柄/855048143554/020.jpg"
+        ],
+        "page_text_sha256": "54b46bf7f4ae4b155f6e299682ab427054e272366f0516f67492cefba91aabd2",
+        "quote": "北通斯巴达2游戏手柄-有线版",
+        "source_context": "PARAMETER\n产品参数\n## 北通斯巴达2游戏手柄-有线版\n\n| 产品型号 | BTP-2270U |\n| --- | --- |\n| 包装尺寸 | 190*120*80 mm |\n| 产品尺寸 | 160*105*67 mm |\n| 产品重量 | $ \\approx $ 210 克 |\n| 供电方式 | USB供电 |\n| 适用平台 | PCWindows 7及以上版本台式电脑/笔记本 |\n|  | Androi",
+        "note": "独立PC/电视控制器，有线/无线版本都在范围内。"
+      }
+    },
+    {
+      "item_id": "844285076150",
+      "record_id": "844285076150@2026-08-31",
+      "rank": 8,
+      "title": "澳加狮 福音K10手柄PC电脑版游戏手柄switch无线蓝牙switch2安卓平板ipad手机类似xbox手柄steam双人成行",
+      "source_url": "https://item.taobao.com/item.htm?id=844285076150",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "d25d687ed76f9bca0b8f202c2426d8e5b857cfdf56c8744e3379b942afc15cae",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "844285076150",
+        "record_id": "844285076150@2026-08-31",
+        "page_id": "page-0019",
+        "source_image_paths": [
+          "images/游戏手柄/844285076150/019.jpg"
+        ],
+        "page_text_sha256": "70488bb55390d5d6494922c4f3bb76b98121e84ac0a4c816dbd19e02a2cfd797",
+        "quote": "产品名称：无线游戏手柄",
+        "source_context": "# 产品参数 品质用料从不低调\n产品参数信息\n产品型号：AL-K10\n产品名称：无线游戏手柄\n工作电压：DC 5V\n充电电流：400mA\n工作电流：无震动无RGB时小于80mA\n产品尺寸：约162.5*106.5*56mm\n产品重量：约242g\n电池容量：600mAh",
+        "note": ""
+      }
+    },
+    {
+      "item_id": "837987833992",
+      "record_id": "837987833992@2026-08-31",
+      "rank": 9,
+      "title": "北通鲲鹏20智控无线游戏手柄xbox机械按键switch电脑手机电视蓝牙",
+      "source_url": "https://item.taobao.com/item.htm?id=837987833992",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "142bb295a7a2d714d683d552589ddaa871d915ab893550da4171d119c46469e8",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "837987833992",
+        "record_id": "837987833992@2026-08-31",
+        "page_id": "page-0001",
+        "source_image_paths": [
+          "images/游戏手柄/837987833992/001.jpg"
+        ],
+        "page_text_sha256": "cabe302b3d350e5438cc40a405bd9db5de0e9b782c4d435e9e8bc1770eba0f60",
+        "quote": "北通鲲鹏20",
+        "source_context": "北通\n智控手柄更好用\n北通鲲鹏20\n# 越级智控 好用又升级\n双切震动扳机\n机械按键2.0\n手感升级\n体验升级\n阻尼可调TMR摇杆\n热销100万\n智控升级\n好评率99%\n\n一键切换5大平台 PC/Switch/TV/手机/车机\n$ ^{*} $99%数据源于北通鲲鹏20用户好评率高达99%，100万数据源于北通鲲鹏系列销售近100万\n手感升级",
+        "note": ""
+      }
+    },
+    {
+      "item_id": "7835436172",
+      "record_id": "7835436172@2026-08-31",
+      "rank": 11,
+      "title": "【官方旗舰店】罗技F710无线游戏手柄握把双震动力反馈电脑PC赛车格斗RPG摇杆电玩游戏机外设神器",
+      "source_url": "https://item.taobao.com/item.htm?id=7835436172",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "bd2e5bbc0416b7496b32233bd2133b156b608dc3405a6412b064fe0603acb0d2",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "7835436172",
+        "record_id": "7835436172@2026-08-31",
+        "page_id": "page-0003",
+        "source_image_paths": [
+          "images/游戏手柄/7835436172/003.jpg"
+        ],
+        "page_text_sha256": "734f942e896ecb3c56f74212c279a674e9d732e2a0e049d81c00d8f1e4617c66",
+        "quote": "F710\n无线游戏手柄",
+        "source_context": "F710\n无线游戏手柄\n·2.4G 游戏级无线技术，高速数据传输\n·即插即用超微型接收器\n·双震动马达还原游戏感受\n·独特 D-Pad 可及时改变方向\n\n职业游戏战队合作伙伴：",
+        "note": ""
+      }
+    },
+    {
+      "item_id": "830675215338",
+      "record_id": "830675215338@2026-08-31",
+      "rank": 12,
+      "title": "盖世小鸡T3pro九尾狐无线精英对称手柄pc电脑steam游戏黑神话悟空",
+      "source_url": "https://item.taobao.com/item.htm?id=830675215338",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "9ac48879308ab336c5c625235dd6c962e91ff47343efa4398499e84621dedb52",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "830675215338",
+        "record_id": "830675215338@2026-08-31",
+        "page_id": "page-0001",
+        "source_image_paths": [
+          "images/游戏手柄/830675215338/001.jpg"
+        ],
+        "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+        "quote": "产品型号 | GameSir T3 Pro",
+        "source_context": "## 版本叁数列表\n\n| 产品名称 | 九尾狐 |\n| --- | --- |\n| 产品型号 | GameSir T3 Pro |\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局",
+        "note": ""
+      }
+    },
+    {
+      "item_id": "688995695211",
+      "record_id": "688995695211@2026-08-31",
+      "rank": 14,
+      "title": "北通阿修罗2Pro+多模蓝牙无线游戏手柄霍尔线性扳机笔记本PC电脑双人成行火影忍者地平线特斯拉老头环2k",
+      "source_url": "https://item.taobao.com/item.htm?id=688995695211",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "295d50013678bf56ebf687bf0780568ada11c52d24e77c28f48a00858b2a26d6",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "688995695211",
+        "record_id": "688995695211@2026-08-31",
+        "page_id": "page-0028",
+        "source_image_paths": [
+          "images/游戏手柄/688995695211/030.jpg"
+        ],
+        "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+        "quote": "北通阿修罗2Pro+星闪版",
+        "source_context": "北通阿修罗2Pro+星闪版\n\n北通阿修罗2Pro+ 星云版\n\n| 产品型号 | BTP-A2P3A | BTP-A1N3S |\n| --- | --- | --- |\n| 连接方式 | 蓝牙/星闪/有线 | 蓝牙/2.4G无线/有线 |\n| 支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm ",
+        "note": "星闪/星云完整手柄版本都在范围内；鲲鹏70横幅不在范围内。"
+      }
+    },
+    {
+      "item_id": "855985116346",
+      "record_id": "855985116346@2026-08-31",
+      "rank": 15,
+      "title": "ShanWan蓝牙手机游戏小手柄switch双霍尔摇杆steam双人成行Q37XSP",
+      "source_url": "https://item.taobao.com/item.htm?id=855985116346",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "c1a4a4351f3df4f5c9eda9b6843ca63eddb6c4da9d0099254a7abcaa1fcca0a3",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "855985116346",
+        "record_id": "855985116346@2026-08-31",
+        "page_id": "page-0003",
+        "source_image_paths": [
+          "images/游戏手柄/855985116346/003.png"
+        ],
+        "page_text_sha256": "3070d2c74267eb993f978fd62e308309ed3dfcc06804769d39a09423dbc796b8",
+        "quote": "X挡: PC/安卓/iOS原生游戏/模拟器",
+        "source_context": "## 三档模式开关 三种模式随时切换\n\n|  | X挡: PC/安卓/iOS原生游戏/模拟器 |\n| --- | --- |\n|  | S挡: Switch |\n|  | P挡: PS4/5主机 |",
+        "note": "独立蓝牙手柄，可切换PC/Switch/PS模式；不是手机夹持式控制器。"
+      }
+    },
+    {
+      "item_id": "876074628579",
+      "record_id": "876074628579@2026-08-31",
+      "rank": 18,
+      "title": "八位堂猎户座微软xbox追光版有线授权手柄Xbox主机PC电脑Steam通用RGB灯环霍尔摇杆霍尔扳机黑神话悟空地平线",
+      "source_url": "https://item.taobao.com/item.htm?id=876074628579",
+      "snapshot_id": "2026-08-31",
+      "context_sha256": "93a8028b344fe693e0bf0c97f6ee63192df08ed6b0e7c6a1da5f5ab4d14dd106",
+      "product_form": "独立手柄",
+      "scope_evidence": {
+        "item_id": "876074628579",
+        "record_id": "876074628579@2026-08-31",
+        "page_id": "page-0001",
+        "source_image_paths": [
+          "images/游戏手柄/876074628579/001.jpg"
+        ],
+        "page_text_sha256": "e1f73fa3b5875cab2e24b220af78d62d4bb6cfb16640c28404f2bb845a11b284",
+        "quote": "Xbox追光版有线手柄",
+        "source_context": "8BitDo Ultimate C Wired Controller for Xbox\n# 八位堂猎户座 Xbox追光版有线手柄\n八位堂对光学美感的首次探索\n带来了几乎没有短板的新款猎户座\n微软官方授权，全新纽扣扳机震动\n平台支持Xbox Series、Xbox One、Windows10/11",
+        "note": ""
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "id": "report_rate",
+      "name": "回报率",
+      "description": "每秒向主机上报输入状态的次数。区分摇杆/整机、连接方式、版本、超频条件及名义/实测值；仅在可比条件下按更大更好评价。不能把一秒N枪、连发频率或摇杆输出级数当回报率。",
+      "aliases": [
+        "轮询率",
+        "Polling Rate"
+      ],
+      "type": "numeric",
+      "units": [
+        "Hz"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "larger_better"
+      },
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/004.jpg"
+          ],
+          "page_text_sha256": "97d9ba68d0ab9b1e84e9432927d3102264a4d7fea280a7471e3ac8c94a7f509b",
+          "quote": "1000Hz 高刷回报率",
+          "source_context": "# 霍尔摇杆 操控精准/杜绝漂移\n标配耐磨环+金属圈\n丝滑翻倍，耐磨不漂移\n\n1000Hz 高刷回报率\n0-100\n死区自定义调节\n方/圆\n摇杆调教切换",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/043.jpg"
+          ],
+          "page_text_sha256": "4d087e51bac639db8c8293f8fec8a43613f20596cb903df00b36fb89484d233c",
+          "quote": "无线有线稳定≥1000Hz",
+          "source_context": " AI锚定体感技术 |\n| 智控功能 | 无 | 50+项智控自定义、一键导入大神\\n键位、定制游戏训练场 | 手柄智控自检、50+项智控自定义\\n一键导入大神键位、定制游戏训练场 |\n| 回报率 | 无线200Hz, 有线500Hz | 无线有线稳定≥1000Hz |  |\n| 十字键 | 常规四向 | 北通专利全向十字键 |  |\n| 充电方式 | 有线充电 | 有线充电+智能充电底座 |  |\n| 背键 | 普通背键 | 2颗云记忆背键\\n北通游戏厅设置 | 2颗云记忆背键\\n支持脱机设置 |",
+          "note": "保留汉玉白/绝尘白版本比较表口径，不提取同级手柄的200/500Hz。"
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "摇杆轮询率 | 1000hz",
+          "source_context": "线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "开启超频模式\n后，有线无线均可达2000Hz回报率",
+          "source_context": "搭载星闪nearlink传输技术的游戏手柄品牌\n$ ^{*} $北通阿修罗2Pro+星闪版是首个在有线/无线模式下均为2000hz回报率的游戏手柄\n$ ^{*}2000Hz $数据源于星闪技术带来的回报率革新体验，北通阿修罗2Pro+星闪版开启超频模式\n后，有线无线均可达2000Hz回报率，不同样本可能存在轻微差异",
+          "note": "仅星闪版、开启超频模式。"
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/007.png"
+          ],
+          "page_text_sha256": "27e9fd7bb3880363372a19f8de119afe3f1b2abebe24ecdc1e4b80b2b2e16c55",
+          "quote": "回报率800Hz高性能",
+          "source_context": "# 电竞级霍尔摇杆\n回报率800Hz高性能，开机自动校准，软橡胶防滑，游玩更丝滑",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "transmission_latency",
+      "name": "传输延时",
+      "description": "通信链路的传输延时，保留版本、链路和厂商声明条件。不等同按下到主机收到事件的输入延迟或屏幕端到端延迟；不从回报率倒数推算。",
+      "aliases": [
+        "传输时延"
+      ],
+      "type": "numeric",
+      "units": [
+        "ms"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "smaller_better"
+      },
+      "evidence_item_ids": [
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/006.jpg"
+          ],
+          "page_text_sha256": "042920966fa17d78550bff2c5dae9dbe55db9573fe5f6ab89d8618d740fe1580",
+          "quote": "传输延时直降30倍",
+          "source_context": "## 更快速\n# 反应速度6倍杀普通手柄 传输延时直降30倍\n北通星闪摇杆回报率达到惊人的2000Hz 延时降至0.5毫秒",
+          "note": "标题给出传输延时口径；非实测报告。"
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/006.jpg"
+          ],
+          "page_text_sha256": "042920966fa17d78550bff2c5dae9dbe55db9573fe5f6ab89d8618d740fe1580",
+          "quote": "延时降至0.5毫秒",
+          "source_context": "## 更快速\n# 反应速度6倍杀普通手柄 传输延时直降30倍\n北通星闪摇杆回报率达到惊人的2000Hz 延时降至0.5毫秒",
+          "note": "星闪版宣传声明；完整测试条件未披露。"
+        }
+      ]
+    },
+    {
+      "id": "button_lifetime",
+      "name": "按键寿命",
+      "description": "指定按键的按压循环次数。必须区分ABXY、肩键、扳机和背键；记录厂商声明与未披露的载荷/失效判据，不把摇杆寿命或质保期计入。",
+      "aliases": [
+        "按键耐久次数"
+      ],
+      "type": "numeric",
+      "units": [
+        "次",
+        "万次"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "larger_better"
+      },
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/013.jpg"
+          ],
+          "page_text_sha256": "cfcd174a46108ecd4549b02710a0e558f70024a1abd47b2c3fdb86b2a7c352c8",
+          "quote": "2000000次 测试",
+          "source_context": "# 百万次按键寿命 赛场上的硬核战将\n2000000次 测试",
+          "note": "未注明具体按键与测试条件。"
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/020.jpg",
+            "images/游戏手柄/837987833992/021.gif"
+          ],
+          "page_text_sha256": "189c3688735e0906d0d7951088f932c7fbc3bf0e53b354aa0a73de58518fe051",
+          "quote": "次按键寿命",
+          "source_context": "械按键触发行程锁定在0.3mm，按压力度仅为70gf。解决传统导电胶按键行程长、粘滞累手、反馈模糊的问题，确保每一个动作指令执行都快、准、稳\n70gf\n闪速出招力度\n触发更快且久玩不累\n0.3mm\n精调键程\n500万+\n不仅快且反馈感更强\n次按键寿命\n狂按依然灵敏",
+          "note": "同页数值500万+；适用核心机械按键，见下一页范围说明。"
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/022.gif",
+            "images/游戏手柄/837987833992/023.jpg",
+            "images/游戏手柄/837987833992/024.gif"
+          ],
+          "page_text_sha256": "539ed66872b473e93042dbae21f5b22a21323c72cad8372efd7e5b6051d8aa3c",
+          "quote": "全机是指ABXY、微动扳机、十字键、背键、肩键等核心元器件",
+          "source_context": "$ ^{*} $全机是指ABXY、微动扳机、十字键、背键、肩键等核心元器件\n# 北通专利 全向十字键 丝滑不串键 猛搓不松垮\n传统十字键容易误触和串键。北通自研专利全向十字键，以全向回中结构突破杜绝串键问题，无论你搓招多激烈，也能回弹复位精准如初，无串键之忧",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/016.jpg"
+          ],
+          "page_text_sha256": "17f01293235b6c82216e2277cfa5d506db12f6132e55f451f0e24afd382cae5d",
+          "quote": "500w使用寿命",
+          "source_context": "动作游戏\n# 出招快人一步 无伤速通更轻松\n弹反连招得心应手，清脆按感拳拳到肉\n0.7mm行程\n快速反应，灵活格挡\n\n段落式按感\n清脆打斗感，格斗更带感\n\n500w使用寿命\n质量耐造\n无惧连续高强度战斗",
+          "note": "动作按键页面；不是摇杆寿命。"
+        }
+      ]
+    },
+    {
+      "id": "stick_lifetime",
+      "name": "摇杆寿命",
+      "description": "摇杆部件的循环次数。保留厂商声明、部件版本和未披露的运动轨迹/失效判据；不代表整机寿命或永久无漂移。",
+      "aliases": [
+        "摇杆耐久次数"
+      ],
+      "type": "numeric",
+      "units": [
+        "次",
+        "万次"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "larger_better"
+      },
+      "evidence_item_ids": [
+        "830675215338",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "磁变阻摇杆(500W次寿命)",
+          "source_context": "\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/011.jpg"
+          ],
+          "page_text_sha256": "4df8fad5584645ebfaaa62711cddb405afb9317fad92af7eb9f5ab436a801f59",
+          "quote": "500万+寿命",
+          "source_context": "不漂移\n500万+寿命\n霍尔摇杆\n更稳定\n1键\n静止归中\n更精准\n2000级摇杆\n分辨率",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "battery_runtime",
+      "name": "电池续航时间",
+      "description": "依靠自身电池持续工作的时间。按产品版本保留数值，记录连接、灯光、震动条件是否披露；不能用待机时间代替，不给手机供电/纯有线版本填0小时。",
+      "aliases": [
+        "续航时长"
+      ],
+      "type": "numeric",
+      "units": [
+        "小时"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "larger_better"
+      },
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "续航8小时（电竞款/机械款10-12小时）",
+          "source_context": "牙设备，或者插两个有线手柄双打套餐送分线器）\nQ 支持王者/吃鸡/LOL吗？\nA 这几款游戏不支持手柄。可以通过Shootingplus V3 映射软件映射后玩，自行百度教程，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": "不同版本独立保留；另有参数页>10H，不能合并成单一数值。"
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/006.jpg",
+            "images/游戏手柄/788146516430/007.jpg"
+          ],
+          "page_text_sha256": "d95f8231404d2161a854ede0d8621035e191ee06f8d915dad7b5d71cea3e9f51",
+          "quote": "持续使用时间：>10H",
+          "source_context": "# 产品参数\n工作电压：DC3.7V\n持续使用时间：>10H\n工作电流：<35mA\n充电电压/电流：DC5V/500mA 休眠电流：<35 $ \\mu $A\n待机时间：满电放置30天\n蓝牙传输距离： $ \\leq8M $\n# 产品参数",
+          "note": "参数页未明确所属SKU。"
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "60h | 20h",
+          "source_context": "灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连 |\n|  | 无线 | 无线2.4G+有线连接 | 无线2.4G |\n| 电池容量 |  | 600mAh | 600mAh |\n| 续航时间 |  | 60h | 20h |",
+          "note": "斯巴达2为60h，20h是比较对象斯巴达1；仅提取目标产品60h。"
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/010.png"
+          ],
+          "page_text_sha256": "7c82fb0f4c661b1e8b4acf4661d0a09bdf8306d1e953f3cdaf5a7bf85295eb41",
+          "quote": "持续使用时间：>10H",
+          "source_context": "# 产品参数\n\n珊瑚红\n\n摆蓝\n产品名称：无线游戏手柄\n产品型号：Q37\n工作电流：<80mA\n蓝牙传输距离：<=8M\n待机时间：满电放置30天\n工作电压：DC3.7V\n持续使用时间：>10H\n电池容量：500mAh\n包装清单：无线游戏手柄 $ ^{1} $ 说明书 $ ^{1} $",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "charging_time",
+      "name": "充电时间",
+      "description": "自带可充电电池由规定初始电量充至满电的时间。记录电源条件与版本；不把手机快充功率、宣传吃饭时间回血或有线供电归入。",
+      "aliases": [
+        "充满耗时"
+      ],
+      "type": "numeric",
+      "units": [
+        "小时",
+        "分钟"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "smaller_better"
+      },
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "充电2小时",
+          "source_context": "以连接多个蓝牙设备，或者插两个有线手柄双打套餐送分线器）\nQ 支持王者/吃鸡/LOL吗？\nA 这几款游戏不支持手柄。可以通过Shootingplus V3 映射软件映射后玩，自行百度教程，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0020",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/020.jpg"
+          ],
+          "page_text_sha256": "d77362cd7d8441cf2f1dc7474977213c6015b254fbb565af0a09400d1a9e168e",
+          "quote": "充电时间：约3小时",
+          "source_context": "充电时间：约3小时\n产品包含：手柄×1 座充×1 接收器×1\n充电线×1 说明书×1\n工作温度：5-45℃\n储存湿度：20~80%",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "input_latency",
+      "name": "输入延迟",
+      "description": "从按键或摇杆的物理输入到主机收到输入事件的耗时，越小越好；保留输入部件、连接方式、平台与测量口径。此范围内仅有按键响应更快的定性比较，数值未知。维度有来源不代表数值已测得；不等同传输延时、回报间隔或屏幕端到端延迟。",
+      "aliases": [
+        "输入时延",
+        "input lag"
+      ],
+      "type": "numeric",
+      "units": [
+        "ms"
+      ],
+      "formula": null,
+      "direction": {
+        "type": "smaller_better"
+      },
+      "evidence_item_ids": [
+        "788146516430"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "机械手柄按键响应更快",
+          "source_context": "/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更快，对手感/响应要求高可选机械款。\nQ 车机可以玩什么游戏？\nA 手柄适配主流游戏模拟器/云游戏app，可自行百度下载或者找客服领取免费游戏模拟器下载链接，红白机/街机/PS等游戏都有，需下载安装到车机上。",
+          "note": "仅支持按键响应速度维度；没有毫秒测量值，不能填写0或推算大小。"
+        }
+      ]
+    }
+  ],
+  "attributes": [
+    {
+      "id": "compatible_platform",
+      "name": "兼容平台",
+      "description": "逐值记录明确的设备/系统及版本。保留原生游戏、映射、适配器及SKU条件；Steam游戏支持不能推出Xbox主机兼容。PS5等仅按厂商明确声明记录，未验证实际兼容。",
+      "aliases": [
+        "适用平台"
+      ],
+      "type": "categorical",
+      "values": [
+        "Windows",
+        "Android",
+        "iOS/iPadOS",
+        "HarmonyOS",
+        "Nintendo Switch",
+        "Xbox One",
+        "Xbox Series X/S",
+        "PlayStation 3（保留商品兼容条件）",
+        "PlayStation 4",
+        "PlayStation 5（厂商声明）",
+        "Android TV/机顶盒",
+        "车机"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "844285076150",
+        "837987833992",
+        "7835436172",
+        "830675215338",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "支持鸿蒙/安卓/iOS13+等手机/平板、Switch等设备蓝牙无线连接",
+          "source_context": "蓝牙手柄支持哪些车型和设备？\nA 蓝牙手柄支持比亚迪王朝系列/海洋系列/驱逐舰系列/腾势D系列等车型蓝牙无线连接，支持2个蓝牙手柄同时连车机双打（已实测）；支持鸿蒙/安卓/iOS13+等手机/平板、Switch等设备蓝牙无线连接；\nQ 电脑/电视/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更快，对手感/响应要求高可选机械款。\nQ 车机可以玩什么游戏？\nA 手柄适配主流游戏模",
+          "note": ""
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "支持比亚迪王朝系列/海洋系列/驱逐舰系列/腾势D系列等车型蓝牙无线连接",
+          "source_context": "蓝牙手柄支持哪些车型和设备？\nA 蓝牙手柄支持比亚迪王朝系列/海洋系列/驱逐舰系列/腾势D系列等车型蓝牙无线连接，支持2个蓝牙手柄同时连车机双打（已实测）；支持鸿蒙/安卓/iOS13+等手机/平板、Switch等设备蓝牙无线连接；\nQ 电脑/电视/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手",
+          "note": ""
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/015.jpg"
+          ],
+          "page_text_sha256": "21bc059d27293d5b547dd67263402cf38dae6c0713be7c7154688fd703edaaa8",
+          "quote": "PS3（软破版）",
+          "source_context": "# 畅玩热门大作游戏\n# 电脑/电视/Steam/模拟器/盒子/PS3（软破版）\n\n怪物猎人：世界\n\nFIFA18\n\nNBA 2K19\n\n仁王\n\n使命召唤14：二战\n\n古墓丽影：崛起\n恶灵附身2",
+          "note": ""
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/020.jpg"
+          ],
+          "page_text_sha256": "54b46bf7f4ae4b155f6e299682ab427054e272366f0516f67492cefba91aabd2",
+          "quote": "Android 4.0及以上版本智能电视",
+          "source_context": "\n| 产品尺寸 | 160*105*67 mm |\n| 产品重量 | $ \\approx $ 210 克 |\n| 供电方式 | USB供电 |\n| 适用平台 | PCWindows 7及以上版本台式电脑/笔记本 |\n|  | AndroidAndroid 4.0及以上版本智能电视\\|机顶盒 |\n\n产品清单 手柄 $ ^{*}1 $、电子说明书 $ ^{*}1 $、保修卡 $ ^{*}1 $",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0016",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/016.jpg"
+          ],
+          "page_text_sha256": "f5e8cb9da69fe8097e514bc7b295c05a4b558fad2e865b1420feb74195bd7221",
+          "quote": "安卓原生",
+          "source_context": "# 三模玩转多平台\n告别繁琐 好玩更简单，有线/蓝牙/接收器2.4G 多种连接方式\n\nPC电脑\n\n安卓原生\n\n苹果原生",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0016",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/016.jpg"
+          ],
+          "page_text_sha256": "f5e8cb9da69fe8097e514bc7b295c05a4b558fad2e865b1420feb74195bd7221",
+          "quote": "苹果原生",
+          "source_context": "# 三模玩转多平台\n告别繁琐 好玩更简单，有线/蓝牙/接收器2.4G 多种连接方式\n\nPC电脑\n\n安卓原生\n\n苹果原生",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "Switch主机",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0017",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/041.jpg"
+          ],
+          "page_text_sha256": "9952235d1fe48d8227af747079cfd58d7b7258f4aaf1670239294c2b308bcd9c",
+          "quote": "PC/switch/手机/TV/车机",
+          "source_context": "# 一键切换5大平台 PC/Switch/TV/手机/车机\n无需复杂组合键，拨码切换即连即用2.4G无线/有线/蓝牙5.3\n\nM2\n\n你想玩的平台都支持！游戏更全面 PC/switch/手机/TV/车机\n※具体适配车机请咨询客服\n\nPC\n\nSwitch",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "PC/Steam/Switch/安卓/iOS",
+          "source_context": "## 版本叁数列表\n\n| 产品名称 | 九尾狐 |\n| --- | --- |\n| 产品型号 | GameSir T3 Pro |\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "NS/PC/TV/手机",
+          "source_context": "o+星闪版\n\n北通阿修罗2Pro+ 星云版\n\n| 产品型号 | BTP-A2P3A | BTP-A1N3S |\n| --- | --- | --- |\n| 连接方式 | 蓝牙/星闪/有线 | 蓝牙/2.4G无线/有线 |\n| 支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 | 手柄*1、星闪接收器*1 | 手柄*1、无线",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/003.png"
+          ],
+          "page_text_sha256": "3070d2c74267eb993f978fd62e308309ed3dfcc06804769d39a09423dbc796b8",
+          "quote": "PC/安卓/iOS原生游戏/模拟器",
+          "source_context": "## 三档模式开关 三种模式随时切换\n\n|  | X挡: PC/安卓/iOS原生游戏/模拟器 |\n| --- | --- |\n|  | S挡: Switch |\n|  | P挡: PS4/5主机 |",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/003.png"
+          ],
+          "page_text_sha256": "3070d2c74267eb993f978fd62e308309ed3dfcc06804769d39a09423dbc796b8",
+          "quote": "PS4/5主机",
+          "source_context": "## 三档模式开关 三种模式随时切换\n\n|  | X挡: PC/安卓/iOS原生游戏/模拟器 |\n| --- | --- |\n|  | S挡: Switch |\n|  | P挡: PS4/5主机 |",
+          "note": "实际游戏兼容范围未给出。"
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/001.jpg"
+          ],
+          "page_text_sha256": "e1f73fa3b5875cab2e24b220af78d62d4bb6cfb16640c28404f2bb845a11b284",
+          "quote": "平台支持Xbox Series、Xbox One、Windows10/11",
+          "source_context": "8BitDo Ultimate C Wired Controller for Xbox\n# 八位堂猎户座 Xbox追光版有线手柄\n八位堂对光学美感的首次探索\n带来了几乎没有短板的新款猎户座\n微软官方授权，全新纽扣扳机震动\n平台支持Xbox Series、Xbox One、Windows10/11",
+          "note": ""
+        },
+        {
+          "item_id": "7835436172",
+          "record_id": "7835436172@2026-08-31",
+          "source_field": "title",
+          "quote": "【官方旗舰店】罗技F710无线游戏手柄握把双震动力反馈电脑PC赛车格斗RPG摇杆电玩游戏机外设神器",
+          "note": "标题明确电脑PC；不把店铺鼠标/键盘广告当F710参数。"
+        }
+      ]
+    },
+    {
+      "id": "connection_mode",
+      "name": "连接方式",
+      "description": "控制器输入传输方式；充电接口不等同数据输入连接。保留模式、接收器、平台与版本限制；触屏导电/脉冲传导单独记录。",
+      "aliases": [
+        "连接模式"
+      ],
+      "type": "categorical",
+      "values": [
+        "USB有线",
+        "2.4GHz接收器",
+        "蓝牙",
+        "星闪"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "844285076150",
+        "837987833992",
+        "7835436172",
+        "830675215338",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/010.jpg"
+          ],
+          "page_text_sha256": "1c8ef30d20f4840dc7bfda8f9446cefa889e67bc7d394a33615d3384b74eec26",
+          "quote": "蓝牙+有线+2.4G连接",
+          "source_context": "进口摇杆\n\n强悍宏功能\n\n酷炫灯光\n\n透明机身\n蓝牙+有线+2.4G连接\n自定义体感",
+          "note": ""
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/001.jpg"
+          ],
+          "page_text_sha256": "d17074f1d1f2e2892d24bfa60adf3b98dcf1fda09253f25ae68b5c68941e31e9",
+          "quote": "无线2.4g连接",
+          "source_context": "# XBOX同级手柄—百元战神\n支持 电脑 | 电视 | STEAM\nXBOX同级\n线性扳机\nXBOX同级\n摇杆\nXBOX同级\n按键\n\n【黑色无线版】\n支持无线/有线\n北通斯巴达2无线黑色\n\nusb接收器，支持插线连接加十无线2.4g连接，10米无延迟。",
+          "note": ""
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "2米有线直连",
+          "source_context": "|  | 标准握把 | 波浪握把 |\n| 震动 |  | 有 | 有 |\n| 动感灯条 |  | 无线版有 | 无 |\n| 按键灯 |  | 无 | 有 |\n| 指示灯 |  | 多指示灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连 |\n|  | 无线 | 无线2.4G+有线连接 | 无线2.4G |\n| 电池容量 |  | 600mAh | 600mAh |\n| 续航时间 |  | 60h | 20h |",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0016",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/016.jpg"
+          ],
+          "page_text_sha256": "f5e8cb9da69fe8097e514bc7b295c05a4b558fad2e865b1420feb74195bd7221",
+          "quote": "有线/蓝牙/接收器2.4G",
+          "source_context": "# 三模玩转多平台\n告别繁琐 好玩更简单，有线/蓝牙/接收器2.4G 多种连接方式\n\nPC电脑\n\n安卓原生\n\n苹果原生",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0017",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/041.jpg"
+          ],
+          "page_text_sha256": "9952235d1fe48d8227af747079cfd58d7b7258f4aaf1670239294c2b308bcd9c",
+          "quote": "2.4G无线/有线/蓝牙5.3",
+          "source_context": "# 一键切换5大平台 PC/Switch/TV/手机/车机\n无需复杂组合键，拨码切换即连即用2.4G无线/有线/蓝牙5.3\n\nM2\n\n你想玩的平台都支持！游戏更全面 PC/switch/手机/TV/车机\n※具体适配车机请咨询客服\n\nPC\n\nSwitch",
+          "note": ""
+        },
+        {
+          "item_id": "7835436172",
+          "record_id": "7835436172@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/7835436172/003.jpg"
+          ],
+          "page_text_sha256": "734f942e896ecb3c56f74212c279a674e9d732e2a0e049d81c00d8f1e4617c66",
+          "quote": "2.4G 游戏级无线技术",
+          "source_context": "F710\n无线游戏手柄\n·2.4G 游戏级无线技术，高速数据传输\n·即插即用超微型接收器\n·双震动马达还原游戏感受\n·独特 D-Pad 可及时改变方向\n\n职业游戏战队合作伙伴：",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "蓝牙/2.4G/有线",
+          "source_context": "## 版本叁数列表\n\n| 产品名称 | 九尾狐 |\n| --- | --- |\n| 产品型号 | GameSir T3 Pro |\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "蓝牙/星闪/有线",
+          "source_context": "北通阿修罗2Pro+星闪版\n\n北通阿修罗2Pro+ 星云版\n\n| 产品型号 | BTP-A2P3A | BTP-A1N3S |\n| --- | --- | --- |\n| 连接方式 | 蓝牙/星闪/有线 | 蓝牙/2.4G无线/有线 |\n| 支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "蓝牙/2.4G无线/有线",
+          "source_context": "北通阿修罗2Pro+星闪版\n\n北通阿修罗2Pro+ 星云版\n\n| 产品型号 | BTP-A2P3A | BTP-A1N3S |\n| --- | --- | --- |\n| 连接方式 | 蓝牙/星闪/有线 | 蓝牙/2.4G无线/有线 |\n| 支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 |",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/001.png"
+          ],
+          "page_text_sha256": "8692d8d3f9135563a6899544f304bf074ab8ac4c71e37fedac04b1950d3cb954",
+          "quote": "Q37XSP蓝牙手柄",
+          "source_context": "ShanWan 手柄\nQ37XSP蓝牙手柄\n## 霍尔摇杆800hz回报率\n\n手机\n\n电脑\n\nSwitch\n\nPS4",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/001.jpg"
+          ],
+          "page_text_sha256": "e1f73fa3b5875cab2e24b220af78d62d4bb6cfb16640c28404f2bb845a11b284",
+          "quote": "Xbox追光版有线手柄",
+          "source_context": "8BitDo Ultimate C Wired Controller for Xbox\n# 八位堂猎户座 Xbox追光版有线手柄\n八位堂对光学美感的首次探索\n带来了几乎没有短板的新款猎户座\n微软官方授权，全新纽扣扳机震动\n平台支持Xbox Series、Xbox One、Windows10/11",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "bluetooth_version",
+      "name": "蓝牙版本",
+      "description": "按目标产品和SKU明确声明记录协议版本，不依据版本号自动推出延迟、带宽或兼容性。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "5.0",
+        "5.3"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "蓝牙5.0协议",
+          "source_context": "板、Switch等设备蓝牙无线连接；\nQ 电脑/电视/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更快，对手感/响应要求高可选机械款。\nQ 车机可以玩什么游戏？\nA 手柄适配主流游戏模拟器/云游戏app，可自行百度下载或者找客服领取免费游戏模拟器下载链接，红白机/街机/PS等游戏都有，需下载安装到车机上。",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/015.jpg"
+          ],
+          "page_text_sha256": "f217a74489746e3fc3e40289925df9269a8ca8ef4c1b43a5be13c266cfb66c1b",
+          "quote": "蓝牙5.3",
+          "source_context": "# 蓝牙5.3 引领行业新标准\n蓝牙5.3是目前市场上蓝牙新标准，真正做到0延迟，不卡顿升华您的游戏体验！",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0017",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/041.jpg"
+          ],
+          "page_text_sha256": "9952235d1fe48d8227af747079cfd58d7b7258f4aaf1670239294c2b308bcd9c",
+          "quote": "蓝牙5.3",
+          "source_context": "# 一键切换5大平台 PC/Switch/TV/手机/车机\n无需复杂组合键，拨码切换即连即用2.4G无线/有线/蓝牙5.3\n\nM2\n\n你想玩的平台都支持！游戏更全面 PC/switch/手机/TV/车机\n※具体适配车机请咨询客服\n\nPC\n\nSwitch",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_sensor",
+      "name": "摇杆传感器类型",
+      "description": "只收录目标型号实际声明，不把比较对象碳膜/传统霍尔配置移入。双霍尔未明确部件时保留歧义，不推出寿命或精度。",
+      "aliases": [
+        "摇杆技术"
+      ],
+      "type": "categorical",
+      "values": [
+        "霍尔",
+        "TMR",
+        "磁变阻（未细分）"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/004.jpg"
+          ],
+          "page_text_sha256": "97d9ba68d0ab9b1e84e9432927d3102264a4d7fea280a7471e3ac8c94a7f509b",
+          "quote": "霍尔摇杆",
+          "source_context": "# 霍尔摇杆 操控精准/杜绝漂移\n标配耐磨环+金属圈\n丝滑翻倍，耐磨不漂移\n\n1000Hz 高刷回报率\n0-100\n死区自定义调节\n方/圆\n摇杆调教切换",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "阻尼可调TMR摇杆",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "磁变阻摇杆",
+          "source_context": "\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/011.jpg"
+          ],
+          "page_text_sha256": "4df8fad5584645ebfaaa62711cddb405afb9317fad92af7eb9f5ab436a801f59",
+          "quote": "霍尔摇杆",
+          "source_context": "不漂移\n500万+寿命\n霍尔摇杆\n更稳定\n1键\n静止归中\n更精准\n2000级摇杆\n分辨率",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/007.png"
+          ],
+          "page_text_sha256": "27e9fd7bb3880363372a19f8de119afe3f1b2abebe24ecdc1e4b80b2b2e16c55",
+          "quote": "电竞级霍尔摇杆",
+          "source_context": "# 电竞级霍尔摇杆\n回报率800Hz高性能，开机自动校准，软橡胶防滑，游玩更丝滑",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/007.jpg"
+          ],
+          "page_text_sha256": "8b09dae1aba50e2b96892fe287e8b1d96344860085f75030cc509bc061f36301",
+          "quote": "品牌霍尔摇杆",
+          "source_context": "GuliKit® Joystick & Textured Finish\n# GuliKit $ ^{®} $ 品牌霍尔摇杆 海浪防滑外形\n相比传统的电位器摇杆，霍尔摇杆靠的是磁力，不接触的方式来避免碳膜磨损，更显实力。橡胶纹理，定位区下凹，防疲劳凸起，3段起伏的海浪，不偏，不滑，不糙，就是这个特别好用的摇杆。",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "trigger_mode",
+      "name": "扳机模式",
+      "description": "区分模拟线性输入、微动数字输入及可切换模式。快速扳机、短触发行程不能自动推定有机械模式锁；触屏辅助器的仿生按键不是线性扳机。",
+      "aliases": [
+        "扳机类型"
+      ],
+      "type": "categorical",
+      "values": [
+        "电位器线性",
+        "霍尔线性",
+        "微动数字",
+        "霍尔线性/微动双切",
+        "快速扳机模式"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "855048143554",
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "电位器线性扳机",
+          "source_context": " 北通斯巴达1游戏手柄（有线版\\|无线版） |\n| --- | --- | --- | --- |\n| 支持平台 |  | PC\\|安卓电视 | PC\\|安卓电视 |\n| 摇杆 |  | 专属定制摇杆 | 常规摇杆 |\n| 扳机 |  | 电位器线性扳机 | 导电胶线性扳机 |\n| 肩键 |  | 轻触微动开关 | 导电胶按键 |\n| 握把 |  | 标准握把 | 波浪握把 |\n| 震动 |  | 有 | 有 |\n| 动感灯条 |  | 无线版有 | 无 |\n| 按键灯 |  | 无 | 有 |\n| 指示灯 |  | 多指示灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/005.jpg"
+          ],
+          "page_text_sha256": "f7dd58f2fee77a27c09023983874e5ef84f65fe21a39ea24a30ed81cf9313dff",
+          "quote": "霍尔线性扳机",
+          "source_context": "# 霍尔线性扳机\n这一扣掌握局势 控住命运 可在APP调节扳机微操，可快速、可缓慢，皆由你定义\n\n0.1mm级精度\n触发更精准\n\n256阶行程线性回弹\n手感真实",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/011.gif",
+            "images/游戏手柄/837987833992/012.jpg",
+            "images/游戏手柄/837987833992/013.gif"
+          ],
+          "page_text_sha256": "fa0e9383a4fd026423408daf432db1a0dbab6920e80d09d200eef353feefb8c8",
+          "quote": "微动/线性双切震动扳机",
+          "source_context": "## 扳机震动 同级手柄难找到第二个\n\n# 微动/线性双切震动扳机 1个扳机2种手感 全游戏适配\n清脆微动手感和线性手感一键切换，既能满足FPS连续开火或动作游戏快速攻击；又能精准模拟开车油门行程，轻松适配各类游戏",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/043.jpg"
+          ],
+          "page_text_sha256": "4d087e51bac639db8c8293f8fec8a43613f20596cb903df00b36fb89484d233c",
+          "quote": "双切霍尔扳机",
+          "source_context": "震动+握把震动\\n北辰AI震动 |\n| ABXY按键 | 常规导电胶按键 | 精调机械按键ABXY |  |\n| 摇杆 | 常规\\n碳膜/霍尔摇杆 | 智控TMR摇杆 | 力度可调TMR摇杆 |\n| 扳机 | 常规\\n1种行程霍尔扳机 | 双切霍尔扳机 | 双切扳机+扳机震动 |\n| 体感 | 普通体感 | MEMS体感 | AI锚定体感技术 |\n| 智控功能 | 无 | 50+项智控自定义、一键导入大神\\n键位、定制游戏训练场 | 手柄智控自检、50+项智控自定义\\n一键导入大神键位、定制游戏训练场 |\n| 回报率 | 无线200Hz, 有线500Hz | 无线有线稳定≥1000Hz |  |\n| 十字",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "双切扳机，霍尔线性扳机和微动扳机切换",
+          "source_context": "| 产品名称 | 九尾狐 |\n| --- | --- |\n| 产品型号 | GameSir T3 Pro |\n| 连接方式 | 蓝牙/2.4G/有线 |\n| 适应平台 | PC/Steam/Switch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/014.jpg"
+          ],
+          "page_text_sha256": "24f9a6c80480afbc4095c475c72ee1ce71c096d74cadb3a09628b57a8de72eea",
+          "quote": "快速扳机模式",
+          "source_context": "赛车游戏\n# 比脚踩油门还精准 丝滑手感霍尔扳机\n百级行程可调节的霍尔扳机，专研快速扳机模式，加速反应瞬间飙升",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0006",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/006.jpg"
+          ],
+          "page_text_sha256": "3860aa82920915779b4dc64332504a47556c4f20498e216321014863655021ab",
+          "quote": "霍尔线性扳机",
+          "source_context": "Hall Linear Trigger\n# 霍尔线性扳机\n弹力只来自于均匀力弹簧\n饱满、有力、丝滑\n纯线性霍尔扳机算法\n1:1真实还原按下键程",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "trigger_resolution",
+      "name": "扳机输出分级",
+      "description": "厂商声明的扳机离散输出级数；保留255级、0-255阶、256阶的原始口径，不混同位移精度或整体操控品质。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "级"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/005.jpg"
+          ],
+          "page_text_sha256": "f7dd58f2fee77a27c09023983874e5ef84f65fe21a39ea24a30ed81cf9313dff",
+          "quote": "256阶行程线性回弹",
+          "source_context": "# 霍尔线性扳机\n这一扣掌握局势 控住命运 可在APP调节扳机微操，可快速、可缓慢，皆由你定义\n\n0.1mm级精度\n触发更精准\n\n256阶行程线性回弹\n手感真实",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "0-255阶线性",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/015.jpg"
+          ],
+          "page_text_sha256": "caba29e07673b403ac3609596070bba69401d8dba1fb796517df7f432eca2f70",
+          "quote": "256阶层级变化",
+          "source_context": "## 线性扳机模式256阶层级变化",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "trigger_travel",
+      "name": "扳机行程",
+      "description": "扳机的机械/触发行程，区分微动触发与线性总行程；不把0.1mm级精度当行程。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "mm"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "0.3mm 攻击更快",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": "微动短行程。"
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "8mm 0-255阶线性",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": "线性长行程。"
+        }
+      ]
+    },
+    {
+      "id": "trigger_position_precision",
+      "name": "扳机位移精度声明",
+      "description": "保留厂商0.1mm级精度声明，不当作实测误差、总行程或速度；无法核对的U1 MM不归一化。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "mm"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "844285076150"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/005.jpg"
+          ],
+          "page_text_sha256": "f7dd58f2fee77a27c09023983874e5ef84f65fe21a39ea24a30ed81cf9313dff",
+          "quote": "0.1mm级精度",
+          "source_context": "# 霍尔线性扳机\n这一扣掌握局势 控住命运 可在APP调节扳机微操，可快速、可缓慢，皆由你定义\n\n0.1mm级精度\n触发更精准\n\n256阶行程线性回弹\n手感真实",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_resolution",
+      "name": "摇杆输出分辨率",
+      "description": "厂商声明的级数、采样分级或位数。区分输出、ADC及有效精度，不因数值更大就推定操控更好。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "级",
+        "bit"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992",
+        "830675215338",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0006",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/017.gif",
+            "images/游戏手柄/837987833992/018.jpg",
+            "images/游戏手柄/837987833992/019.gif"
+          ],
+          "page_text_sha256": "2d403e3ad2cdc2a7d7dc66079d3289950017cc4f310212ab058c1c91d8da8c77",
+          "quote": "5400+ 超高分辨率",
+          "source_context": "30gf\n90gf\n\n灵活走位\n\n新手防误操作\n\n精细瞄准\n\n北通新型专利号：ZL202021197247.4\n北通新型专利号：ZL202422738375X\n\n丝滑耐用更胜一筹\n阻尼环不移位\n5400+ 超高分辨率\n\n微操更精准\n\n指哪打哪更灵敏",
+          "note": "原文未给单位，按分级解释待审。"
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/008.jpg",
+            "images/游戏手柄/830675215338/009.jpg"
+          ],
+          "page_text_sha256": "b3884f37c7d6af3afd45966ab2353461b1e7c6fdf348a526fd5879f2495bc100",
+          "quote": "采样分级",
+          "source_context": "# Gamesir Mag-Res™ 小鸡定制磁变阻摇杆\n\n兼具碳膜摇杆的精度与线性，和霍尔摇杆的寿命，把算法交给玩家\n4096\n1000Hz\n采样分级\n回报率\n500W\n长寿命\n强线性\n低功耗\n12bit",
+          "note": "同页4096与12bit。"
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/010.jpg"
+          ],
+          "page_text_sha256": "9ab726d959a34d8ae35ae42178ad3f0e257fd5ffca60dc7e278280400f593894",
+          "quote": "小鸡定制磁变阻摇杆——12bit",
+          "source_context": "## 输出\n输入\n小鸡定制磁变阻摇杆——12bit\n传统碳膜摇杆——8bit\n传统霍尔摇杆——8bit",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/011.jpg"
+          ],
+          "page_text_sha256": "4df8fad5584645ebfaaa62711cddb405afb9317fad92af7eb9f5ab436a801f59",
+          "quote": "2000级摇杆",
+          "source_context": "不漂移\n500万+寿命\n霍尔摇杆\n更稳定\n1键\n静止归中\n更精准\n2000级摇杆\n分辨率",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "deadzone_adjustable",
+      "name": "摇杆死区可调",
+      "description": "支持调节死区/反死区。二者分别保留，0死区宣传不证明可调或回中误差为0。",
+      "aliases": [
+        "死区调节"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/004.jpg"
+          ],
+          "page_text_sha256": "97d9ba68d0ab9b1e84e9432927d3102264a4d7fea280a7471e3ac8c94a7f509b",
+          "quote": "死区自定义调节",
+          "source_context": "# 霍尔摇杆 操控精准/杜绝漂移\n标配耐磨环+金属圈\n丝滑翻倍，耐磨不漂移\n\n1000Hz 高刷回报率\n0-100\n死区自定义调节\n方/圆\n摇杆调教切换",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0024",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/025.jpg",
+            "images/游戏手柄/830675215338/026.jpg"
+          ],
+          "page_text_sha256": "8bb125fd1f6e5ef826e9b9d61f539034f15c8c8da44065b2abb43830d1c3d0e0",
+          "quote": "反死区",
+          "source_context": "# PC精英软件\n# 自由调节手柄各项参数，摇杆曲线、反死区、宏编程、RGB灯效...等等你想要的，它都有\n\n$ ^{*} $PC精英软件预计8.31号左右上线",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_curve_adjustable",
+      "name": "摇杆输出曲线可调",
+      "description": "可改变摇杆输出曲线或方/圆调教；灵敏度调节单独记录。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/004.jpg"
+          ],
+          "page_text_sha256": "97d9ba68d0ab9b1e84e9432927d3102264a4d7fea280a7471e3ac8c94a7f509b",
+          "quote": "摇杆调教切换",
+          "source_context": "# 霍尔摇杆 操控精准/杜绝漂移\n标配耐磨环+金属圈\n丝滑翻倍，耐磨不漂移\n\n1000Hz 高刷回报率\n0-100\n死区自定义调节\n方/圆\n摇杆调教切换",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0024",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/025.jpg",
+            "images/游戏手柄/830675215338/026.jpg"
+          ],
+          "page_text_sha256": "8bb125fd1f6e5ef826e9b9d61f539034f15c8c8da44065b2abb43830d1c3d0e0",
+          "quote": "摇杆曲线",
+          "source_context": "# PC精英软件\n# 自由调节手柄各项参数，摇杆曲线、反死区、宏编程、RGB灯效...等等你想要的，它都有\n\n$ ^{*} $PC精英软件预计8.31号左右上线",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_sensitivity_adjustable",
+      "name": "摇杆灵敏度可调",
+      "description": "可通过软件改变摇杆灵敏度，不等同输出位数或死区。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0021",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/023.jpg"
+          ],
+          "page_text_sha256": "2d69d19341fd400b8d192be3bd5040f8530a28a85a50d21ad1c15c9b31a0e8d0",
+          "quote": "摇杆灵敏度自定义",
+          "source_context": "摇杆灵敏度自定义",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_tension_adjustable",
+      "name": "摇杆阻尼可调",
+      "description": "支持改变摇杆操作阻尼；保留SKU范围和可调力范围，不假设阻尼越大越好。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "30gf-90gf可调范围",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/043.jpg"
+          ],
+          "page_text_sha256": "4d087e51bac639db8c8293f8fec8a43613f20596cb903df00b36fb89484d233c",
+          "quote": "力度可调TMR摇杆",
+          "source_context": " |\n| 震动 | 握把震动 | 握把震动\\n北辰AI震动 | 扳机震动+握把震动\\n北辰AI震动 |\n| ABXY按键 | 常规导电胶按键 | 精调机械按键ABXY |  |\n| 摇杆 | 常规\\n碳膜/霍尔摇杆 | 智控TMR摇杆 | 力度可调TMR摇杆 |\n| 扳机 | 常规\\n1种行程霍尔扳机 | 双切霍尔扳机 | 双切扳机+扳机震动 |\n| 体感 | 普通体感 | MEMS体感 | AI锚定体感技术 |\n| 智控功能 | 无 | 50+项智控自定义、一键导入大神\\n键位、定制游戏训练场 | 手柄智控自检、50+项智控自定义\\n一键导入大神键位、定制游戏训练场 |\n| 回报率 | 无线200Hz, 有线",
+          "note": "绝尘白版本。"
+        }
+      ]
+    },
+    {
+      "id": "stick_tension_range",
+      "name": "摇杆阻尼调节力范围",
+      "description": "声明的操作力可调范围，不作为全局更大更好指标。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "gf"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/014.jpg",
+            "images/游戏手柄/837987833992/015.gif",
+            "images/游戏手柄/837987833992/016.jpg"
+          ],
+          "page_text_sha256": "9d361c3c650bc3ef2adb955782284df5d990365141b268124b77cc326fdc42e1",
+          "quote": "30gf-90gf可调范围",
+          "source_context": "0.3mm 攻击更快，射击快如狙击手\n微动短行程：鼠标按感，快速连击\n\n8mm 0-255阶线性，过弯稳如老司机\n线性长行程：顺滑按感，精准油门\n图片来源于网络，侵权删\n# 阻尼可调TMR摇杆 30gf-90gf可调范围更大 更顺手\n在更先进TMR摇杆基础上，搭载POM阻尼环和北通专利0接触防磨损结构，不仅阻尼可随时根据游戏需求调节，摇杆更丝滑更耐用",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "stick_calibration",
+      "name": "摇杆校准/归中功能",
+      "description": "区分开机自动校准、按键归中及软件归中；不是回中误差的测量值。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/011.jpg"
+          ],
+          "page_text_sha256": "4df8fad5584645ebfaaa62711cddb405afb9317fad92af7eb9f5ab436a801f59",
+          "quote": "静止归中",
+          "source_context": "不漂移\n500万+寿命\n霍尔摇杆\n更稳定\n1键\n静止归中\n更精准\n2000级摇杆\n分辨率",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0020",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/022.jpg"
+          ],
+          "page_text_sha256": "a357f75945ba0818a7decaa61285737f93f27016a098e2ae7074b0869b32dee5",
+          "quote": "摇杆自动归中自定义",
+          "source_context": "②专属配置APP\n一键神操作 秒变高手\n2000万玩家共创多样玩法\n多样自定义玩法，根据习惯自定义操控\n复杂连招轻松导入\n\n摇杆自动归中自定义\n\n回报率超频模式自定义\n\n多级震动自定义",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/007.png"
+          ],
+          "page_text_sha256": "27e9fd7bb3880363372a19f8de119afe3f1b2abebe24ecdc1e4b80b2b2e16c55",
+          "quote": "开机自动校准",
+          "source_context": "# 电竞级霍尔摇杆\n回报率800Hz高性能，开机自动校准，软橡胶防滑，游玩更丝滑",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "button_mechanism",
+      "name": "按键结构",
+      "description": "按部件记录导电胶/硅胶、轻触、微动、机械黑轴等实际结构，保留适用键位，不构造跨结构绝对优劣排序。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "导电胶/硅胶",
+        "轻触开关",
+        "微动开关",
+        "机械按键（未细分）",
+        "轻触+硅胶"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "837987833992",
+        "830675215338",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0006",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/006.jpg"
+          ],
+          "page_text_sha256": "e5d8b0ab25a893cffd28d9237cff0bf179722e855780f198d98f2a4bb435b358",
+          "quote": "LB、RB行程短",
+          "source_context": "# 支持多平台 畅玩3A游戏大作\n肩键采用轻触微动开关，LB、RB行程短，格挡迅捷",
+          "note": "同页肩键轻触微动开关。"
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/020.jpg",
+            "images/游戏手柄/837987833992/021.gif"
+          ],
+          "page_text_sha256": "189c3688735e0906d0d7951088f932c7fbc3bf0e53b354aa0a73de58518fe051",
+          "quote": "全机采用机械按键",
+          "source_context": "## 02 体验升级\n闪速机械按键2.0\n全机采用机械按键 爽脆敏捷快如闪电\n将机械按键触发行程锁定在0.3mm，按压力度仅为70gf。解决传统导电胶按键行程长、粘滞累手、反馈模糊的问题，确保每一个动作指令执行都快、准、稳\n70gf\n闪速出招力度\n触发更快且久玩不累\n0.3mm\n精调键程\n500万+\n不仅快且反馈感更强\n次按键寿命\n狂按依然灵敏",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "十字键类型 | 轻触开关",
+          "source_context": "，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0006",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/006.png"
+          ],
+          "page_text_sha256": "5a467f4e4e2729f3b61bf76d76792c1cee57e919dfce41dcc8877c082e586e09",
+          "quote": "轻触按键",
+          "source_context": "# 轻触按键\n经过数十年的经验选择各种按键对比以及长时间的不断测试最优选择，给您极致的游戏体验。",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "硅胶按键",
+          "source_context": "{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1个右握把小型马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/003.jpg"
+          ],
+          "page_text_sha256": "1da43e6213c8c6c668f1975c352b9e5c6eb27c5b4d31806ba915fdb9e941ce2e",
+          "quote": "轻触+硅胶",
+          "source_context": "\"Brittle\" Shoulder Buttons\n# 杠杆式轻触“脆弹”肩键\n杠杆式结构设计，让每个位置按下手感几乎一致采用了轻触+硅胶的用料\n手感清脆，回弹快速，非常的爽",
+          "note": ""
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "机械手柄按键响应更快",
+          "source_context": "/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更快，对手感/响应要求高可选机械款。\nQ 车机可以玩什么游戏？\nA 手柄适配主流游戏模拟器/云游戏app，可自行百度下载或者找客服领取免费游戏模拟器下载链接，红白机/街机/PS等游戏都有，需下载安装到车机上。",
+          "note": "仅机械款。"
+        }
+      ]
+    },
+    {
+      "id": "button_travel",
+      "name": "按键触发行程",
+      "description": "指定动作按键的触发行程，扳机行程单列，部件和SKU必须保留；不把位移当输入延迟。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "mm"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/020.jpg",
+            "images/游戏手柄/837987833992/021.gif"
+          ],
+          "page_text_sha256": "189c3688735e0906d0d7951088f932c7fbc3bf0e53b354aa0a73de58518fe051",
+          "quote": "0.3mm",
+          "source_context": "## 02 体验升级\n闪速机械按键2.0\n全机采用机械按键 爽脆敏捷快如闪电\n将机械按键触发行程锁定在0.3mm，按压力度仅为70gf。解决传统导电胶按键行程长、粘滞累手、反馈模糊的问题，确保每一个动作指令执行都快、准、稳\n70gf\n闪速出招力度\n触发更快且久玩不累\n0.3mm\n精调键程\n500万+\n不仅快且反馈感更强\n次按键寿命\n狂按依然灵敏",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/016.jpg"
+          ],
+          "page_text_sha256": "17f01293235b6c82216e2277cfa5d506db12f6132e55f451f0e24afd382cae5d",
+          "quote": "0.7mm行程",
+          "source_context": "动作游戏\n# 出招快人一步 无伤速通更轻松\n弹反连招得心应手，清脆按感拳拳到肉\n0.7mm行程\n快速反应，灵活格挡\n\n段落式按感\n清脆打斗感，格斗更带感\n\n500w使用寿命\n质量耐造\n无惧连续高强度战斗",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "button_actuation_force",
+      "name": "按键触发力",
+      "description": "动作按键按压力，不能预设越大/越小越好；保留部件范围和厂商声明。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "gf"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/020.jpg",
+            "images/游戏手柄/837987833992/021.gif"
+          ],
+          "page_text_sha256": "189c3688735e0906d0d7951088f932c7fbc3bf0e53b354aa0a73de58518fe051",
+          "quote": "按压力度仅为70gf",
+          "source_context": "## 02 体验升级\n闪速机械按键2.0\n全机采用机械按键 爽脆敏捷快如闪电\n将机械按键触发行程锁定在0.3mm，按压力度仅为70gf。解决传统导电胶按键行程长、粘滞累手、反馈模糊的问题，确保每一个动作指令执行都快、准、稳\n70gf\n闪速出招力度\n触发更快且久玩不累\n0.3mm\n精调键程\n500万+\n不仅快且反馈感更强\n次按键寿命\n狂按依然灵敏",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "remapping",
+      "name": "按键重映射",
+      "description": "设备或配套软件可改变按键对应输入。保留平台、APP和脱机条件；游戏内移动触屏按钮不算设备重映射。",
+      "aliases": [
+        "键位映射"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "Shootingplus V3 映射软件映射",
+          "source_context": "## Q 支持双打吗？\nA 支持。车机可以连接多个蓝牙设备，或者插两个有线手柄双打套餐送分线器）\nQ 支持王者/吃鸡/LOL吗？\nA 这几款游戏不支持手柄。可以通过Shootingplus V3 映射软件映射后玩，自行百度教程，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/010.jpg"
+          ],
+          "page_text_sha256": "b328d72e17a8f4b456154bd983d2c3aa5aed121b64e913c57d1e75aff589087b",
+          "quote": "一次编程可映射32个功能键",
+          "source_context": "# 玩无极限 高阶操作随心炫\n前置拨片式宏编程按键，更顺手。一次编程可映射32个功能键",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/035.gif",
+            "images/游戏手柄/837987833992/036.jpg"
+          ],
+          "page_text_sha256": "977a7aa614d74e179c281c448753494f0be0948fd8b0d3444fe30ac93b03830b",
+          "quote": "一键导入大咖云键位",
+          "source_context": "# 瞬间拥有大神级操控 一键导入大咖云键位\n# 创新AI语音 修改配置免退出游戏 动动嘴 都设置好了\n长按LS+RS三秒或说出“你好，通通”即可唤醒你的智控助手，修改配置动动嘴就行，无需中途退出游戏",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "macro_recording",
+      "name": "宏录制/编程",
+      "description": "可录制或编排多步输入，区分简单连发和单键映射。10秒录制原文不充分说明行为时保留待审条件。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/010.jpg"
+          ],
+          "page_text_sha256": "1c8ef30d20f4840dc7bfda8f9446cefa889e67bc7d394a33615d3384b74eec26",
+          "quote": "强悍宏功能",
+          "source_context": "进口摇杆\n\n强悍宏功能\n\n酷炫灯光\n\n透明机身\n蓝牙+有线+2.4G连接\n自定义体感",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/010.jpg"
+          ],
+          "page_text_sha256": "b328d72e17a8f4b456154bd983d2c3aa5aed121b64e913c57d1e75aff589087b",
+          "quote": "宏编程按键",
+          "source_context": "# 玩无极限 高阶操作随心炫\n前置拨片式宏编程按键，更顺手。一次编程可映射32个功能键",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/042.jpg"
+          ],
+          "page_text_sha256": "b22ebb72f1a4506b966b91fc77e5c05b1a1733b480a03b2b218742f64698248f",
+          "quote": "脱机也能设置宏",
+          "source_context": "# 连细节都精心打磨\n# 精调百搭「绝尘白」色 任意桌搭都好看\n\n2颗云记忆背键 脱机也能设置宏\n\n仿包胶纹理握把 防滑耐用 久用不包浆\n\n匠心防伪国潮纹 指尖上的触觉享受",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "9个自定义宏拓展键",
+          "source_context": " | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0020",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/022.jpg"
+          ],
+          "page_text_sha256": "a357f75945ba0818a7decaa61285737f93f27016a098e2ae7074b0869b32dee5",
+          "quote": "复杂连招轻松导入",
+          "source_context": "②专属配置APP\n一键神操作 秒变高手\n2000万玩家共创多样玩法\n多样自定义玩法，根据习惯自定义操控\n复杂连招轻松导入\n\n摇杆自动归中自定义\n\n回报率超频模式自定义\n\n多级震动自定义",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "turbo",
+      "name": "连发功能",
+      "description": "设备可自动重复发出输入。须有设备功能或设置方法支持，不能仅凭游戏全自动武器一秒N枪判定。",
+      "aliases": [
+        "TURBO"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "855048143554",
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/007.jpg",
+            "images/游戏手柄/855048143554/008.jpg"
+          ],
+          "page_text_sha256": "cdf1f6c219d76930356b6da49b9dd2a70381187a4b10c1a42476216291f5703c",
+          "quote": "开启连发：同时按下【连发键+动作键】",
+          "source_context": "## 热门电脑大作 即插即玩\n\n### NBA 2K20\n使命召唤14：二战 刺客信条：起源\n巫师3\n黑暗之魂3\n极品飞车20\n$ ^{*} $不仅限以上游戏，Steam上支持手柄的游戏都可以畅玩\n同时支持多款电脑模拟器，更多请咨询客服\n开启连发：同时按下【连发键+动作键】即可开启连发\n关闭连发：再次同时按下【连发键+动作键】即可关闭连发\n设置连发频率：开启连发后，按住【连发键+上/下键】即可切换连发频率",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0017",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/017.jpg"
+          ],
+          "page_text_sha256": "b656972ee071e66af5ea4168efc9fe025c93a9718d25c5ccc123d7d41c4f32c5",
+          "quote": "一键TURBO连发",
+          "source_context": "# 面面俱到 很难不爱 在这个价位，配置拉满，样样出色\n方/圆摇杆调教切换\n\n其他游戏\n方形调教 输出拉满\n\n一键TURBO连发\n解放手指 快慢由你",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "连击功能 | 有",
+          "source_context": "底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "turbo_speed_levels",
+      "name": "连发调速档数",
+      "description": "设备连发可选频率档数，仅描述调节能力，不默认档数更多必然更好。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "档"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "855048143554"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/010.jpg"
+          ],
+          "page_text_sha256": "92e14731eb3eaca54d3cb209485dca574a26cce53fa1e88b94170bb2b4cadbb3",
+          "quote": "三种连发频率",
+          "source_context": "## 三重变频式连发 让狙击枪秒变加特林\n\n一键设置按键连发，并配置“快-中-慢”三种连发频率，玩家只需同时按下连发键与游戏键位，即可开启，从此告别手速瓶颈，让狙击枪秒变加特林\n游戏键位\n连发键",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "motion_control",
+      "name": "体感功能",
+      "description": "将姿态/运动用作游戏输入。原生体感、PC映射、六轴传感与AI算法分开注明；360度摇杆文案不证明体感。",
+      "aliases": [
+        "体感输入"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "支持体感游戏",
+          "source_context": "，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": "电竞/机械款。"
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/007.jpg"
+          ],
+          "page_text_sha256": "8af56cfd1969c2b8cdaaad1495a4e0ca6c731a4d8af04787188933192fd077d8",
+          "quote": "PC电脑游戏强开体感",
+          "source_context": "# 黑科技！ AKP $ ^{™} $ 高精准体感 映射技术\n\nPC电脑游戏强开体感，电脑游戏轻松实现体感功能，简简单单，轻松过关。",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/037.gif",
+            "images/游戏手柄/837987833992/038.jpg"
+          ],
+          "page_text_sha256": "78a2d222b7d495cdc19b61b6ea9b3b429c83c6aae90ad2c1c9ce16562577cd80",
+          "quote": "AI锚定体感技术",
+          "source_context": "※语音功能需下载北通游戏厅开启AI语音功能，保持北通游戏厅在电脑后台开启并连接音箱/耳机等音频设备\n# AI锚定体感技术 灵敏升级 角色动作跟随无延迟\n智能识别有效操作和无效抖动，指令传递迅速、直接、无延迟，角色动作与你如出一辙",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0022",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/023.jpg"
+          ],
+          "page_text_sha256": "62a17397d62e6ef66c2476c6b551262457b8c5009b782dff0781462e39cb0488",
+          "quote": "六轴体感",
+          "source_context": "## 六轴体感 将动作指令直观输入游戏场景",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/020.jpg",
+            "images/游戏手柄/688995695211/021.jpg"
+          ],
+          "page_text_sha256": "5b8e5429a16f6da1ead9d09f70ee89c6367c3cb17e14c4e9206228d057b594f1",
+          "quote": "原子式六轴体感映射",
+          "source_context": "不止硬件更有调校\n①专利体感技术\n真六轴超强BUFF\n大幅提升子弹命中率\n北通自研原子式六轴体感映射\n全方位灵活体感，紧贴手势快速输出",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/002.png"
+          ],
+          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
+          "quote": "六轴体感陀螺仪",
+          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "vibration",
+      "name": "震动反馈",
+      "description": "明确具备震动功能。记录握把/扳机、平台及模拟附加震动条件；马达配置不证明反馈品质。",
+      "aliases": [
+        "振动反馈"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "844285076150",
+        "837987833992",
+        "7835436172",
+        "830675215338",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "灯光和马达可调节",
+          "source_context": "跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": "电竞款。"
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "震动 |  | 有",
+          "source_context": "PC\\|安卓电视 |\n| 摇杆 |  | 专属定制摇杆 | 常规摇杆 |\n| 扳机 |  | 电位器线性扳机 | 导电胶线性扳机 |\n| 肩键 |  | 轻触微动开关 | 导电胶按键 |\n| 握把 |  | 标准握把 | 波浪握把 |\n| 震动 |  | 有 | 有 |\n| 动感灯条 |  | 无线版有 | 无 |\n| 按键灯 |  | 无 | 有 |\n| 指示灯 |  | 多指示灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连 |\n|  | 无线 | 无线2.4G+有线连接 | 无线2.4G |\n| 电池容量 |  | 600mAh | 600mAh |\n| 续航时间 | ",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "非对称马达",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/025.jpg",
+            "images/游戏手柄/837987833992/026.jpg"
+          ],
+          "page_text_sha256": "31734c6aff5a6d9b6e3649bfb0dc18dd806f3736fb5d7e3a3c13c180512bc841",
+          "quote": "握把+扳机四马达立体震动",
+          "source_context": "◄\n专利全向回中结构\n激战不误触 猛搓不松垮\n\n360°\n360°全向清晰反馈\n像搓摇杆一样丝滑\n北通新型专利号：ZL202421467324.1\n$ ^{*} $游戏画面仅用于演示手柄使用效果，实际游戏版权归其所有者所有\n握把+扳机四马达立体震动\n非对称急停马达 震感细腻更沉浸\n与常规手柄“嗡嗡嗡”傻震不同，我们围绕震动细腻度、丰富度、适配度3个维度升级，让每一次震感都真实得像走进游戏里\n更细腻 该震才震，省电又细腻\n北通专利智能急停节能马达",
+          "note": ""
+        },
+        {
+          "item_id": "7835436172",
+          "record_id": "7835436172@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/7835436172/003.jpg"
+          ],
+          "page_text_sha256": "734f942e896ecb3c56f74212c279a674e9d732e2a0e049d81c00d8f1e4617c66",
+          "quote": "双震动马达",
+          "source_context": "F710\n无线游戏手柄\n·2.4G 游戏级无线技术，高速数据传输\n·即插即用超微型接收器\n·双震动马达还原游戏感受\n·独特 D-Pad 可及时改变方向\n\n职业游戏战队合作伙伴：",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "音圈线性马达",
+          "source_context": "| 充电底座 | 智能启停充电底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0017",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/018.jpg"
+          ],
+          "page_text_sha256": "ab8f94ad5408ddb1f5ef696bfedc9c6dbe2147cbe8d22d8c07ee5eb0928b5c8b",
+          "quote": "沉浸式震动2.0",
+          "source_context": "更沉浸\n# 不仅更强 也更细腻 沉浸感受车辆颠簸 爆炸轰鸣\n北通领航算法升级 沉浸式震动2.0\n硬件驱动响应\n实现仿真感震动急速启停",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/002.png"
+          ],
+          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
+          "quote": "双马达震动",
+          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "2个扳机键纽扣马达",
+          "source_context": "  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1个右握把小型马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "vibration_motor_type",
+      "name": "震动马达类型",
+      "description": "按目标产品声明保留马达结构及位置，不把与PS5同类型当PS5兼容。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "非对称马达",
+        "音圈线性马达",
+        "纽扣马达",
+        "未细分双马达"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "7835436172",
+        "830675215338",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "非对称马达",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/025.jpg",
+            "images/游戏手柄/837987833992/026.jpg"
+          ],
+          "page_text_sha256": "31734c6aff5a6d9b6e3649bfb0dc18dd806f3736fb5d7e3a3c13c180512bc841",
+          "quote": "非对称急停马达",
+          "source_context": "向回中结构\n激战不误触 猛搓不松垮\n\n360°\n360°全向清晰反馈\n像搓摇杆一样丝滑\n北通新型专利号：ZL202421467324.1\n$ ^{*} $游戏画面仅用于演示手柄使用效果，实际游戏版权归其所有者所有\n握把+扳机四马达立体震动\n非对称急停马达 震感细腻更沉浸\n与常规手柄“嗡嗡嗡”傻震不同，我们围绕震动细腻度、丰富度、适配度3个维度升级，让每一次震感都真实得像走进游戏里\n更细腻 该震才震，省电又细腻\n北通专利智能急停节能马达",
+          "note": ""
+        },
+        {
+          "item_id": "7835436172",
+          "record_id": "7835436172@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/7835436172/003.jpg"
+          ],
+          "page_text_sha256": "734f942e896ecb3c56f74212c279a674e9d732e2a0e049d81c00d8f1e4617c66",
+          "quote": "双震动马达",
+          "source_context": "F710\n无线游戏手柄\n·2.4G 游戏级无线技术，高速数据传输\n·即插即用超微型接收器\n·双震动马达还原游戏感受\n·独特 D-Pad 可及时改变方向\n\n职业游戏战队合作伙伴：",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/016.jpg"
+          ],
+          "page_text_sha256": "15286ce074f6bf3469bc8a474dcd3923ee1903cbf67ac766897c3e3f45e7649f",
+          "quote": "音圈线性马达",
+          "source_context": "# PS同类型音圈线性马达 PC和Switch端均做了特调适配\n电磁力驱动，很好控制HD震动行程及频率\n支持急起急停，带来真实的触觉反馈\n\n$ ^{*} $NS模式振动为对称振动，PC模式振动为非对称振动",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/002.png"
+          ],
+          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
+          "quote": "双马达震动",
+          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/005.jpg"
+          ],
+          "page_text_sha256": "52889e464fe4475ec4e637c39cda34eec382d5b3ac4b965477d486bcbeac96cf",
+          "quote": "纽扣马达扳机震动",
+          "source_context": "The Button Motor Trigger Vibrates\n# 纽扣马达扳机震动\n全新升级的纽扣马达\n经过2个大版本的调教\n手感更柔和，真实",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "vibration_motor_count",
+      "name": "震动马达数量",
+      "description": "马达数量及位置，缺失数量不由宣传词推算。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "个"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992",
+        "7835436172",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/025.jpg",
+            "images/游戏手柄/837987833992/026.jpg"
+          ],
+          "page_text_sha256": "31734c6aff5a6d9b6e3649bfb0dc18dd806f3736fb5d7e3a3c13c180512bc841",
+          "quote": "四马达立体震动",
+          "source_context": "◄\n专利全向回中结构\n激战不误触 猛搓不松垮\n\n360°\n360°全向清晰反馈\n像搓摇杆一样丝滑\n北通新型专利号：ZL202421467324.1\n$ ^{*} $游戏画面仅用于演示手柄使用效果，实际游戏版权归其所有者所有\n握把+扳机四马达立体震动\n非对称急停马达 震感细腻更沉浸\n与常规手柄“嗡嗡嗡”傻震不同，我们围绕震动细腻度、丰富度、适配度3个维度升级，让每一次震感都真实得像走进游戏里\n更细腻 该震才震，省电又细腻\n北通专利智能急停节能马达",
+          "note": ""
+        },
+        {
+          "item_id": "7835436172",
+          "record_id": "7835436172@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/7835436172/003.jpg"
+          ],
+          "page_text_sha256": "734f942e896ecb3c56f74212c279a674e9d732e2a0e049d81c00d8f1e4617c66",
+          "quote": "双震动马达",
+          "source_context": "F710\n无线游戏手柄\n·2.4G 游戏级无线技术，高速数据传输\n·即插即用超微型接收器\n·双震动马达还原游戏感受\n·独特 D-Pad 可及时改变方向\n\n职业游戏战队合作伙伴：",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/002.png"
+          ],
+          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
+          "quote": "双马达震动",
+          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "1个左握把大型马达",
+          "source_context": "| 摇杆 | Austenitic不锈钢弹簧 |  |\n|  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1个右握把小型马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "1个右握把小型马达",
+          "source_context": "nitic不锈钢弹簧 |  |\n|  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1个右握把小型马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "2个扳机键纽扣马达",
+          "source_context": "  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1个右握把小型马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "trigger_vibration",
+      "name": "扳机震动",
+      "description": "扳机部位明确具备震动。双切功能不等同扳机震动；保留版本差异。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "837987833992",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/011.gif",
+            "images/游戏手柄/837987833992/012.jpg",
+            "images/游戏手柄/837987833992/013.gif"
+          ],
+          "page_text_sha256": "fa0e9383a4fd026423408daf432db1a0dbab6920e80d09d200eef353feefb8c8",
+          "quote": "双切震动扳机",
+          "source_context": "## 扳机震动 同级手柄难找到第二个\n\n# 微动/线性双切震动扳机 1个扳机2种手感 全游戏适配\n清脆微动手感和线性手感一键切换，既能满足FPS连续开火或动作游戏快速攻击；又能精准模拟开车油门行程，轻松适配各类游戏",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/043.jpg"
+          ],
+          "page_text_sha256": "4d087e51bac639db8c8293f8fec8a43613f20596cb903df00b36fb89484d233c",
+          "quote": "扳机震动+握把震动",
+          "source_context": "通鲲鹏20绝尘白\n\n支持\n智能座充\n\n| 适配平台 | 部分平台 | PC/switch/手机/TV/车机 多平台适配 |  |\n| --- | --- | --- | --- |\n| 震动 | 握把震动 | 握把震动\\n北辰AI震动 | 扳机震动+握把震动\\n北辰AI震动 |\n| ABXY按键 | 常规导电胶按键 | 精调机械按键ABXY |  |\n| 摇杆 | 常规\\n碳膜/霍尔摇杆 | 智控TMR摇杆 | 力度可调TMR摇杆 |\n| 扳机 | 常规\\n1种行程霍尔扳机 | 双切霍尔扳机 | 双切扳机+扳机震动 |\n| 体感 | 普通体感 | MEMS体感 | AI锚定体感技术 |\n| 智控功能 | 无 |",
+          "note": "绝尘白；汉玉白仅握把震动。"
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/005.jpg"
+          ],
+          "page_text_sha256": "52889e464fe4475ec4e637c39cda34eec382d5b3ac4b965477d486bcbeac96cf",
+          "quote": "纽扣马达扳机震动",
+          "source_context": "The Button Motor Trigger Vibrates\n# 纽扣马达扳机震动\n全新升级的纽扣马达\n经过2个大版本的调教\n手感更柔和，真实",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "vibration_adjustable",
+      "name": "震动可调",
+      "description": "可调震动强度、分区或模式，保留档数和软件条件。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "马达可调节",
+          "source_context": "不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "三档调节 多重震感",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/027.gif",
+            "images/游戏手柄/837987833992/028.jpg"
+          ],
+          "page_text_sha256": "22cd2412c99a8c0f8b656741d114d4a2024f2fd3cf81c29e1d800a8cc019ed2c",
+          "quote": "震动细腻度+方式+分区+分级可调",
+          "source_context": "北通新型专利号：ZL202311874088.5\n北通新型专利号：ZL202410373441.X\n\n握把震动\n大招冲击，蔓延掌心\n扳机震动\n细腻震感，指尖芭蕾\n# 更适配 告别傻震，玩不同游戏 调不同震感 震动细腻度+方式+分区+分级可调",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0020",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/022.jpg"
+          ],
+          "page_text_sha256": "a357f75945ba0818a7decaa61285737f93f27016a098e2ae7074b0869b32dee5",
+          "quote": "多级震动自定义",
+          "source_context": "②专属配置APP\n一键神操作 秒变高手\n2000万玩家共创多样玩法\n多样自定义玩法，根据习惯自定义操控\n复杂连招轻松导入\n\n摇杆自动归中自定义\n\n回报率超频模式自定义\n\n多级震动自定义",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dock_support",
+      "name": "座充支持",
+      "description": "支持充电底座与套餐已包含底座分别记录；另购不等于不支持。",
+      "aliases": [
+        "充电底座支持"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/008.jpg"
+          ],
+          "page_text_sha256": "c4ecf02529c40ff68efeafe27c9bab71697c30bb4accf171f09c45e9372a04be",
+          "quote": "智能交互充电底座",
+          "source_context": "# 智能交互充电底座 从此告别电量焦虑\n智能启停 | 自动回连 | HUB拓展\n手柄放下自动休眠充电，手柄拿起自动唤醒无线回连支持hub拓展\n\n## 拓展坞功能\n当底座连接到电脑时，可化身为一款拓展坞2.4G接收器安装在底座背部获得良好的抗干扰能力",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/043.jpg"
+          ],
+          "page_text_sha256": "4d087e51bac639db8c8293f8fec8a43613f20596cb903df00b36fb89484d233c",
+          "quote": "有线充电+智能充电底座",
+          "source_context": "+项智控自定义\\n一键导入大神键位、定制游戏训练场 |\n| 回报率 | 无线200Hz, 有线500Hz | 无线有线稳定≥1000Hz |  |\n| 十字键 | 常规四向 | 北通专利全向十字键 |  |\n| 充电方式 | 有线充电 | 有线充电+智能充电底座 |  |\n| 背键 | 普通背键 | 2颗云记忆背键\\n北通游戏厅设置 | 2颗云记忆背键\\n支持脱机设置 |",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "底座需另外购买",
+          "source_context": "| 充电底座 | 智能启停充电底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dock_auto_power",
+      "name": "座充自动休眠/唤醒",
+      "description": "放下自动休眠充电、拿起自动唤醒/回连的明确声明，不由普通座充支持推断。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/008.jpg"
+          ],
+          "page_text_sha256": "c4ecf02529c40ff68efeafe27c9bab71697c30bb4accf171f09c45e9372a04be",
+          "quote": "手柄放下自动休眠充电，手柄拿起自动唤醒无线回连",
+          "source_context": "# 智能交互充电底座 从此告别电量焦虑\n智能启停 | 自动回连 | HUB拓展\n手柄放下自动休眠充电，手柄拿起自动唤醒无线回连支持hub拓展\n\n## 拓展坞功能\n当底座连接到电脑时，可化身为一款拓展坞2.4G接收器安装在底座背部获得良好的抗干扰能力",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "智能启停充电底座",
+          "source_context": "| 充电底座 | 智能启停充电底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "dock_hub",
+      "name": "底座HUB拓展",
+      "description": "底座可作扩展坞/接收器安装，不等同所有底座都有USB拓展。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/008.jpg"
+          ],
+          "page_text_sha256": "c4ecf02529c40ff68efeafe27c9bab71697c30bb4accf171f09c45e9372a04be",
+          "quote": "可化身为一款拓展坞",
+          "source_context": "# 智能交互充电底座 从此告别电量焦虑\n智能启停 | 自动回连 | HUB拓展\n手柄放下自动休眠充电，手柄拿起自动唤醒无线回连支持hub拓展\n\n## 拓展坞功能\n当底座连接到电脑时，可化身为一款拓展坞2.4G接收器安装在底座背部获得良好的抗干扰能力",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "headset_jack",
+      "name": "耳麦接口",
+      "description": "明确的音频孔，记录孔径；Type-C充电孔不证明音频支持。",
+      "aliases": [
+        "耳机接口"
+      ],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0011",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/011.jpg"
+          ],
+          "page_text_sha256": "1de4cf9631f9f8cfd6ad8b07b16c926729e880e78a22020b88dd6982bde26971",
+          "quote": "3.5mm耳机孔",
+          "source_context": "Volume Controls\n## 声音控制\n不得不说，有些时候，我们很需要这个3.5mm耳机孔，不管是防止打扰，联机交流，还是增加沉浸感，小身材，大用处。",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "3.5mm耳麦孔",
+          "source_context": "|  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清单 | 手柄1台、数据线1条、说明书1份 |  |\n\n服务电话 400-963-9188",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "nfc",
+      "name": "NFC功能",
+      "description": "支持Switch Amiibo等NFC用途。前页NEC为OCR歧义，但后页有明确NFC与用途，可据后页标注。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0023",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/024.jpg"
+          ],
+          "page_text_sha256": "1c99fcbd12f587290e8d44c24c7c2e97738e7b34fcf744ba0ed8f76188d099e0",
+          "quote": "支持连接Switch使用NFC功能刷Amiibo",
+          "source_context": "## NFC+唤醒NS主机 体验再进一步\n唤醒主机即刻启动游戏，\n支持连接Switch使用NFC功能刷Amiibo来获取道具，\n带来更丰富的游戏互动和道具获取方式",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "console_wake",
+      "name": "主机唤醒",
+      "description": "明确唤醒Switch主机的功能；与手柄自身唤醒、蓝牙回连区分。Q37页面的换醒文案未明确对象，不作为此项证据。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "远程唤醒",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0023",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/024.jpg"
+          ],
+          "page_text_sha256": "1c99fcbd12f587290e8d44c24c7c2e97738e7b34fcf744ba0ed8f76188d099e0",
+          "quote": "唤醒NS主机",
+          "source_context": "## NFC+唤醒NS主机 体验再进一步\n唤醒主机即刻启动游戏，\n支持连接Switch使用NFC功能刷Amiibo来获取道具，\n带来更丰富的游戏互动和道具获取方式",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "multiplayer_controllers",
+      "name": "多手柄同时连接",
+      "description": "明确可同时连接多个手柄，保留平台及分线器/接收器条件。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/001.jpg"
+          ],
+          "page_text_sha256": "7b346f49219012be2ce5d2acf965e3d50900294c4ef69bc49b6b383f7286bca3",
+          "quote": "支持2个蓝牙手柄同时连车机双打",
+          "source_context": "蓝牙手柄支持哪些车型和设备？\nA 蓝牙手柄支持比亚迪王朝系列/海洋系列/驱逐舰系列/腾势D系列等车型蓝牙无线连接，支持2个蓝牙手柄同时连车机双打（已实测）；支持鸿蒙/安卓/iOS13+等手机/平板、Switch等设备蓝牙无线连接；\nQ 电脑/电视/投影仪可以用吗？\nA 可以的。电脑/电视/投影仪可以插2.4G适配器（不是蓝牙）后无线连接手柄（拍2.4G适配器套餐）\n\n蓝牙手柄有延迟吗？\nA 车机上实测蓝牙款跟有线款无明显差别，现在蓝牙5.0协议很快，市面很多大牌主流手柄也是蓝牙的。机械手柄按键响应更",
+          "note": ""
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "插两个有线手柄双打",
+          "source_context": "## Q 支持双打吗？\nA 支持。车机可以连接多个蓝牙设备，或者插两个有线手柄双打套餐送分线器）\nQ 支持王者/吃鸡/LOL吗？\nA 这几款游戏不支持手柄。可以通过Shootingplus V3 映射软件映射后玩，自行百度教程，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/005.png"
+          ],
+          "page_text_sha256": "4cefaf1e6034aab560ed7fa491cbfeb92243b7f70bd464a6204d67c632976094",
+          "quote": "支持多手柄同时连接使用",
+          "source_context": "# 支持双打\n与您儿时的伙伴还是家人或者伴侣一起共享游戏的快乐，支持多手柄同时连接使用，享受游戏的乐趣。",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "rgb_lighting",
+      "name": "RGB灯效",
+      "description": "明确RGB灯效，普通动感灯条/指示灯不自动归为RGB。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/014.jpg"
+          ],
+          "page_text_sha256": "b344cbc797666c9afa87ce5241c60db6e7229998224470c3be055b76dc709aa9",
+          "quote": "RGB氛围灯",
+          "source_context": "# 炫酷RGB氛围灯 可调多组氛围灯效\n丰富多彩随心随意，RGB灯光可满足玩家个性需求，做不被定义的灯光“SHOW”",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "RGB幻彩灯效",
+          "source_context": "| 充电底座 | 智能启停充电底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/002.jpg"
+          ],
+          "page_text_sha256": "1beb6131b3f39546f695bb6ac825fda206367b3d5d8b27c49d73af4d911a3fc1",
+          "quote": "RGB灯环",
+          "source_context": "Fire Ring - RGB lighting joysticks\n# 风火轮RGB灯环\n3种灯光模式，亮度可调\n还可以实时显示你的每个操作\n每次指尖的跳跃都值得被看见",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "lighting_adjustable",
+      "name": "灯光可调",
+      "description": "可调整灯效或亮度；九尾狐5种/6种存在跨页不一致，保留而不合并。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "830675215338",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "灯光和马达可调节",
+          "source_context": "跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/014.jpg"
+          ],
+          "page_text_sha256": "b344cbc797666c9afa87ce5241c60db6e7229998224470c3be055b76dc709aa9",
+          "quote": "可调多组氛围灯效",
+          "source_context": "# 炫酷RGB氛围灯 可调多组氛围灯效\n丰富多彩随心随意，RGB灯光可满足玩家个性需求，做不被定义的灯光“SHOW”",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "6种灯效可调",
+          "source_context": "| 充电底座 | 智能启停充电底座（底座需另外购买） |\n| --- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0016",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/017.jpg"
+          ],
+          "page_text_sha256": "64bf1ddb0fb668bfba8c3695473144aec9246e955207e5e1f57c061143b9fc18",
+          "quote": "5种绚丽灯效供选择",
+          "source_context": "# RGB灯带 勾勒胜利斑斓\n5种绚丽灯效供选择\nGAMESIR",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/002.jpg"
+          ],
+          "page_text_sha256": "1beb6131b3f39546f695bb6ac825fda206367b3d5d8b27c49d73af4d911a3fc1",
+          "quote": "3种灯光模式，亮度可调",
+          "source_context": "Fire Ring - RGB lighting joysticks\n# 风火轮RGB灯环\n3种灯光模式，亮度可调\n还可以实时显示你的每个操作\n每次指尖的跳跃都值得被看见",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "replaceable_faceplate",
+      "name": "面壳可更换",
+      "description": "用户可更换/拆卸面壳，不把多颜色SKU当可更换部件。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0009",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/009.jpg"
+          ],
+          "page_text_sha256": "2d795770669733a7f9be2de1791140bb9e3904611ddde05551552355153cfb80",
+          "quote": "可替换磁吸面壳",
+          "source_context": "# 全新可替换磁吸面壳\n# 想你所想 打破标签 做自己专属 “私人订制” 可用小帖纸\n做手柄面壳个性DIY",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "replaceable_stick_caps",
+      "name": "摇杆帽可更换",
+      "description": "明确可拆卸/更换摇杆帽或不同高度摇杆。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/001.jpg"
+          ],
+          "page_text_sha256": "53803c20550e33cd8436c5cc657b5441db6c8fa46bbd0e25d1a26554cdfcf87e",
+          "quote": "可拆卸蘑菇帽",
+          "source_context": "澳加狮福音系列游戏手柄\n# 「百元」战神「MAX」\n有颜值 | 够实力\n全新双霍尔 | 智能交互底座 | 磁吸可拆卸面壳 | 可拆卸蘑菇帽",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0012",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/012.jpg"
+          ],
+          "page_text_sha256": "a7ec174ddfd88c7b22960ee299dec2841cc30af048bc6a61aeb3270016f5f917",
+          "quote": "2种可替换摇杆",
+          "source_context": "## 摇杆结构新升级\n2种可替换摇杆，解锁更多玩法\n\n中低摇杆：格斗游戏快速搓招\n\n高摇杆：赛车游戏细腻把控",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "extra_programmable_buttons",
+      "name": "扩展编程按键",
+      "description": "存在背键/前置拨片等扩展可编程按键；仅有实体按键数量不证明可编程。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/010.jpg"
+          ],
+          "page_text_sha256": "b328d72e17a8f4b456154bd983d2c3aa5aed121b64e913c57d1e75aff589087b",
+          "quote": "前置拨片式宏编程按键",
+          "source_context": "# 玩无极限 高阶操作随心炫\n前置拨片式宏编程按键，更顺手。一次编程可映射32个功能键",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/042.jpg"
+          ],
+          "page_text_sha256": "b22ebb72f1a4506b966b91fc77e5c05b1a1733b480a03b2b218742f64698248f",
+          "quote": "2颗云记忆背键",
+          "source_context": "# 连细节都精心打磨\n# 精调百搭「绝尘白」色 任意桌搭都好看\n\n2颗云记忆背键 脱机也能设置宏\n\n仿包胶纹理握把 防滑耐用 久用不包浆\n\n匠心防伪国潮纹 指尖上的触觉享受",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "9个自定义宏拓展键",
+          "source_context": " | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "extra_button_count",
+      "name": "扩展按键数量",
+      "description": "按部件记录背键或总扩展键，不能把6个实体按键当6个扩展键。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "个"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "837987833992",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/042.jpg"
+          ],
+          "page_text_sha256": "b22ebb72f1a4506b966b91fc77e5c05b1a1733b480a03b2b218742f64698248f",
+          "quote": "2颗云记忆背键",
+          "source_context": "# 连细节都精心打磨\n# 精调百搭「绝尘白」色 任意桌搭都好看\n\n2颗云记忆背键 脱机也能设置宏\n\n仿包胶纹理握把 防滑耐用 久用不包浆\n\n匠心防伪国潮纹 指尖上的触觉享受",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "9个自定义宏拓展键",
+          "source_context": " | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "back_button_lock",
+      "name": "背键物理锁定/收纳",
+      "description": "可物理伸缩或锁定背键。区分新版本键值及按键均锁死与旧版本仅物理锁。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0006",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/006.jpg"
+          ],
+          "page_text_sha256": "87a120cb4dc353a4a8aff3ffc24817794b8829af713a955b398fab490680f10c",
+          "quote": "可编程背键支持一键伸缩上锁",
+          "source_context": "## 一键伸缩背键 物理性调整结构\n可编程背键支持一键伸缩上锁，从物理结构上开合背键功能，上锁后背键贴合平整，不用担心影响手感\n\n背键伸缩对比\n### 新版本背键锁\n物理性调整结构一键伸缩背键\n键值和按键都被锁死\n原版本背键锁\n只锁死背键，不可按动",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "button_layout_switch",
+      "name": "按键布局切换",
+      "description": "ABXY键值/字符布局切换，物理字符切换与电子键值交换区分。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/018.jpg"
+          ],
+          "page_text_sha256": "6614f7c4c8766150f4e76362d541d6a6a833ad6cddd6b870867685875e1efb02",
+          "quote": "ABXY键值互换",
+          "source_context": "Switch主机\n远程唤醒 秒速回连\n\nABXY键值互换\n组合键快速切换 适应原生布局\n非对称马达\n三档调节 多重震感 身临其境",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/001.jpg"
+          ],
+          "page_text_sha256": "af5e757ca1bed3095c46449e2db88cb0e0723198b75711ef795a7c2cdb3a5e3f",
+          "quote": "XBOX和Switch布局和键值自动切换",
+          "source_context": "ch/安卓/iOS |\n| 扳机类型 | 双切扳机，霍尔线性扳机和微动扳机切换 |\n| 摇杆类型 | GameSir Mag-Res $ ^{™} $磁变阻摇杆(500W次寿命) |\n| 摇杆轮询率 | 1000hz |\n| 按键布局 | XBOX和Switch布局和键值自动切换 |\n| 十字键类型 | 轻触开关 |\n| 扩展键 | 9个自定义宏拓展键 |\n| NEC功能 | 有 |",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0004",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/004.jpg"
+          ],
+          "page_text_sha256": "90e7b447e7fcaa7c7182d60a726ec8e1e56a412abdcdb3bf0696bb393aba32e2",
+          "quote": "ABXY字符切换",
+          "source_context": "九个拓展按键\n\nABXY字符切换\n\n可伸缩自定义宏背键（带锁）\n\n霍尔线性/微动双切扳机\n\n智能启停充电底座\n\nP55同类型音圈线性马达",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "configuration_software",
+      "name": "配套配置软件",
+      "description": "明确有配置APP/PC软件，记录平台、后台要求和预计上线状态，不把客服教程算配置软件。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211"
+      ],
+      "evidence": [
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/005.jpg"
+          ],
+          "page_text_sha256": "f7dd58f2fee77a27c09023983874e5ef84f65fe21a39ea24a30ed81cf9313dff",
+          "quote": "可在APP调节扳机微操",
+          "source_context": "# 霍尔线性扳机\n这一扣掌握局势 控住命运 可在APP调节扳机微操，可快速、可缓慢，皆由你定义\n\n0.1mm级精度\n触发更精准\n\n256阶行程线性回弹\n手感真实",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0003",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/007.jpg",
+            "images/游戏手柄/837987833992/008.gif",
+            "images/游戏手柄/837987833992/009.gif",
+            "images/游戏手柄/837987833992/010.jpg"
+          ],
+          "page_text_sha256": "19d90611b0d8f59abcb8482bdbafe3f3c809ffd63845999f25d38020208711f9",
+          "quote": "北通智控软件6.0",
+          "source_context": "## 智能升级\n### 北通智控软件6.0\n好用手柄深度自定义\n\n一键导入大咖云键位\n瞬间拥有高手级操控\n\n01 手感升级\n升级扳机震动 + 握把震动\n连指尖都有细腻震感\n同级手柄大多数只有握把震动，我们实现扳机和握把立体共振，让每一次出击与轰鸣，不再局限在掌心，连指尖也能直观感受细腻震动，宛如置身游戏实景中",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0024",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/025.jpg",
+            "images/游戏手柄/830675215338/026.jpg"
+          ],
+          "page_text_sha256": "8bb125fd1f6e5ef826e9b9d61f539034f15c8c8da44065b2abb43830d1c3d0e0",
+          "quote": "PC精英软件预计8.31号左右上线",
+          "source_context": "# PC精英软件\n# 自由调节手柄各项参数，摇杆曲线、反死区、宏编程、RGB灯效...等等你想要的，它都有\n\n$ ^{*} $PC精英软件预计8.31号左右上线",
+          "note": "数据快照中仍属预计上线文案，不能当已上线验证。"
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0020",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/022.jpg"
+          ],
+          "page_text_sha256": "a357f75945ba0818a7decaa61285737f93f27016a098e2ae7074b0869b32dee5",
+          "quote": "专属配置APP",
+          "source_context": "②专属配置APP\n一键神操作 秒变高手\n2000万玩家共创多样玩法\n多样自定义玩法，根据习惯自定义操控\n复杂连招轻松导入\n\n摇杆自动归中自定义\n\n回报率超频模式自定义\n\n多级震动自定义",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "voice_configuration",
+      "name": "语音修改配置",
+      "description": "可用语音修改配置；依赖PC后台北通游戏厅和音频设备，不推定离线运行。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "837987833992"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/035.gif",
+            "images/游戏手柄/837987833992/036.jpg"
+          ],
+          "page_text_sha256": "977a7aa614d74e179c281c448753494f0be0948fd8b0d3444fe30ac93b03830b",
+          "quote": "AI语音 修改配置",
+          "source_context": "# 瞬间拥有大神级操控 一键导入大咖云键位\n# 创新AI语音 修改配置免退出游戏 动动嘴 都设置好了\n长按LS+RS三秒或说出“你好，通通”即可唤醒你的智控助手，修改配置动动嘴就行，无需中途退出游戏",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/037.gif",
+            "images/游戏手柄/837987833992/038.jpg"
+          ],
+          "page_text_sha256": "78a2d222b7d495cdc19b61b6ea9b3b429c83c6aae90ad2c1c9ce16562577cd80",
+          "quote": "保持北通游戏厅在电脑后台开启并连接音箱/耳机等音频设备",
+          "source_context": "※语音功能需下载北通游戏厅开启AI语音功能，保持北通游戏厅在电脑后台开启并连接音箱/耳机等音频设备\n# AI锚定体感技术 灵敏升级 角色动作跟随无延迟\n智能识别有效操作和无效抖动，指令传递迅速、直接、无延迟，角色动作与你如出一辙",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "body_weight",
+      "name": "机身重量",
+      "description": "手柄本体质量，按SKU区分，底座、包装与手机不计入。不预设重量越轻越好。",
+      "aliases": [
+        "本体重量"
+      ],
+      "type": "numeric",
+      "units": [
+        "g"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "855048143554",
+        "844285076150",
+        "830675215338",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/020.jpg"
+          ],
+          "page_text_sha256": "54b46bf7f4ae4b155f6e299682ab427054e272366f0516f67492cefba91aabd2",
+          "quote": "210 克",
+          "source_context": "斯巴达2游戏手柄-有线版\n\n| 产品型号 | BTP-2270U |\n| --- | --- |\n| 包装尺寸 | 190*120*80 mm |\n| 产品尺寸 | 160*105*67 mm |\n| 产品重量 | $ \\approx $ 210 克 |\n| 供电方式 | USB供电 |\n| 适用平台 | PCWindows 7及以上版本台式电脑/笔记本 |\n|  | AndroidAndroid 4.0及以上版本智能电视\\|机顶盒 |\n\n产品清单 手柄 $ ^{*}1 $、电子说明书 $ ^{*}1 $、保修卡 $ ^{*}1 $",
+          "note": "有线版约210g。"
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/019.jpg"
+          ],
+          "page_text_sha256": "70488bb55390d5d6494922c4f3bb76b98121e84ac0a4c816dbd19e02a2cfd797",
+          "quote": "约242g",
+          "source_context": "# 产品参数 品质用料从不低调\n产品参数信息\n产品型号：AL-K10\n产品名称：无线游戏手柄\n工作电压：DC 5V\n充电电流：400mA\n工作电流：无震动无RGB时小于80mA\n产品尺寸：约162.5*106.5*56mm\n产品重量：约242g\n电池容量：600mAh",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/002.jpg"
+          ],
+          "page_text_sha256": "d4864c025addee6086633eed29b652f2716310a2ad4ef2df878db01bb67c06e5",
+          "quote": "手柄（263克） 底座（62克）",
+          "source_context": "- | --- |\n| RGB灯效 | RGB幻彩灯效，6种灯效可调 |\n| 六轴陀螺仪（体感功能） | 有 |\n| PC精英软件 | 有 |\n| 马达 | PS5同类型音圈线性马达（HD震动） |\n| 连击功能 | 有 |\n| 重量 | 手柄（263克） 底座（62克） |\n\nGAMESIR\n盖世小鸡",
+          "note": "只提取手柄263g。"
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "≈250克 | ≈280克",
+          "source_context": "机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 | 手柄*1、星闪接收器*1 | 手柄*1、无线接收器*1 |\n|  | 数据线*1 | 数据线*1 |\n|  | 电子说明书&保修卡*1 | 电子说明书&保修卡*1 |\n\n## 备注\n$ ^{*} $最强芯是指北通星闪手柄采用星闪高端芯片结合北通领航算法4.0，成就北通星闪手柄“最强芯”，率先实现星闪手柄又快又稳定的优势\n$ ^{*} ",
+          "note": "星闪/星云版本分别保留。"
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/008.png"
+          ],
+          "page_text_sha256": "a16282e82d8910ec9c59ce3f5038aca4352320e67d6faffc51efce1007dd3994",
+          "quote": "手柄整体不超过50克",
+          "source_context": "# 颜值与精致并存\n高颜值收藏，新潮玩物，轻薄便携\n手柄整体不超过50克\n50g\n\n## 产品尺寸\n20.8mm\n\n125mm\n61.5mm",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "216g",
+          "source_context": "Specifications\n# 上手前，先看看参数\n# 八位堂猎户座Xbox追光版有线手柄\n\n| 尺寸重量 | 146.7*103.5*61.3mm | 216g |\n| --- | --- | --- |\n| 扳机键 | 霍尔震动扳机 | 线性扳机 |\n| 摇杆 | Austenitic不锈钢弹簧 |  |\n|  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大型马达 | 1",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "body_dimensions",
+      "name": "机身尺寸",
+      "description": "记录长度×宽度×高度或原始三轴标注，保留部件及单位；包装尺寸和夹持厚度不算机身尺寸。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "160×105×67 mm",
+        "162.5×106.5×56 mm",
+        "160×110×50 mm",
+        "125×61.5×20.8 mm（轴次待审）",
+        "146.7×103.5×61.3 mm"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "855048143554",
+        "844285076150",
+        "688995695211",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/020.jpg"
+          ],
+          "page_text_sha256": "54b46bf7f4ae4b155f6e299682ab427054e272366f0516f67492cefba91aabd2",
+          "quote": "产品尺寸 | 160*105*67 mm",
+          "source_context": "PARAMETER\n产品参数\n## 北通斯巴达2游戏手柄-有线版\n\n| 产品型号 | BTP-2270U |\n| --- | --- |\n| 包装尺寸 | 190*120*80 mm |\n| 产品尺寸 | 160*105*67 mm |\n| 产品重量 | $ \\approx $ 210 克 |\n| 供电方式 | USB供电 |\n| 适用平台 | PCWindows 7及以上版本台式电脑/笔记本 |\n|  | AndroidAndroid 4.0及以上版本智能电视\\|机顶盒 |\n\n产品清单 手柄 $ ^{*}1 $、电子说明书 $ ^{*}1 $、保修卡 $ ^{*}1 $",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/019.jpg"
+          ],
+          "page_text_sha256": "70488bb55390d5d6494922c4f3bb76b98121e84ac0a4c816dbd19e02a2cfd797",
+          "quote": "约162.5*106.5*56mm",
+          "source_context": "# 产品参数 品质用料从不低调\n产品参数信息\n产品型号：AL-K10\n产品名称：无线游戏手柄\n工作电压：DC 5V\n充电电流：400mA\n工作电流：无震动无RGB时小于80mA\n产品尺寸：约162.5*106.5*56mm\n产品重量：约242g\n电池容量：600mAh",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "160*110*50mm",
+          "source_context": "2P3A | BTP-A1N3S |\n| --- | --- | --- |\n| 连接方式 | 蓝牙/星闪/有线 | 蓝牙/2.4G无线/有线 |\n| 支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 | 手柄*1、星闪接收器*1 | 手柄*1、无线接收器*1 |\n|  | 数据线*1 | 数据线*1 |\n|  | 电子说明",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0008",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/008.png"
+          ],
+          "page_text_sha256": "a16282e82d8910ec9c59ce3f5038aca4352320e67d6faffc51efce1007dd3994",
+          "quote": "20.8mm",
+          "source_context": "# 颜值与精致并存\n高颜值收藏，新潮玩物，轻薄便携\n手柄整体不超过50克\n50g\n\n## 产品尺寸\n20.8mm\n\n125mm\n61.5mm",
+          "note": "同页125mm、61.5mm，三轴关系需图像复核。"
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "146.7*103.5*61.3mm",
+          "source_context": "Specifications\n# 上手前，先看看参数\n# 八位堂猎户座Xbox追光版有线手柄\n\n| 尺寸重量 | 146.7*103.5*61.3mm | 216g |\n| --- | --- | --- |\n| 扳机键 | 霍尔震动扳机 | 线性扳机 |\n| 摇杆 | Austenitic不锈钢弹簧 |  |\n|  | 海浪防滑外形 | GuliKit $ \\text{®} $霍尔摇杆 |\n|  | 风火轮RGB灯环 | 金属防磨圈 |\n| 震动 | PA66透光顺滑环 |  |\n|  | 1个左握把大",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "battery_capacity",
+      "name": "电池容量",
+      "description": "设备自带电池标称容量，按SKU保留；不能转成续航，USB/手机供电不填0容量。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "mAh"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "855048143554",
+        "844285076150",
+        "830675215338",
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "600mAh",
+          "source_context": "键灯 |  | 无 | 有 |\n| 指示灯 |  | 多指示灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连 |\n|  | 无线 | 无线2.4G+有线连接 | 无线2.4G |\n| 电池容量 |  | 600mAh | 600mAh |\n| 续航时间 |  | 60h | 20h |",
+          "note": "斯巴达2；不提取斯巴达1字段。"
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/019.jpg"
+          ],
+          "page_text_sha256": "70488bb55390d5d6494922c4f3bb76b98121e84ac0a4c816dbd19e02a2cfd797",
+          "quote": "电池容量：600mAh",
+          "source_context": "品参数 品质用料从不低调\n产品参数信息\n产品型号：AL-K10\n产品名称：无线游戏手柄\n工作电压：DC 5V\n充电电流：400mA\n工作电流：无震动无RGB时小于80mA\n产品尺寸：约162.5*106.5*56mm\n产品重量：约242g\n电池容量：600mAh",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0025",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/027.jpg"
+          ],
+          "page_text_sha256": "a1865b5709d9782ca67e9ba68132116fbebd7a54852ff1f9e497d338ed7fea50",
+          "quote": "1200mAh",
+          "source_context": "# 1200mAh大容量电池 无续航焦虑\n# 1200mAh\nGAMESIR",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "600mAh锂电池",
+          "source_context": "支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 | 手柄*1、星闪接收器*1 | 手柄*1、无线接收器*1 |\n|  | 数据线*1 | 数据线*1 |\n|  | 电子说明书&保修卡*1 | 电子说明书&保修卡*1 |\n\n## 备注\n$ ^{*} $最强芯是指北通星闪手柄采用星闪高端芯片结合北通领航算法4.0，成就北",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/010.png"
+          ],
+          "page_text_sha256": "7c82fb0f4c661b1e8b4acf4661d0a09bdf8306d1e953f3cdaf5a7bf85295eb41",
+          "quote": "电池容量：500mAh",
+          "source_context": "# 产品参数\n\n珊瑚红\n\n摆蓝\n产品名称：无线游戏手柄\n产品型号：Q37\n工作电流：<80mA\n蓝牙传输距离：<=8M\n待机时间：满电放置30天\n工作电压：DC3.7V\n持续使用时间：>10H\n电池容量：500mAh\n包装清单：无线游戏手柄 $ ^{1} $ 说明书 $ ^{1} $",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "power_source",
+      "name": "供电方式",
+      "description": "区分独立手柄的内置可充电电池与USB供电，按SKU记录；充电接口不等同数据连接。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "内置可充电电池",
+        "USB供电"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "844285076150",
+        "830675215338",
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/020.jpg"
+          ],
+          "page_text_sha256": "54b46bf7f4ae4b155f6e299682ab427054e272366f0516f67492cefba91aabd2",
+          "quote": "供电方式 | USB供电",
+          "source_context": "线版\n\n| 产品型号 | BTP-2270U |\n| --- | --- |\n| 包装尺寸 | 190*120*80 mm |\n| 产品尺寸 | 160*105*67 mm |\n| 产品重量 | $ \\approx $ 210 克 |\n| 供电方式 | USB供电 |\n| 适用平台 | PCWindows 7及以上版本台式电脑/笔记本 |\n|  | AndroidAndroid 4.0及以上版本智能电视\\|机顶盒 |\n\n产品清单 手柄 $ ^{*}1 $、电子说明书 $ ^{*}1 $、保修卡 $ ^{*}1 $",
+          "note": ""
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/019.jpg"
+          ],
+          "page_text_sha256": "70488bb55390d5d6494922c4f3bb76b98121e84ac0a4c816dbd19e02a2cfd797",
+          "quote": "电池容量：600mAh",
+          "source_context": "品参数 品质用料从不低调\n产品参数信息\n产品型号：AL-K10\n产品名称：无线游戏手柄\n工作电压：DC 5V\n充电电流：400mA\n工作电流：无震动无RGB时小于80mA\n产品尺寸：约162.5*106.5*56mm\n产品重量：约242g\n电池容量：600mAh",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0028",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/030.jpg"
+          ],
+          "page_text_sha256": "604916b1bd172f6590b582eba8483f531041fc31ea085161a4d866ead03e85fb",
+          "quote": "600mAh锂电池",
+          "source_context": "支持平台 | NS/PC/TV/手机 | NS/PC/TV/手机 |\n| 产品尺寸 | 160*110*50mm | 160*110*50mm |\n| 包装尺寸 | 193*133*70mm | 195*130*70mm |\n| 电池 | 600mAh锂电池 | 600mAh锂电池 |\n| 重量 | ≈250克 | ≈280克 |\n| 产品清单 | 手柄*1、星闪接收器*1 | 手柄*1、无线接收器*1 |\n|  | 数据线*1 | 数据线*1 |\n|  | 电子说明书&保修卡*1 | 电子说明书&保修卡*1 |\n\n## 备注\n$ ^{*} $最强芯是指北通星闪手柄采用星闪高端芯片结合北通领航算法4.0，成就北",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/010.png"
+          ],
+          "page_text_sha256": "7c82fb0f4c661b1e8b4acf4661d0a09bdf8306d1e953f3cdaf5a7bf85295eb41",
+          "quote": "电池容量：500mAh",
+          "source_context": "# 产品参数\n\n珊瑚红\n\n摆蓝\n产品名称：无线游戏手柄\n产品型号：Q37\n工作电流：<80mA\n蓝牙传输距离：<=8M\n待机时间：满电放置30天\n工作电压：DC3.7V\n持续使用时间：>10H\n电池容量：500mAh\n包装清单：无线游戏手柄 $ ^{1} $ 说明书 $ ^{1} $",
+          "note": ""
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "充电2小时，续航8小时",
+          "source_context": "以连接多个蓝牙设备，或者插两个有线手柄双打套餐送分线器）\nQ 支持王者/吃鸡/LOL吗？\nA 这几款游戏不支持手柄。可以通过Shootingplus V3 映射软件映射后玩，自行百度教程，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": "无线电池版本；不适用于有线版本。"
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0025",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/027.jpg"
+          ],
+          "page_text_sha256": "a1865b5709d9782ca67e9ba68132116fbebd7a54852ff1f9e497d338ed7fea50",
+          "quote": "1200mAh大容量电池",
+          "source_context": "# 1200mAh大容量电池 无续航焦虑\n# 1200mAh\nGAMESIR",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "wireless_range",
+      "name": "无线传输距离",
+      "description": "按协议、版本和遮挡条件记录距离；≤8M表示上限，不能解释成至少8米稳定范围。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "m"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "788146516430",
+        "855048143554",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/006.jpg",
+            "images/游戏手柄/788146516430/007.jpg"
+          ],
+          "page_text_sha256": "d95f8231404d2161a854ede0d8621035e191ee06f8d915dad7b5d71cea3e9f51",
+          "quote": "蓝牙传输距离：",
+          "source_context": "# 产品参数\n工作电压：DC3.7V\n持续使用时间：>10H\n工作电流：<35mA\n充电电压/电流：DC5V/500mA 休眠电流：<35 $ \\mu $A\n待机时间：满电放置30天\n蓝牙传输距离： $ \\leq8M $\n# 产品参数",
+          "note": ""
+        },
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/006.jpg",
+            "images/游戏手柄/788146516430/007.jpg"
+          ],
+          "page_text_sha256": "d95f8231404d2161a854ede0d8621035e191ee06f8d915dad7b5d71cea3e9f51",
+          "quote": "8M",
+          "source_context": "# 产品参数\n工作电压：DC3.7V\n持续使用时间：>10H\n工作电流：<35mA\n充电电压/电流：DC5V/500mA 休眠电流：<35 $ \\mu $A\n待机时间：满电放置30天\n蓝牙传输距离： $ \\leq8M $\n# 产品参数",
+          "note": ""
+        },
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0001",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/001.jpg"
+          ],
+          "page_text_sha256": "d17074f1d1f2e2892d24bfa60adf3b98dcf1fda09253f25ae68b5c68941e31e9",
+          "quote": "10米无延迟",
+          "source_context": "# XBOX同级手柄—百元战神\n支持 电脑 | 电视 | STEAM\nXBOX同级\n线性扳机\nXBOX同级\n摇杆\nXBOX同级\n按键\n\n【黑色无线版】\n支持无线/有线\n北通斯巴达2无线黑色\n\nusb接收器，支持插线连接加十无线2.4g连接，10米无延迟。",
+          "note": "2.4G无线厂商声明，不当延迟0ms。"
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/010.png"
+          ],
+          "page_text_sha256": "7c82fb0f4c661b1e8b4acf4661d0a09bdf8306d1e953f3cdaf5a7bf85295eb41",
+          "quote": "蓝牙传输距离：<=8M",
+          "source_context": "# 产品参数\n\n珊瑚红\n\n摆蓝\n产品名称：无线游戏手柄\n产品型号：Q37\n工作电流：<80mA\n蓝牙传输距离：<=8M\n待机时间：满电放置30天\n工作电压：DC3.7V\n持续使用时间：>10H\n电池容量：500mAh\n包装清单：无线游戏手柄 $ ^{1} $ 说明书 $ ^{1} $",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "standby_time",
+      "name": "待机时间",
+      "description": "满电静置待机时长，不与持续游戏续航混合。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "天"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "788146516430",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0005",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/006.jpg",
+            "images/游戏手柄/788146516430/007.jpg"
+          ],
+          "page_text_sha256": "d95f8231404d2161a854ede0d8621035e191ee06f8d915dad7b5d71cea3e9f51",
+          "quote": "待机时间：满电放置30天",
+          "source_context": "# 产品参数\n工作电压：DC3.7V\n持续使用时间：>10H\n工作电流：<35mA\n充电电压/电流：DC5V/500mA 休眠电流：<35 $ \\mu $A\n待机时间：满电放置30天\n蓝牙传输距离： $ \\leq8M $\n# 产品参数",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0010",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/010.png"
+          ],
+          "page_text_sha256": "7c82fb0f4c661b1e8b4acf4661d0a09bdf8306d1e953f3cdaf5a7bf85295eb41",
+          "quote": "待机时间：满电放置30天",
+          "source_context": "# 产品参数\n\n珊瑚红\n\n摆蓝\n产品名称：无线游戏手柄\n产品型号：Q37\n工作电流：<80mA\n蓝牙传输距离：<=8M\n待机时间：满电放置30天\n工作电压：DC3.7V\n持续使用时间：>10H\n电池容量：500mAh\n包装清单：无线游戏手柄 $ ^{1} $ 说明书 $ ^{1} $",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "cable_length",
+      "name": "连接线长度",
+      "description": "附带或支持的数据连接线长度；长度更多并非全局更好。",
+      "aliases": [],
+      "type": "numeric",
+      "units": [
+        "m"
+      ],
+      "formula": null,
+      "evidence_item_ids": [
+        "855048143554",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855048143554",
+          "record_id": "855048143554@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/855048143554/016.jpg"
+          ],
+          "page_text_sha256": "61c2b52510d2c429522177f5fca19f74806e5afc99d27840f593c641dd3012ff",
+          "quote": "2米有线直连",
+          "source_context": "|  | 标准握把 | 波浪握把 |\n| 震动 |  | 有 | 有 |\n| 动感灯条 |  | 无线版有 | 无 |\n| 按键灯 |  | 无 | 有 |\n| 指示灯 |  | 多指示灯指示 | 单灯指示 |\n| 连接方式 | 有线 | 2米有线直连 | 2米有线直连 |\n|  | 无线 | 无线2.4G+有线连接 | 无线2.4G |\n| 电池容量 |  | 600mAh | 600mAh |\n| 续航时间 |  | 60h | 20h |",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/013.jpg"
+          ],
+          "page_text_sha256": "4371360d42912f1dc82304a23af117328f2ee4f22f09070ee0cbc2dedc03281a",
+          "quote": "附带2.5米Type-C",
+          "source_context": "Plugable Design\n# 线要收放自如\n附带2.5米Type-C优质线材\n有时会有点碍事，你可以换上更趁手的短线连电脑，长线连Xbox\n用完拔线即可收纳，舒畅多了",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "detachable_cable",
+      "name": "连接线可拔插",
+      "description": "数据线可以从手柄拔下，不由Type-C充电口自动推定。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0013",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/013.jpg"
+          ],
+          "page_text_sha256": "4371360d42912f1dc82304a23af117328f2ee4f22f09070ee0cbc2dedc03281a",
+          "quote": "用完拔线即可收纳",
+          "source_context": "Plugable Design\n# 线要收放自如\n附带2.5米Type-C优质线材\n有时会有点碍事，你可以换上更趁手的短线连电脑，长线连Xbox\n用完拔线即可收纳，舒畅多了",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "接口可拔插设计",
+          "source_context": " 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清单 | 手柄1台、数据线1条、说明书1份 |  |\n\n服务电话 400-963-9188",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "material",
+      "name": "外壳/接触材料",
+      "description": "区分外壳、按键、硅胶护垫等部件，不能把局部金属解释成整机全金属。",
+      "aliases": [],
+      "type": "categorical",
+      "values": [
+        "ABS",
+        "硅胶",
+        "软橡胶"
+      ],
+      "value_domain": "open",
+      "evidence_item_ids": [
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/007.png"
+          ],
+          "page_text_sha256": "27e9fd7bb3880363372a19f8de119afe3f1b2abebe24ecdc1e4b80b2b2e16c55",
+          "quote": "软橡胶防滑",
+          "source_context": "# 电竞级霍尔摇杆\n回报率800Hz高性能，开机自动校准，软橡胶防滑，游玩更丝滑",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "ABS",
+          "source_context": "马达 |\n|  | 2个扳机键纽扣马达 |  |\n| 肩键 | 杠杆式轻触+硅胶按键 |  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清单 | 手柄1台、数据线1条、说明书1份 |  |\n\n服务电话 400-963-9188",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "anti_slip_grip",
+      "name": "防滑设计",
+      "description": "明确握把纹理、橡胶/硅胶防滑或固定防滑设计；不把舒适文案转成量化抓握性能。",
+      "aliases": [],
+      "type": "boolean",
+      "evidence_item_ids": [
+        "837987833992",
+        "855985116346",
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0018",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/042.jpg"
+          ],
+          "page_text_sha256": "b22ebb72f1a4506b966b91fc77e5c05b1a1733b480a03b2b218742f64698248f",
+          "quote": "仿包胶纹理握把 防滑耐用",
+          "source_context": "# 连细节都精心打磨\n# 精调百搭「绝尘白」色 任意桌搭都好看\n\n2颗云记忆背键 脱机也能设置宏\n\n仿包胶纹理握把 防滑耐用 久用不包浆\n\n匠心防伪国潮纹 指尖上的触觉享受",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/007.png"
+          ],
+          "page_text_sha256": "27e9fd7bb3880363372a19f8de119afe3f1b2abebe24ecdc1e4b80b2b2e16c55",
+          "quote": "软橡胶防滑",
+          "source_context": "# 电竞级霍尔摇杆\n回报率800Hz高性能，开机自动校准，软橡胶防滑，游玩更丝滑",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/007.jpg"
+          ],
+          "page_text_sha256": "8b09dae1aba50e2b96892fe287e8b1d96344860085f75030cc509bc061f36301",
+          "quote": "海浪防滑外形",
+          "source_context": "GuliKit® Joystick & Textured Finish\n# GuliKit $ ^{®} $ 品牌霍尔摇杆 海浪防滑外形\n相比传统的电位器摇杆，霍尔摇杆靠的是磁力，不接触的方式来避免碳膜磨损，更显实力。橡胶纹理，定位区下凹，防疲劳凸起，3段起伏的海浪，不偏，不滑，不糙，就是这个特别好用的摇杆。",
+          "note": ""
+        }
+      ]
+    }
+  ],
+  "excluded_or_unconfirmed": [
+    {
+      "id": "numeric_input_latency_values",
+      "reason": "保留输入延迟维度，但没有可核对的毫秒测量值。零延迟/无明显差别不能标0ms；0.5ms另列传输延时。"
+    },
+    {
+      "id": "stick_center_error",
+      "reason": "无明确回中误差测量。0死区、不漂移和自动归中不能证明回中误差为0。"
+    },
+    {
+      "id": "advertised_other_products",
+      "reason": "罗技页面的鼠标/键盘广告、北通阿修罗页面0001的鲲鹏70广告、版本比较表的竞品配置不属于目标商品。"
+    },
+    {
+      "id": "marketing_scores",
+      "reason": "销量、好评率、榜单分、主观星级、六倍/三十倍宣传不作为产品通用评价维度。"
+    },
+    {
+      "id": "purchase_terms",
+      "reason": "价格、赠品、质保/退换政策为交易服务信息，本稿只标产品本体及输入功能，不作为criteria。"
+    },
+    {
+      "id": "raw_electrical_and_storage_parameters",
+      "reason": "工作电压/电流、温湿度、休眠电流等保留在源文本，未转为购物输入性能维度。"
+    }
+  ],
+  "excluded_products": [
+    {
+      "item_id": "937103245564",
+      "rank": 3,
+      "title": "适用iQOOZ9/Turbo/x手机游戏吃鸡神器按键和平精英三角洲暗区辅助",
+      "reason": "触屏辅助按键，非独立手柄"
+    },
+    {
+      "item_id": "839166304553",
+      "rank": 4,
+      "title": "平板吃鸡神器手游外设六指压枪电竞手游通用手机游戏ipad快速按键",
+      "reason": "触屏辅助按键，非独立手柄"
+    },
+    {
+      "item_id": "918087254574",
+      "rank": 5,
+      "title": "M16全自动吃鸡神器连发压枪脉冲变频连点器手游机械按键和平外设",
+      "reason": "触屏辅助按键，非独立手柄"
+    },
+    {
+      "item_id": "824485989445",
+      "rank": 6,
+      "title": "stame游戏手柄爱吾游戏宝盒switch手柄安卓苹果电视手机无线手柄",
+      "reason": "手机拉伸手柄，非独立手柄"
+    },
+    {
+      "item_id": "798258208001",
+      "rank": 7,
+      "title": "平板吃鸡神器多功能变频吃鸡神器连发辅助按键游戏手柄直销",
+      "reason": "触屏辅助按键，非独立手柄"
+    },
+    {
+      "item_id": "871813989306",
+      "rank": 10,
+      "title": "小仔火啦2025新款燕云十六声手游手柄自定义宏走位神器外设手机平板鸿蒙安卓苹果通用逆水寒天涯明月刀连招款",
+      "reason": "专用移动控制器，非独立完整手柄"
+    },
+    {
+      "item_id": "816253993308",
+      "rank": 13,
+      "title": "平板硅胶保护套ipadpro电脑游戏防滑防误触握把手托支架吃鸡神器",
+      "reason": "被动保护套/握把配件"
+    },
+    {
+      "item_id": "615296813917",
+      "rank": 19,
+      "title": "【狙歌】全金属吃鸡神器适用小米11华为mate40带壳IQOO7苹果1123X",
+      "reason": "触屏辅助按键，非独立手柄"
+    },
+    {
+      "item_id": "944393588388",
+      "rank": 20,
+      "title": "全透明吃鸡神器自动压枪机械按键连发和平外设精英游戏手柄辅助器",
+      "reason": "触屏辅助按键，非独立手柄"
+    }
+  ],
+  "review_notes": [
+    "商品范围已由用户确定为独立手柄，9件；不以预算、平台或无线偏好筛选。",
+    "需人工逐项审查定义、criteria/attribute划分、商品证据列表，并复核OCR歧义和跨SKU宣传。",
+    "criterion评价方向只在定义的可比条件内有效；属性没有无条件优劣方向。",
+    "evidence摘录为代表性支持，不宣称证据页穷尽；商品证据列表仍需人工复核是否漏标。"
+  ]
+}
