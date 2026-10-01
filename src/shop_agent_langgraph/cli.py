@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 
 from .supervisor.graph import supervisor
+from .core.tracing import flush_traces
 
 
 EXIT_COMMANDS = {"exit", "quit", "/exit", "/quit", "退出"}
@@ -37,3 +38,4 @@ def main() -> None:
             print(f"\n系统错误：{exc}")
             continue
         print(f"\nSupervisor：{reply}")
+    flush_traces()

@@ -7,6 +7,8 @@ from langchain_openai import ChatOpenAI
 
 def build_deepseek_model() -> ChatOpenAI:
     """Build the shared DeepSeek chat model from environment variables."""
+    from .tracing import load_environment
+    load_environment()
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         raise RuntimeError("DEEPSEEK_API_KEY is not set")

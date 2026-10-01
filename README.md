@@ -1,5 +1,36 @@
 # Shop Agent LangGraph
 
+## Langfuse tracing
+
+The application uses the official LangChain callback integration with Langfuse
+Python SDK 4.15.6. Set `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` and
+`LANGFUSE_BASE_URL` in `.env` (or the process environment). `LANGFUSE_HOST` is
+accepted as a fallback. Shell variables take precedence over `.env`.
+
+CLI and LangGraph Studio conversations automatically emit one `shopping-turn`
+trace per user turn. The conversation's `thread_id` is the Langfuse session ID.
+Nested agents, tools, model names and token usage are captured by framework
+callbacks, including parallel research calls and validation retries. Existing
+callbacks and LangSmith tracing are preserved. Direct standalone agent calls
+can be traced by passing `langfuse.langchain.CallbackHandler` in their config.
+
+Set `LANGFUSE_TRACING_ENABLED=false` to disable tracing. Missing credentials also
+leave tracing disabled. Use `LANGFUSE_ENVIRONMENT` and `LANGFUSE_RELEASE` to
+distinguish environments and deployments. Export-stage masking removes credential
+fields, configured secrets, email addresses and mainland China mobile numbers;
+extend `core/tracing.py` for additional application-specific sensitive data.
+
+Long-running servers export in the background. The CLI flushes on exit and the
+client shuts down at process exit. Short-lived scripts should call
+`shop_agent_langgraph.core.tracing.flush_traces()` before exiting. No credentials
+are stored in application code or logs.
+
+Verify a real upload with `uv run python scripts/verify_langfuse.py`. It runs a
+small Supervisor request and prints a trace URL. Inspect the exported observations
+for that trace (not just authentication success) to confirm model, tokens,
+parent/child structure, session ID and masked inputs/outputs.
+
+
 The project incrementally ports Shop Agent features to LangGraph. The first
 available component resolves one product name against the bundled Google
 product taxonomy.

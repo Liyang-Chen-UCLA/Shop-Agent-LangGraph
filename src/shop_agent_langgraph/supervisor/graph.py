@@ -13,6 +13,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
 from ..core.llm import build_deepseek_model
+from ..core.tracing import trace_turn
 from .state import SupervisorState
 from .tools import SUPERVISOR_TOOLS
 
@@ -40,7 +41,10 @@ def build_supervisor_graph(
     supervisor_agent = build_supervisor_agent(model)
 
     def run_supervisor(state: SupervisorState, config: RunnableConfig) -> dict[str, list[Any]]:
-        result = supervisor_agent.invoke({"messages": state["messages"]}, config=config)
+        with trace_turn(state["messages"], config) as (traced_config, span):
+            result = supervisor_agent.invoke({"messages": state["messages"]}, config=traced_config)
+            if span is not None:
+                span.update(output=result["messages"][-1].content)
         return {"messages": result["messages"][len(state["messages"]):]}
 
     builder = StateGraph(SupervisorState)
