@@ -175,6 +175,15 @@ not receive a taxonomy node ID. Local cache files are excluded from Git.
 Eval remains an independent, read-only semantic judge for comparing two
 `CriteriaAttributeSet` values, but Market Agent no longer invokes it.
 
+Eval now treats the first input as gold and the second as actual, requiring the
+same fixed product IDs. Name/description matching yields `match`, `missing` and
+`extra`; matched schemas receive per-field 0/1 scores, including classification
+and a deterministic merge/split penalty. Criteria and attributes are both covered.
+Run `uv run python scripts/eval_market.py --actual market-result.json` to save
+JSON and Markdown reports against the independent-controller gold. The actual
+delivery must cover the same nine product IDs; the default four-item sample is
+not interchangeable. See the protocol below for field semantics and counting.
+
 Market receives every product's evidence without pre-merging it. It derives
 reusable dimensions, merges clear synonyms, and preserves meaningful conditions
 and units. Descriptive dimensions without a general better/worse direction remain
