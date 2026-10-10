@@ -1,0 +1,25 @@
+{
+  "input": {
+    "message": "预算无所谓了",
+    "context": []
+  },
+  "reference": {
+    "action": "remove",
+    "category": null,
+    "criteria_preferences": [
+      "预算"
+    ],
+    "attribute_preferences": []
+  },
+  "rubric_ids": [
+    "INT-1",
+    "INT-2",
+    "INT-3",
+    "INT-4",
+    "INT-5"
+  ],
+  "metadata": {
+    "reference_status": "draft_pending_human_review",
+    "authoring": "hand-written, not yet human-approved"
+  }
+}

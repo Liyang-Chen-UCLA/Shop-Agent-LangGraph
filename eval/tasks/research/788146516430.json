@@ -1,0 +1,24 @@
+{
+  "input": {
+    "case": "gamepad",
+    "item_id": "788146516430",
+    "target": "独立手柄"
+  },
+  "reference": {
+    "gold": "eval/cases/gamepad/gold.json",
+    "item_id": "788146516430",
+    "relevance": "relevant"
+  },
+  "rubric_ids": [
+    "RS-1",
+    "RS-2",
+    "RS-3",
+    "RS-4",
+    "RS-5"
+  ],
+  "metadata": {
+    "reference_status": "draft_pending_human_review",
+    "authoring": "hand-written, not yet human-approved",
+    "case": "gamepad"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "input": {
+    "message": "预算改成 800，最好轻一点",
+    "context": []
+  },
+  "reference": {
+    "action": "update",
+    "category": null,
+    "criteria_preferences": [
+      "价格 ≤ 800 元",
+      "重量越轻越好"
+    ],
+    "attribute_preferences": []
+  },
+  "rubric_ids": [
+    "INT-1",
+    "INT-2",
+    "INT-3",
+    "INT-4",
+    "INT-5"
+  ],
+  "metadata": {
+    "reference_status": "draft_pending_human_review",
+    "authoring": "hand-written, not yet human-approved"
+  }
+}

@@ -149,6 +149,8 @@ def e2e_2(sample, ctx):
 
 def e2e_3(sample, ctx):
     reference = sample.get("reference") or {}
+    if reference.get("route_status") == "ambiguous":
+        return not_applicable("reference expects an ambiguous route, so no resolved node")
     allowed = {str(x) for x in reference.get("allowed_node_ids") or []}
     if reference.get("node_id") is not None:
         allowed.add(str(reference["node_id"]))
