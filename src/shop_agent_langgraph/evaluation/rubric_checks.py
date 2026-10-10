@@ -476,8 +476,13 @@ def ag_3(sample, ctx):
             score = deterministic_score(name, gold, actual)
             if name in {"kind", "type"} and score is None:
                 units.append(UnitResult(unit=unit, status="unresolved", reason="mixed group needs semantic judgement"))
+            elif name == "kind":
+                units.append(result(unit, score != 0, f"gold is {gold['kind']}, actual is {sorted({a['kind'] for a in actual})}"))
+            elif name == "type":
+                units.append(result(unit, score != 0, f"gold is {gold['item']['type']}, actual is {sorted({a['item']['type'] for a in actual})}"))
             else:
-                units.append(result(unit, score != 0, "kind/type disagree or the field exists on only one side"))
+                side = "gold only" if name in gold["item"] else "actual only"
+                units.append(result(unit, score != 0, f"field exists on {side}"))
     return units or not_applicable("no matched dimension")
 
 

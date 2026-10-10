@@ -20,6 +20,11 @@ from ..core.llm import build_deepseek_model
 from ..core.tracing import redact
 from ..domain.criteria import CriteriaAttributeSet
 from .cases import validate_case, write_json
+from .rubric import load_overlay, load_rubrics, rubric_file_hashes
+from .rubric_run import DEFAULT_OVERLAY, compute_trial, rubric_scores, write_rubric_artifacts
+
+
+OVERLAY_KEY = "eval/cases/gamepad/rubric.yaml"
 
 
 def versions():
@@ -33,7 +38,8 @@ def versions():
             "judge_model": os.getenv("EVAL_MODEL", "deepseek-flash"),
             "code_hashes": {str(p.relative_to(root / "src/shop_agent_langgraph")).replace("\\", "/"):
                 hashlib.sha256(p.read_bytes()).hexdigest() for p in (root / "src/shop_agent_langgraph").rglob("*.py")},
-            "prompt_hashes": {name: hashlib.sha256((root / "src/shop_agent_langgraph" / name).read_bytes()).hexdigest() for name in files}}
+            "prompt_hashes": {**{name: hashlib.sha256((root / "src/shop_agent_langgraph" / name).read_bytes()).hexdigest() for name in files},
+                              **rubric_file_hashes(), OVERLAY_KEY: hashlib.sha256(DEFAULT_OVERLAY.read_bytes()).hexdigest()}}
 
 
 def report_scores(report):
@@ -50,9 +56,10 @@ def report_scores(report):
 
 
 def run_experiment(case, output_dir, *, client=None, jev=None, actual_path=None, model=None, judge_model=None, run_name=None,
-                   dataset=None):
+                   dataset=None, overlay_path=None):
     """Execute the same task/evaluator locally or through Langfuse's runner."""
     gold = validate_case(case)
+    rubrics, overlay = load_rubrics(), load_overlay(overlay_path or DEFAULT_OVERLAY)
     if jev is not None:
         jev.preflight()  # fail before spending on nine research calls
         jev.trace_client = client
@@ -62,7 +69,9 @@ def run_experiment(case, output_dir, *, client=None, jev=None, actual_path=None,
     root = Path(__file__).resolve().parents[3]
     with ZipFile(directory / "source.zip", "w") as archive:
         sources = list((root / "src/shop_agent_langgraph").rglob("*.py")) + list((root / "src/shop_agent_langgraph").rglob("*.md"))
-        sources += [root / "pyproject.toml", root / "uv.lock", root / "scripts/market_evaluation.py"]
+        sources += list((root / "src/shop_agent_langgraph").rglob("*.yaml"))
+        sources += [root / "pyproject.toml", root / "uv.lock", root / "scripts/market_evaluation.py",
+                    Path(overlay_path or DEFAULT_OVERLAY)]
         for path in sources:
             archive.write(path, str(path.relative_to(root)))
     supplied_model = model
@@ -111,7 +120,10 @@ def run_experiment(case, output_dir, *, client=None, jev=None, actual_path=None,
         manifest["evaluation_complete"] = True
         manifest["metrics"] = report.metrics.model_dump(mode="json")
         write_json(directory / "manifest.json", manifest)
-        return report_scores(report)
+        gate = write_rubric_artifacts(directory, compute_trial(case, output, report, overlay, rubrics), case, overlay, rubrics)
+        manifest["rubric_gate"] = dict(conclusion=gate.conclusion, blockers=gate.blockers, needs_review=gate.reviews)
+        write_json(directory / "manifest.json", manifest)
+        return report_scores(report) + rubric_scores(gate)
 
     try:
         if client:
