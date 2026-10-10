@@ -1,0 +1,70 @@
+module: e2e
+version: 1
+rubrics:
+  - id: E2E-1
+    question: "Supervisor 的 Intent/Route/Market 调用链是否符合动作要求？"
+    pass: "create/switch 依次调用 intent→route→market；route 为 ambiguous 时不调用 market；query 不调用 route 和 market。"
+    fail: "顺序错误、缺少必要调用、在 ambiguous 后调用 market，或 query 触发了 route/market。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "trace.tool_calls（call_intent_agent / call_route_agent / call_market_agent 的顺序）；route 状态取自 route 工具输出"
+  - id: E2E-2
+    question: "call_market_agent 的 node_id 是否等于 route 返回的 resolved node_id？"
+    pass: "每次 market 调用的 node_id 与 route 的唯一 resolved node_id 完全一致。"
+    fail: "node_id 与 route 结果不同，或在没有 resolved 结果时调用了 market。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "trace.tool_calls 的参数与 route 工具输出"
+  - id: E2E-3
+    question: "resolved node_id 是否等于参考节点（或在允许集合内）？"
+    pass: "route resolved 的 node_id 等于 reference.node_id，或属于 reference.allowed_node_ids。"
+    fail: "node_id 不在参考范围内，或参考要求 resolved 但 route 未 resolved。"
+    judge: code
+    severity: gate
+    threshold: 0.9
+    maturity: active
+    depends_on_gold: true
+    data_source: "route 工具输出；task.reference.node_id / allowed_node_ids"
+  - id: E2E-4
+    question: "Market 是否返回 completed（而非 pending 或异常）？"
+    pass: "每次 call_market_agent 的输出为合法结果且 status=completed。"
+    fail: "输出 status 为 pending、工具报错或输出无法解析。"
+    judge: code
+    severity: gate
+    threshold: 0.9
+    maturity: active
+    depends_on_gold: false
+    data_source: "call_market_agent 的工具输出"
+  - id: E2E-5
+    question: "回复是否没有声称工具结果中不存在的内容（推荐商品、已搜索、数值评分）？"
+    pass: "回复中的每一项事实性声明都能在工具结果中找到依据。"
+    fail: "回复推荐了具体商品、声称已完成搜索，或给出了工具结果中没有的数值评分。"
+    judge: llm
+    severity: veto
+    maturity: shadow
+    depends_on_gold: false
+    data_source: "trace 全部工具输出与 final_reply"
+  - id: E2E-6
+    question: "回复是否不含 JSON、工具名、agent 名或内部 ID？"
+    pass: "回复是自然语言，不出现 JSON 片段、工具名、agent 名、node_id/item_id 等内部标识。"
+    fail: "回复中出现上述任一内容。"
+    judge: code
+    severity: gate
+    threshold: 1.0
+    maturity: active
+    depends_on_gold: false
+    data_source: "final_reply（正则）"
+  - id: E2E-7
+    question: "route 为 ambiguous 时，回复是否只给出 route 返回的候选？"
+    pass: "回复包含 route 返回的每个候选名称（去空白后的子串）。"
+    fail: "任一候选名称没有出现在回复中。"
+    judge: code
+    severity: gate
+    threshold: 1.0
+    maturity: active
+    depends_on_gold: false
+    data_source: "route 工具输出的 candidates；final_reply"

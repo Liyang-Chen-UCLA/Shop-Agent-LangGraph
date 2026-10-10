@@ -1,0 +1,50 @@
+module: research
+version: 1
+rubrics:
+  - id: RS-1
+    question: "每条 evidence.source_text 是否是商品原文的子串？"
+    pass: "source_text 去除所有空白后是冻结商品原文（同样去空白）的子串。"
+    fail: "source_text 不在原文中（改写、拼接或编造）。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "ResearchResult.evidence；冻结商品原文"
+  - id: RS-2
+    question: "固定相关商品的 relevance 是否为 relevant？"
+    pass: "result.relevance == relevant（且 item_id 正确）。"
+    fail: "relevance 为 irrelevant 或 uncertain，或 item_id 不一致。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "ResearchResult.relevance；task.reference.relevance"
+  - id: RS-3
+    question: "evidence 的 value 与 unit 是否出现在其 source_text 中？"
+    pass: "非空的 value、unit 去空白、忽略大小写后均是 source_text 的子串。"
+    fail: "value 或 unit 不在 source_text 中。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "ResearchResult.evidence 的 value / unit / source_text"
+  - id: RS-4
+    question: "竞品、广告或对比表内容是否没有被标为 subject=product？"
+    pass: "evidence 的 subject 与原文所述对象一致，竞品/对比内容不是 product。"
+    fail: "竞品、广告或对比表内容被标为 product。"
+    judge: llm
+    severity: gate
+    threshold: 0.9
+    maturity: shadow
+    depends_on_gold: false
+    data_source: "ResearchResult.evidence.subject；商品原文"
+  - id: RS-5
+    question: "gold 中该商品有证据的维度，是否至少有一条对应 evidence？"
+    pass: "每个 gold 维度（该商品有 quote 的）都有语义对应的 evidence。"
+    fail: "该维度没有对应 evidence。"
+    judge: llm
+    severity: gate
+    threshold: 0.7
+    maturity: shadow
+    depends_on_gold: true
+    data_source: "ResearchResult.evidence；gold 维度的 evidence quote"

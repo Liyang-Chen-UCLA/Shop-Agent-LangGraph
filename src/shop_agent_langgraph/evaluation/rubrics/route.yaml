@@ -1,0 +1,51 @@
+module: route
+version: 1
+rubrics:
+  - id: RT-1
+    question: "status 是否等于参考？"
+    pass: "output.status 与 reference.status 相同。"
+    fail: "不同。"
+    judge: code
+    severity: gate
+    threshold: 0.9
+    maturity: active
+    depends_on_gold: true
+    data_source: "RouteResult.status；task.reference.status"
+  - id: RT-2
+    question: "resolved 时 node_id 是否等于参考？"
+    pass: "参考要求 resolved 时，输出有唯一 resolved 节点且 node_id 等于 reference.node_id（或属于 acceptable_node_ids）。"
+    fail: "没有 resolved 节点，或 node_id 不在参考范围内。"
+    judge: code
+    severity: gate
+    threshold: 0.9
+    maturity: active
+    depends_on_gold: true
+    data_source: "RouteResult.resolved_nodes；task.reference"
+  - id: RT-3
+    question: "返回的所有 node 是否存在于 taxonomy，且 name/path 一致？"
+    pass: "resolved_nodes、candidates、children 中每个节点的 ID 都存在，且 node_name 与 node_path 与 taxonomy 完全一致。"
+    fail: "节点不存在，或名称、路径与 taxonomy 不一致。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "RouteResult 全部节点；domain.taxonomy"
+  - id: RT-4
+    question: "ambiguous 时参考节点是否在 candidates 中？"
+    pass: "输出 ambiguous 时，candidates 至少包含一个参考节点（reference.node_id 与 acceptable_node_ids 的并集）。"
+    fail: "candidates 不含任何参考节点。"
+    judge: code
+    severity: gate
+    threshold: 0.8
+    maturity: active
+    depends_on_gold: true
+    data_source: "RouteResult.candidates；task.reference"
+  - id: RT-5
+    question: "children 是否恰为 resolved 节点的直接子节点？"
+    pass: "children 的 ID 集合与 taxonomy 中 resolved 节点的直接子节点集合相等。"
+    fail: "多出、缺少或包含非直接子节点。"
+    judge: code
+    severity: veto
+    maturity: active
+    depends_on_gold: false
+    data_source: "RouteResult.children；domain.taxonomy"
