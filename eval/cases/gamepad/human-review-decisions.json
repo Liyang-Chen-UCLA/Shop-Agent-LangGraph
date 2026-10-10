@@ -129,6 +129,77 @@
       "decision": "delegate_policy_based_ai_review",
       "reviewer": "Codex AI",
       "human_approval": false
+    },
+    {
+      "id": "criteria_attribute_split",
+      "date": "2026-10-10",
+      "answer": "criteria是商品质量，attribute管商品分类；bool有/无、数值大更好/小更好、类别A/B/C，能带来稳定收益即可认为是criteria（A类型震动反馈比B好则进criteria，白色不会比黑色好）",
+      "decision": "split_by_quality_vs_classification",
+      "promoted_to_criteria": {
+        "numeric": [
+          "standby_time",
+          "wireless_range",
+          "stick_resolution",
+          "trigger_resolution",
+          "trigger_position_precision",
+          "extra_button_count",
+          "stick_tension_range",
+          "vibration_motor_count",
+          "turbo_speed_levels"
+        ],
+        "boolean_true_better": [
+          "deadzone_adjustable",
+          "stick_curve_adjustable",
+          "stick_sensitivity_adjustable",
+          "stick_calibration",
+          "remapping",
+          "macro_recording",
+          "extra_programmable_buttons",
+          "vibration_adjustable",
+          "rapid_trigger_support",
+          "stick_tension_adjustable",
+          "button_layout_switch",
+          "back_button_lock",
+          "detachable_cable",
+          "replaceable_stick_caps",
+          "anti_slip_grip",
+          "vibration",
+          "trigger_vibration"
+        ],
+        "categorical": {
+          "vibration_motor_type": "total_order 音圈线性马达>纽扣马达",
+          "stick_sensor": "partial_order 霍尔/TMR/磁阻>电位器",
+          "trigger_mode": "partial_order 霍尔线性>电位器线性；双切>霍尔线性、微动数字"
+        }
+      },
+      "kept_as_attributes_confirmed": [
+        "motion_control",
+        "nfc",
+        "console_wake",
+        "headset_jack",
+        "multiplayer_controllers",
+        "voice_configuration",
+        "dock_support",
+        "dock_auto_power",
+        "dock_hub",
+        "rgb_lighting",
+        "lighting_adjustable",
+        "replaceable_faceplate",
+        "turbo",
+        "button_mechanism",
+        "vibration_symmetry",
+        "bluetooth_version",
+        "connection_mode",
+        "button_travel",
+        "button_actuation_force",
+        "trigger_travel",
+        "battery_capacity",
+        "body_weight"
+      ],
+      "type_changes": {
+        "body_dimensions": "categorical -> numeric(mm)"
+      },
+      "scope": "仅批准分类规则与本次切分，不代表整份gold获批准"
     }
   ],
   "ai_policy_review": {
