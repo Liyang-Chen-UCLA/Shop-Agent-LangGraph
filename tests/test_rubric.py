@@ -180,3 +180,31 @@ def test_gate_report_renders_every_rubric_and_failures():
     markdown = rb.render_gate_markdown(report)
     assert "# Rubric 门禁：block" in markdown and "| RS-1 |" in markdown and "u1: r" in markdown
     assert report.model_dump(mode="json")["blockers"] == ["RS-1"]
+
+
+# --- promotion and documentation -----------------------------------------------------------
+
+def entry(count, correct, positive, negative, unclear=0):
+    return dict(count=count, correct=correct, unclear=unclear, positive_labels=positive, negative_labels=negative)
+
+
+def test_promotion_needs_agreement_samples_and_both_label_classes():
+    assert rb.promotion_status(entry(30, 27, 20, 10))["eligible"]                       # exactly 0.9 and 30
+    low = rb.promotion_status(entry(40, 35, 20, 20))
+    assert not low["eligible"] and "agreement 0.875" in low["reasons"][0]
+    assert "29 human samples" in rb.promotion_status(entry(29, 29, 20, 9))["reasons"][0]
+    one_sided = rb.promotion_status(entry(50, 50, 50, 0))
+    assert one_sided["agreement"] == 1.0 and one_sided["reasons"] == ["human labels lack positive or negative examples"]
+    assert not rb.promotion_status(entry(0, 0, 0, 0))["eligible"]
+
+
+def test_rubric_doc_lists_every_rubric_with_its_level_and_threshold():
+    text = (ROOT / "docs/rubric.md").read_text(encoding="utf-8")
+    for item in rb.load_rubrics().rubrics:
+        row = next((line for line in text.splitlines() if line.startswith(f"| {item.id} |")), None)
+        assert row is not None, item.id
+        cells = [c.strip() for c in row.strip("|").split("|")]
+        level = item.severity + (f" {item.threshold}" if item.threshold else "")
+        assert cells[2:5] == [item.judge, level, item.maturity] and cells[5] == ("是" if item.depends_on_gold else "否"), item.id
+    for number in ("0.9", "30"):
+        assert number in text.split("## shadow → active 晋升")[1]

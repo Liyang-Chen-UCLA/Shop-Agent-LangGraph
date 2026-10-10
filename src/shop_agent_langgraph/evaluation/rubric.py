@@ -325,3 +325,27 @@ def review_questions(directory: str | Path | None = None) -> dict[str, str]:
     """Human annotation question per schema field: the rubric's template plus the shared definition."""
     return {f.name: f"{rubric.review_question.replace('{field}', f.name)} Criterion: {f.definition}"
             for rubric, f in _schema_fields(directory)}
+
+
+# --- Shadow -> active promotion -------------------------------------------------------------
+
+PROMOTION_MIN_AGREEMENT = 0.9
+PROMOTION_MIN_SAMPLES = 30
+
+
+def promotion_status(by_field_entry: dict) -> dict:
+    """Judge one field of a calibration manifest's `by_field` against the promotion bar.
+
+    Agreement is correct/count, so `unclear` judgments count against the judge. Both positive
+    and negative human labels must exist, otherwise agreement says nothing about errors.
+    """
+    count = by_field_entry["count"]
+    agreement = by_field_entry["correct"] / count if count else 0.0
+    reasons = []
+    if agreement < PROMOTION_MIN_AGREEMENT:
+        reasons.append(f"human-judge agreement {agreement:.3f} < {PROMOTION_MIN_AGREEMENT}")
+    if count < PROMOTION_MIN_SAMPLES:
+        reasons.append(f"{count} human samples < {PROMOTION_MIN_SAMPLES}")
+    if not by_field_entry["positive_labels"] or not by_field_entry["negative_labels"]:
+        reasons.append("human labels lack positive or negative examples")
+    return {"eligible": not reasons, "agreement": agreement, "samples": count, "reasons": reasons}
