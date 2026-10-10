@@ -11,10 +11,11 @@ from ..agents.eval.io import ITEM_FIELDS
 from ..domain.criteria import CriteriaAttributeSet
 from .cases import digest, seal_case, validate_case, write_json
 from .langfuse_api import api, all_items
+from .rubric import review_questions
 
 QUEUE_NAME = "market-dimension-review"
 SCORE_NAME = "human_correct"
-REVIEW_VERSION = "v1"
+REVIEW_VERSION = "v2"  # v2: schema-field questions render from rubrics/aggregation.yaml
 
 
 def review_tasks(case, report: EvalReport | None = None):
@@ -26,6 +27,7 @@ def review_tasks(case, report: EvalReport | None = None):
         if report_gold != gold or report.gold_metadata.get("input_sha256", case["metadata"]["input_sha256"]) != case["metadata"]["input_sha256"]:
             raise ValueError("report does not belong to this frozen case/gold version")
     tasks = []
+    questions = review_questions()
 
     def add(kind, ref, field, inp, output):
         identity = dict(input_sha256=case["metadata"]["input_sha256"],
@@ -57,7 +59,7 @@ def review_tasks(case, report: EvalReport | None = None):
                     continue  # deterministic; correcting matching recomputes this
                 group = groups[review.gold_ref]
                 add("schema_field", review.gold_ref, score.field,
-                    {"question": f"Does the actual representation preserve the gold dimension's `{score.field}` semantics? Score the field itself, not agreement with an automatic judge.",
+                    {"question": questions[score.field],
                      "gold": report.items[review.gold_ref], "actual": {r: report.items[r] for r in group.actual_ids}},
                     {"field": score.field, "actual": {r: report.items[r]["item"].get(score.field) if score.field != "kind" else report.items[r]["kind"] for r in group.actual_ids}})
                 decision = next((d for d in report.judge_details.get("decisions", [])

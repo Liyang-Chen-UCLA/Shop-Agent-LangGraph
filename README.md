@@ -237,3 +237,9 @@ See [Personalization MVP schemas and usage](docs/personalization.md).
 Fixed-product experiments evaluate Research and Market delivery against a versioned
 gold draft, with TypeSafe Jev shadow judgments and native Langfuse annotation tasks.
 See [the evaluation lifecycle and commands](docs/market-evaluation-lifecycle.md).
+
+## Rubric gate
+
+Explicit yes/no rubrics (YAML, code- or LLM-judged) cover the chain up to Market Agent, with a
+veto/gate/monitor scoring gate. `uv run python scripts/market_evaluation.py gate --runs <run dir>`
+scores saved runs and exits 1 on block. See [the rubric catalogue and gate rules](docs/rubric.md).

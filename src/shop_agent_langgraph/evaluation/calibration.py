@@ -10,6 +10,9 @@ from ..agents.eval.schemas import FieldScore, ItemReview, SchemaReview
 from .cases import digest, write_json
 
 
+RUBRIC_PREFIXES = ("evaluation/rubrics/", "eval/cases/")
+
+
 def calibrate(samples, jev, directory, *, client=None):
     if not samples or len({s["task_id"] for s in samples}) != len(samples):
         raise ValueError("calibration needs nonempty, distinct reviewed samples")
@@ -89,8 +92,13 @@ def compare_runs(baseline_path, candidate_path):
     for name, value in baseline["metadata"]["prompt_hashes"].items():
         if name.startswith("agents/eval/") and candidate["metadata"]["prompt_hashes"].get(name) != value:
             raise ValueError("cannot compare runs judged with different evaluation prompts")
+    def rubric_files(metadata):
+        return {k: v for k, v in metadata["prompt_hashes"].items() if k.startswith(RUBRIC_PREFIXES)}
+
+    if rubric_files(baseline["metadata"]) != rubric_files(candidate["metadata"]):
+        raise ValueError("cannot compare runs scored with different rubric files")
     for name, value in baseline["metadata"].get("code_hashes", {}).items():
-        if (name.startswith("agents/eval/") or name == "domain/criteria.py") and candidate["metadata"].get("code_hashes", {}).get(name) != value:
+        if (name.startswith(("agents/eval/", "evaluation/rubric")) or name == "domain/criteria.py") and candidate["metadata"].get("code_hashes", {}).get(name) != value:
             raise ValueError("cannot compare runs judged with different evaluation code")
     b, c = baseline["metrics"], candidate["metrics"]
     return {"counts": {key: {"baseline": b[key], "candidate": c[key], "delta": c[key] - b[key]}
