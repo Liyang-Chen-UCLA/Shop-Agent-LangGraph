@@ -94,3 +94,89 @@ def test_rubric_file_hashes_change_with_content(tmp_path):
     directory = edited_dir(tmp_path, "route", lambda d: d["rubrics"][0].update(question="改过的问题"))
     after = rb.rubric_file_hashes(directory)
     assert [k for k in before if before[k] != after[k]] == ["evaluation/rubrics/route.yaml"]
+
+
+# --- gate ------------------------------------------------------------------------------
+
+RUBRICS = rb.load_rubrics()
+
+
+def units(*statuses):
+    return [rb.UnitResult(unit=f"u{i}", status=s, reason="r") for i, s in enumerate(statuses)]
+
+
+def outcome(rubric_id, *trials, approved=True):
+    return rb.evaluate_rubric(RUBRICS.by_id[rubric_id], [units(*t) for t in trials], gold_approved=approved)
+
+
+def gate(trials, **kwargs):
+    return rb.evaluate_gate(RUBRICS, [{k: units(*v) for k, v in t.items()} for t in trials], **kwargs)
+
+
+def test_active_veto_failure_blocks_and_gate_uses_threshold():
+    assert outcome("RS-1", ["pass", "pass", "fail"]).verdict == "block"
+    assert outcome("RS-1", ["pass", "pass", "na"]).verdict == "pass"
+    assert outcome("E2E-4", ["pass"] * 9 + ["fail"]).verdict == "pass"       # 0.9 meets the 0.9 threshold
+    low = outcome("E2E-4", ["pass"] * 8 + ["fail"] * 2)
+    assert low.verdict == "block" and low.pass_rate == 0.8 and "threshold 0.9" in low.reason
+
+
+def test_shadow_and_monitor_rubrics_only_report():
+    shadow = outcome("E2E-5", ["fail", "fail"])               # llm veto, shadow
+    assert shadow.verdict == "report" and shadow.would_be == "block"
+    monitor = outcome("AG-2", ["fail", "pass"])
+    assert monitor.verdict == "report" and monitor.pass_rate == 0.5
+    report = gate([{"E2E-5": ["fail"], "AG-2": ["fail"], "E2E-4": ["pass"]}])
+    assert report.conclusion == "pass" and not report.blockers
+
+
+def test_gold_dependent_failures_are_downgraded_until_gold_is_approved():
+    unapproved = outcome("AG-1", ["pass", "fail"], approved=False)
+    assert unapproved.verdict == "needs_review" and unapproved.gold_downgraded
+    assert outcome("AG-1", ["pass", "fail"], approved=True).verdict == "block"
+    independent = outcome("INT-5", ["fail"], approved=False)             # not gold-dependent
+    assert independent.verdict == "block" and not independent.gold_downgraded
+    assert outcome("AG-1", ["pass"], approved=False).verdict == "pass"
+    assert gate([{"AG-1": ["fail"]}], gold_approved=False).conclusion == "needs_review"
+    assert gate([{"AG-1": ["fail"]}], gold_approved=True).conclusion == "block"
+    assert gate([{"AG-1": ["fail"]}], gold_approved={"aggregation": True}).conclusion == "block"
+
+
+def test_conclusion_priority_is_block_then_needs_review_then_pass():
+    mixed = gate([{"AG-1": ["fail"], "AG-7": ["fail"]}], gold_approved=False)
+    assert mixed.conclusion == "block" and mixed.blockers == ["AG-7"] and mixed.reviews == ["AG-1"]
+    assert gate([{"AG-1": ["fail"], "AG-7": ["pass"]}], gold_approved=False).conclusion == "needs_review"
+    assert gate([{"AG-1": ["pass"], "AG-7": ["pass"]}], gold_approved=False).conclusion == "pass"
+
+
+def test_unresolved_units_never_silently_pass():
+    assert outcome("RS-1", ["pass", "unresolved"]).verdict == "needs_review"
+    assert outcome("RS-1", ["pass", "unresolved", "fail"]).verdict == "block"
+    reachable = outcome("E2E-4", ["pass"] * 8 + ["unresolved"] * 2)       # 0.8 now, 1.0 if resolved
+    assert reachable.verdict == "needs_review" and reachable.pass_rate == 0.8
+    assert outcome("E2E-4", ["pass"] * 5 + ["fail"] * 3 + ["unresolved"] * 2).verdict == "block"
+
+
+def test_trials_veto_needs_every_trial_clean_and_gate_averages():
+    assert outcome("RS-1", ["pass"], ["pass"], ["pass"]).verdict == "pass"
+    assert outcome("RS-1", ["pass"] * 9, ["pass"] * 8 + ["fail"]).verdict == "block"   # one bad trial is enough
+    averaged = outcome("E2E-4", ["pass"] * 10, ["pass"] * 8 + ["fail"] * 2)            # mean(1.0, 0.8) = 0.9
+    assert averaged.verdict == "pass" and averaged.pass_rate == pytest.approx(0.9) and averaged.trials == 2
+    assert outcome("E2E-4", ["pass"] * 10, ["pass"] * 7 + ["fail"] * 3).verdict == "block"
+    pooled_would_differ = outcome("E2E-4", ["pass"], ["pass"] * 2 + ["fail"] * 8)      # mean 0.6, pooled 0.27 irrelevant
+    assert pooled_would_differ.pass_rate == pytest.approx(0.6)
+    assert outcome("E2E-4", ["na"], ["pass"]).verdict == "pass"                        # empty trial is skipped
+
+
+def test_not_run_and_not_applicable_are_distinguished():
+    assert rb.evaluate_rubric(RUBRICS.by_id["RS-4"], [], gold_approved=True).verdict == "not_run"
+    assert outcome("RS-1", ["na"]).verdict == "na"
+    report = gate([{"RS-1": ["pass"]}])
+    assert {o.id: o.verdict for o in report.outcomes}["RS-5"] == "not_run" and report.conclusion == "pass"
+
+
+def test_gate_report_renders_every_rubric_and_failures():
+    report = gate([{"RS-1": ["pass", "fail"], "RS-2": ["pass"]}])
+    markdown = rb.render_gate_markdown(report)
+    assert "# Rubric 门禁：block" in markdown and "| RS-1 |" in markdown and "u1: r" in markdown
+    assert report.model_dump(mode="json")["blockers"] == ["RS-1"]

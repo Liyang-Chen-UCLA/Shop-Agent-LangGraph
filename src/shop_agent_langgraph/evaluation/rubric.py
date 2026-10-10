@@ -155,3 +155,130 @@ class GoldOverlay(BaseModel):
 
 def load_overlay(path: str | Path) -> GoldOverlay:
     return GoldOverlay.model_validate(yaml.safe_load(Path(path).read_text(encoding="utf-8")))
+
+
+# --- Scoring gate ----------------------------------------------------------------------
+
+Verdict = Literal["pass", "block", "needs_review", "report", "na", "not_run"]
+Conclusion = Literal["pass", "needs_review", "block"]
+EPSILON = 1e-9
+
+
+class RubricOutcome(BaseModel):
+    """A rubric's aggregate over one or more trials, plus its gate verdict."""
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    severity: str
+    maturity: str
+    judge: str
+    threshold: float | None = None
+    trials: int
+    counts: dict[str, int]
+    pass_rate: float | None = None
+    optimistic_rate: float | None = None
+    verdict: Verdict
+    would_be: Verdict | None = None
+    gold_downgraded: bool = False
+    reason: str = ""
+    failures: list[str] = Field(default_factory=list)
+
+
+class GateReport(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    conclusion: Conclusion
+    gold_approved: dict[str, bool]
+    trial_count: int
+    outcomes: list[RubricOutcome]
+    blockers: list[str]
+    reviews: list[str]
+
+
+def _tally(units: list[UnitResult]) -> dict[str, int]:
+    return {status: sum(u.status == status for u in units) for status in ("pass", "fail", "unresolved", "na")}
+
+
+def _rate(counts: dict[str, int], optimistic: bool = False) -> float | None:
+    denominator = counts["pass"] + counts["fail"] + counts["unresolved"]
+    if not denominator:
+        return None
+    return (counts["pass"] + (counts["unresolved"] if optimistic else 0)) / denominator
+
+
+def evaluate_rubric(rubric: Rubric, trials: list[list[UnitResult]], *, gold_approved: bool) -> RubricOutcome:
+    """Aggregate trials: veto needs every trial clean; gate compares the mean per-trial pass rate."""
+    per_trial = [_tally(units) for units in trials]
+    total = {key: sum(c[key] for c in per_trial) for key in ("pass", "fail", "unresolved", "na")}
+    base = dict(id=rubric.id, severity=rubric.severity, maturity=rubric.maturity, judge=rubric.judge,
+                threshold=rubric.threshold, trials=len(trials), counts=total)
+    failures = [f"{u.unit}: {u.reason}" if u.reason else u.unit for units in trials for u in units if u.status == "fail"][:20]
+    if not any(total.values()):
+        return RubricOutcome(**base, verdict="not_run", reason="no judged units (no judge or no data)")
+    rates = [r for r in (_rate(c) for c in per_trial) if r is not None]
+    if not rates:
+        return RubricOutcome(**base, verdict="na", reason="no applicable units")
+    optimistic = [_rate(c, True) for c in per_trial if _rate(c) is not None]
+    mean, best = sum(rates) / len(rates), sum(optimistic) / len(optimistic)
+    pooled = _rate(total)
+    reason = ""
+    if rubric.severity == "veto":
+        raw: Verdict = "block" if total["fail"] else "needs_review" if total["unresolved"] else "pass"
+        value = pooled
+        reason = {"block": f"{total['fail']} failing unit(s); veto needs every trial clean",
+                  "needs_review": f"{total['unresolved']} unresolved unit(s)", "pass": ""}[raw]
+    elif rubric.severity == "gate":
+        raw = "pass" if mean >= rubric.threshold - EPSILON else "needs_review" if best >= rubric.threshold - EPSILON else "block"
+        value = mean
+        reason = "" if raw == "pass" else f"mean pass rate {mean:.3f} < threshold {rubric.threshold}" + (
+            " (unresolved units could still reach it)" if raw == "needs_review" else "")
+    else:
+        raw, value = "report", pooled
+    outcome = dict(**base, pass_rate=value, optimistic_rate=best if rubric.severity == "gate" else None,
+                   failures=failures, reason=reason)
+    if rubric.maturity == "shadow" or rubric.severity == "monitor":
+        return RubricOutcome(**outcome, verdict="report", would_be=None if raw == "report" else raw)
+    if raw == "block" and rubric.depends_on_gold and not gold_approved:
+        return RubricOutcome(**outcome | {"reason": f"{reason}; gold is not approved, so the failure needs review"},
+                             verdict="needs_review", gold_downgraded=True)
+    return RubricOutcome(**outcome, verdict=raw)
+
+
+def evaluate_gate(rubrics: RubricSet, trials: list[dict[str, list[UnitResult]]], *,
+                  gold_approved: bool | dict[str, bool] = False, modules: list[str] | None = None) -> GateReport:
+    """Combine rubric outcomes: block > needs_review > pass. Shadow and monitor rubrics only report."""
+    if modules is None:
+        seen = {rubrics.module_of(rid) for trial in trials for rid in trial}
+        modules = [m for m in MODULE_PREFIXES if m in seen]
+    approvals = {m: (gold_approved if isinstance(gold_approved, bool) else gold_approved.get(m, False)) for m in modules}
+    outcomes: list[RubricOutcome] = []
+    for module in modules:
+        for rubric in rubrics.module(module):
+            outcomes.append(evaluate_rubric(rubric, [t[rubric.id] for t in trials if rubric.id in t],
+                                            gold_approved=approvals[module]))
+    blockers = [o.id for o in outcomes if o.verdict == "block"]
+    reviews = [o.id for o in outcomes if o.verdict == "needs_review"]
+    return GateReport(conclusion="block" if blockers else "needs_review" if reviews else "pass",
+                      gold_approved=approvals, trial_count=len(trials), outcomes=outcomes,
+                      blockers=blockers, reviews=reviews)
+
+
+def render_gate_markdown(report: GateReport) -> str:
+    def cell(text: str) -> str:
+        return text.replace("|", r"\|").replace("\n", " ")
+
+    lines = [f"# Rubric 门禁：{report.conclusion}", "",
+             f"trial 数：{report.trial_count}；gold 已批准：{report.gold_approved}。",
+             "block 来自 active 的 veto/gate；gold 未批准时依赖 gold 的失败降级为 needs_review；shadow 与 monitor 只报告。", "",
+             "| rubric | 判定方式 | 级别 | 状态 | 通过率 | 阈值 | 结论 | 说明 |", "|---|---|---|---|---|---|---|---|"]
+    for o in report.outcomes:
+        rate = "-" if o.pass_rate is None else f"{o.pass_rate:.3f}"
+        verdict = o.verdict if o.would_be is None else f"{o.verdict}（若 active：{o.would_be}）"
+        lines.append(f"| {o.id} | {o.judge} | {o.severity} | {o.maturity} | {rate} | "
+                     f"{'-' if o.threshold is None else o.threshold} | {verdict} | {cell(o.reason)} |")
+    failing = [o for o in report.outcomes if o.failures]
+    if failing:
+        lines += ["", "## 失败单元（每条 rubric 最多 20 个）", ""]
+        for o in failing:
+            lines += [f"### {o.id}", ""] + [f"- {cell(f)}" for f in o.failures] + [""]
+    return "\n".join(lines) + "\n"
