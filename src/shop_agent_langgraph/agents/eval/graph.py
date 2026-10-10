@@ -9,6 +9,7 @@ from langchain.agents.structured_output import ToolStrategy
 from langchain_core.language_models import BaseChatModel
 from ...core.llm import build_deepseek_model
 from ...domain.criteria import CriteriaAttributeSet
+from ...evaluation.rubric import render_schema_prompt
 from .schemas import Coverage, EvalMetrics, EvalReport, FieldScore, MatchingReport, SchemaReview
 from .tools import review_fields, source_references, validate_eval_report, validate_schema_review, validate_scope
 
@@ -30,7 +31,7 @@ class EvalAgent:
             system_prompt=PROMPT_PATH.read_text(encoding="utf-8"),
             response_format=ToolStrategy(MatchingReport), name="eval_matching_agent")
         self.review_graph = create_agent(model=model, tools=[],
-            system_prompt=PROMPT_PATH.with_name("schema_prompt.md").read_text(encoding="utf-8"),
+            system_prompt=render_schema_prompt(PROMPT_PATH.with_name("schema_prompt.md").read_text(encoding="utf-8")),
             response_format=ToolStrategy(SchemaReview), name="eval_schema_agent")
 
     @staticmethod

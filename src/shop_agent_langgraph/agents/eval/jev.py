@@ -8,18 +8,7 @@ from pathlib import Path
 from typesafe_sdk import AsyncTypeSafeClient, Choice, RetryPolicy
 
 from ...core.tracing import load_environment
-
-RULES = {
-    "kind": "The corresponding dimension must have the same criterion/attribute classification.",
-    "type": "The corresponding dimension must have the same numeric/boolean/categorical type.",
-    "units": "Units must describe the same physical quantity and be equivalent or convertible without changing schema semantics.",
-    "formula": "Formulas must have equivalent mathematical meaning and conditions, including unit conversions; null on both sides is correct.",
-    "direction": "Preference direction and its conditions must have equivalent meaning; reversed preferences are incorrect.",
-    "values": "Categorical values must preserve the same semantic set, ignoring synonyms and order. Missing or additional non-equivalent options are incorrect, even for open domains.",
-    "value_domain": "Open/closed domain semantics must agree.",
-    "aliases": "Aliases must refer to the same dimension; identical synonym coverage is not required.",
-}
-
+from ...evaluation.rubric import field_definitions, jev_instruction
 
 def deterministic_score(field, gold, actual):
     if field == "kind":
@@ -60,6 +49,7 @@ class JevJudge:
         factory = self.client_factory or (lambda: AsyncTypeSafeClient(
             model=self.model, timeout=45, retry=RetryPolicy(max_retries=1)))
         rubric = Path(__file__).with_name("jev_rules.md").read_text(encoding="utf-8")
+        definitions = field_definitions()
         async with factory() as client:
             for group in groups:
                 for ref, gold in group["gold"].items():
@@ -72,7 +62,7 @@ class JevJudge:
                                 candidate_score=known, baseline_score=baseline_scores[ref][field],
                                 status="determined"))
                         else:
-                            questions[field] = Choice(instructions=f"{rubric}\nJudge ONLY `{field}`. {RULES[field]}",
+                            questions[field] = Choice(instructions=jev_instruction(field, rubric, definitions),
                                 criteria={"correct": "The actual schema preserves this gold dimension's field semantics.",
                                           "incorrect": "The field is absent, incompatible, or changes this dimension's meaning.",
                                           "unclear": "The supplied state is insufficient or ambiguous for this judgment."})

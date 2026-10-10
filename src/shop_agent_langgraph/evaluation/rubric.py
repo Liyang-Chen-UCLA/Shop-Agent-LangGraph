@@ -282,3 +282,46 @@ def render_gate_markdown(report: GateReport) -> str:
         for o in failing:
             lines += [f"### {o.id}", ""] + [f"- {cell(f)}" for f in o.failures] + [""]
     return "\n".join(lines) + "\n"
+
+
+# --- Single source for schema-field wording ----------------------------------------------
+# The sub-field definitions of AG-3 (kind/type) and AG-5 (the rest) in aggregation.yaml are the
+# only place that words them. The LLM prompt, Jev instructions and the human review question
+# all render from here, so editing a definition changes all three together.
+
+SCHEMA_RUBRICS = ("AG-3", "AG-5")
+FIELD_PLACEHOLDER = "{{FIELD_DEFINITIONS}}"
+
+
+def _schema_fields(directory: str | Path | None = None) -> list[tuple[Rubric, RubricField]]:
+    rubrics = load_rubrics(directory)
+    pairs = [(rubrics.by_id[rid], f) for rid in SCHEMA_RUBRICS for f in rubrics.by_id[rid].fields]
+    names = [f.name for _, f in pairs]
+    if len(names) != len(set(names)):
+        raise ValueError("a schema field may be defined by only one of AG-3/AG-5")
+    return pairs
+
+
+def field_definitions(directory: str | Path | None = None) -> dict[str, str]:
+    return {f.name: f.definition for _, f in _schema_fields(directory)}
+
+
+def render_field_definitions(directory: str | Path | None = None) -> str:
+    return "\n".join(f"- {f.name}: {f.definition}" for _, f in _schema_fields(directory))
+
+
+def render_schema_prompt(template: str, directory: str | Path | None = None) -> str:
+    if template.count(FIELD_PLACEHOLDER) != 1:
+        raise ValueError(f"schema prompt must contain {FIELD_PLACEHOLDER} exactly once")
+    return template.replace(FIELD_PLACEHOLDER, render_field_definitions(directory))
+
+
+def jev_instruction(field: str, rules: str, definitions: dict[str, str]) -> str:
+    """Judge-specific framing around the shared definition."""
+    return f"{rules}\nJudge ONLY `{field}`. {definitions[field]}"
+
+
+def review_questions(directory: str | Path | None = None) -> dict[str, str]:
+    """Human annotation question per schema field: the rubric's template plus the shared definition."""
+    return {f.name: f"{rubric.review_question.replace('{field}', f.name)} Criterion: {f.definition}"
+            for rubric, f in _schema_fields(directory)}
