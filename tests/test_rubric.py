@@ -84,7 +84,9 @@ def test_gamepad_overlay_matches_gold_and_is_a_draft():
     gold = json.loads((ROOT / "eval/cases/gamepad/gold.json").read_text(encoding="utf-8"))
     gold_ids = {item["id"] for kind in ("criteria", "attributes") for item in gold[kind]}
     assert overlay.status == "draft_pending_human_review" and not overlay.approved
-    assert len(overlay.core_ids) == 20 and set(overlay.core_ids) <= gold_ids
+    assert len(overlay.core_ids) == 18 and set(overlay.core_ids) <= gold_ids
+    assert "input_latency" not in gold_ids
+    assert "transmission_latency" not in gold_ids
     assert "价格" in overlay.excluded_keywords and len(overlay.excluded_keywords) == 10
 
 

@@ -3,12 +3,10 @@
 status: draft_pending_human_review
 core_ids:
   - report_rate
-  - transmission_latency
   - button_lifetime
   - stick_lifetime
   - battery_runtime
   - charging_time
-  - input_latency
   - compatible_platform
   - connection_mode
   - stick_sensor

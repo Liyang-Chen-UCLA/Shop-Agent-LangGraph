@@ -31,7 +31,7 @@ def small_case():
 def test_real_case_freezes_nine_products_and_rejects_tampering(tmp_path):
     case = prepare_case(Path(__file__).resolve().parents[1] / "eval/cases/gamepad/gold.json")
     assert len(case["input"]["source_item_ids"]) == 9
-    assert len(validate_case(case).attributes) == 55
+    assert len(validate_case(case).attributes) == 56
     path = write_json(tmp_path / "case.json", case)
     assert load_case(path) == case
     case["input"]["product_contexts"][case["input"]["source_item_ids"][0]] += "修改"

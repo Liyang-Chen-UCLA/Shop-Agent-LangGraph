@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-10",
+  "scope": "partial human feedback; not whole-gold approval",
+  "items": [
+    {
+      "id": "input_latency",
+      "answer": "不能支持。需要有实际测量指标的才能落盘进入",
+      "decision": "remove_dimension_and_core_id",
+      "reason": "定性宣传不满足用户对数值标准的纳入要求。"
+    },
+    {
+      "id": "transmission_latency",
+      "answer": "看起来“回报率”是一个指标？",
+      "decision": "pending_clarification",
+      "reason": "这是指标识别问题，不是对0.5ms归类的批准。"
+    },
+    {
+      "id": "stick_resolution",
+      "item_id": "837987833992",
+      "answer": "能结合上下文消歧吗？不能就不记录这个标准",
+      "decision": "remove_ambiguous_product_evidence",
+      "reason": "邻页确认摇杆对象，但不能确定5400+的量纲/数量含义；其他商品明确证据不受影响。"
+    },
+    {
+      "id": "numeric_evidence_policy",
+      "answer": "允许明确的量化声明：指标含义和数值可核对；单位明确或可由上下文确定，注明厂商声明",
+      "decision": "allow_identifiable_manufacturer_quantified_claims"
+    },
+    {
+      "id": "transmission_latency",
+      "answer": "只确认回报率：保留2000Hz；0.5ms口径不够明确，移出传输延时证据",
+      "decision": "remove_dimension_and_core_id",
+      "reason": "移除歧义0.5ms后无明确量化传输延时证据；report_rate保留。"
+    },
+    {
+      "id": "body_dimensions",
+      "item_id": "855985116346",
+      "answer": "暂不裁决：需要查看尺寸原图",
+      "decision": "pending_image_review",
+      "image_path": "D:/Code/taobao-images/游戏手柄/855985116346/images/008.png",
+      "image_sha256": "4d902374349ab26004fbe27987b0a9beb563ba978b8a57ef5025cbb970ae2acd",
+      "ai_visual_reading": "横向125mm、纵向61.5mm、厚20.8mm；等待用户裁决，不作为已批准标签。"
+    },
+    {
+      "id": "body_dimensions",
+      "item_id": "855985116346",
+      "answer": "确认：按横向125mm、纵向61.5mm、厚20.8mm记录",
+      "decision": "confirm_q37_axes_from_original_image",
+      "axes_mm": {
+        "horizontal": 125,
+        "vertical": 61.5,
+        "thickness": 20.8
+      },
+      "image_path": "D:\\Code\\taobao-images\\游戏手柄\\855985116346\\images\\008.png",
+      "image_sha256": "4d902374349ab26004fbe27987b0a9beb563ba978b8a57ef5025cbb970ae2acd",
+      "date": "2026-10-10"
+    },
+    {
+      "id": "stick_sensor",
+      "answer": "TMR是啥？",
+      "decision": "pending_explanation_not_approval"
+    },
+    {
+      "id": "trigger_mode",
+      "answer": "拆开记录：一个标准描述扳机类型，另一个布尔标准描述快速扳机模式支持",
+      "decision": "split_type_and_rapid_mode",
+      "new_id": "rapid_trigger_support"
+    },
+    {
+      "id": "vibration_motor_type",
+      "answer": "拆开记录：马达类型保留音圈线性/纽扣；对称/非对称另设震动配置标准并保留平台条件",
+      "decision": "split_type_and_symmetry",
+      "new_id": "vibration_symmetry"
+    },
+    {
+      "id": "stick_sensor",
+      "item_id": "830675215338",
+      "answer": "磁阻",
+      "decision": "classify_as_magnetoresistive_unspecified_subtype",
+      "value": "磁阻"
+    },
+    {
+      "id": "remapping",
+      "answer": "分开记录键位映射和布局切换",
+      "decision": "separate_custom_mapping_from_preset_layout_switch"
+    },
+    {
+      "id": "configuration_software",
+      "answer": "你都没搞明白PC精英软件是不是一个标准，就讨论上时间有效期了？我觉得PC精英软件不算标准",
+      "decision": "remove_software_as_independent_dimension",
+      "interpretation": "软件名称不作为独立标准；对应的可比较功能保留各自维度，软件仅作为实现上下文。"
+    },
+    {
+      "id": "compatible_platform",
+      "item_id": "855985116346",
+      "answer": "X/S/P三档，“兼容平台”那不就是3个加起来？",
+      "decision": "union_platforms_across_modes_with_qualifiers",
+      "platforms_by_mode": {
+        "X": {
+          "raw_platforms": [
+            "PC",
+            "安卓",
+            "iOS"
+          ],
+          "qualifier": "原生游戏/模拟器"
+        },
+        "S": {
+          "raw_platforms": [
+            "Switch"
+          ]
+        },
+        "P": {
+          "raw_platforms": [
+            "PS4",
+            "PS5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "battery_runtime",
+      "item_id": "788146516430",
+      "answer": "只纳入可对应版本的值：保留8小时和电竞/机械款10–12小时，移出SKU未知的>10H证据",
+      "decision": "remove_runtime_with_unidentified_sku"
+    },
+    {
+      "id": "remaining_review",
+      "answer": "前面已经标注这么多了。后续的让我看到你的理解",
+      "decision": "delegate_policy_based_ai_review",
+      "reviewer": "Codex AI",
+      "human_approval": false
+    }
+  ],
+  "ai_policy_review": {
+    "date": "2026-10-10",
+    "reviewer": "Codex AI",
+    "delegating_message": "前面已经标注这么多了。后续的让我看到你的理解",
+    "rules": [
+      "先确定通用能力或物理量，再决定值与证据；商品、软件和品牌名称不是独立标准。",
+      "允许明确厂商量化声明；指标含义、数值和单位须可确定，未知含义不补猜。",
+      "模式支持取并集并保留条件；SKU数值分别记录，无法对应SKU的冲突数值不纳入。",
+      "硬件类型、功能支持、数量、配置分别记录；固定布局切换不证明自定义映射。",
+      "上位类别可以保留原文确定的范围，不强行细分；有电池不自动推出可充电。",
+      "布尔能力存在与具体档数分开；档数冲突不自动否定原文明确的能力存在。",
+      "有优劣方向且条件可比的量列criteria；配置、偏好和不能无条件排序的量列attributes。",
+      "AI按用户规则复审不等于用户逐项批准；保持global gold/overlay未批准。"
+    ]
+  }
+}

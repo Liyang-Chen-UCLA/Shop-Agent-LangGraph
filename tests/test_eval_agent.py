@@ -229,7 +229,7 @@ def test_gold_loader_strips_annotations_preserves_review_status_and_exports_repo
     root = Path(__file__).resolve().parents[1]
     gold, metadata = load_gold(root / "eval/cases/gamepad/gold.json")
     assert len(gold.source_item_ids) == 9
-    assert len(gold.criteria) == 7 and len(gold.attributes) == 55
+    assert len(gold.criteria) == 5 and len(gold.attributes) == 56
     assert metadata["status"] == "draft_pending_human_review"
     assert len(metadata["gold_sha256"]) == 64
     actual_path = tmp_path / "market.json"
