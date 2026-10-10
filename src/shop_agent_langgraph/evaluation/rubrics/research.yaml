@@ -21,7 +21,7 @@ rubrics:
     data_source: "ResearchResult.relevance；task.reference.relevance"
   - id: RS-3
     question: "evidence 的 value 与 unit 是否出现在其 source_text 中？"
-    pass: "非空的 value、unit 去空白、忽略大小写后均是 source_text 的子串。"
+    pass: "非空的 value、unit 去除所有空白后均是 source_text（同样去空白）的子串。"
     fail: "value 或 unit 不在 source_text 中。"
     judge: code
     severity: veto

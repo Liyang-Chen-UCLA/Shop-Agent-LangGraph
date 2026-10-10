@@ -15,6 +15,15 @@ MODULE_PREFIXES = {"e2e": "E2E", "intent": "INT", "route": "RT", "market_screeni
 ID_PATTERN = re.compile(r"^[A-Z0-9]+-\d+$")
 
 
+class UnitResult(BaseModel):
+    """Outcome of one checked unit (an evidence, a dimension, a tool call, a turn...)."""
+    model_config = ConfigDict(extra="forbid")
+
+    unit: str = Field(min_length=1)
+    status: Literal["pass", "fail", "unresolved", "na"]
+    reason: str = ""
+
+
 class RubricField(BaseModel):
     """One schema sub-field; its definition is the single source for every judge's wording."""
     model_config = ConfigDict(extra="forbid")
