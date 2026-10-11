@@ -69,3 +69,23 @@ uv run python scripts/market_evaluation.py compare --baseline <baseline目录>/m
 运行比较要求输入、gold、裁判模型及评估代码/提示词一致；输出 missing、extra、误分类、粒度错误及字段均值差异。没有预设总分权重或自动发布门槛。改变 gold 或裁判版本后，应在新版本上重跑 baseline 与 candidate。
 
 官方参考：[Jev](https://langfuse.com/docs/evaluation/evaluation-methods/jev-as-a-judge)、[Dataset experiments](https://langfuse.com/docs/evaluation/experiments/experiments-via-sdk)、[Annotation queues](https://langfuse.com/docs/evaluation/evaluation-methods/annotation-queues)、[Corrections](https://langfuse.com/docs/observability/features/corrections)。
+
+## 6. 失败聚类与归因
+
+先把 rubric 失败聚成根因簇，再在 Langfuse 里由人工判断每个簇该谁负责。打分问“这一项对不对”（`human_correct`），归因问“这类失败该谁负责”（`失败负责方`）。Hobby 套餐只允许一个标注队列，两类任务共用 `market-dimension-review`：按 `task_kind` 筛选，归因任务为 `cluster` / `unit`，observation 名称为“归因-失败簇”“归因-单个失败单元”；每个任务只填对应的那一个分数。队列里人工看到的分数名、选项、任务名和内容都用中文。API 不能修改已有队列的分数配置和描述，首次使用前需在 Langfuse 界面把 `失败负责方` 加到该队列。
+
+```powershell
+# 同一用例、同一 gold 版本的多个 run；输出 clusters.json（结构化）和由它渲染的 clusters.md
+uv run python scripts/market_evaluation.py cluster --runs <run目录1> <run目录2> --output .cache/eval/gamepad/clusters/<名字>
+# AI 初判与任务草稿：attribution-tasks.json 入队；ai-attribution.json 只留在本地
+uv run python scripts/market_evaluation.py attribute --clusters <目录>/clusters.json --output <目录>
+uv run python scripts/market_evaluation.py publish-attribution --tasks <目录>/attribution-tasks.json
+# 人工标完后：附上 AI初判负责方、统计人机一致率、为 gold/judge 簇生成打分队列草稿
+uv run python scripts/market_evaluation.py export-attribution --ai <目录>/ai-attribution.json --output <目录>/export
+```
+
+聚类：程序把失败单元按“rubric + 错误签名”分组，并把连带失败（漏维度导致的 AG-4、kind/type 错导致的字段缺失和 AG-5 推导分、合并组上的 AG-5）挂到根失败下；LLM 只负责跨组合并、拆分和写摘要。`cluster_id` 是簇中最大初始组的签名，只要签名规则不变，跨 run 保持稳定。单元引用为 `{run_dir, rubric_id, unit}`，`unit` 与 rubric 写法一致。聚类不做归因，摘要也不暗示负责方。
+
+归因：每个簇一个任务，AI 判为负责方不同的单元单独成任务。标签 `失败负责方`（CATEGORICAL）的选项为“Agent 行为错误 / 规则或检查器问题 / gold 有误 / 评测 LLM 判错 / 无法判断或需拆分”，在文件和代码中分别对应 `agent / rubric / gold / judge / unclear`，定义写在任务里。每个任务先给出规则说明和每个失败单元的白话失败原因。簇不纯时选“无法判断或需拆分”，在评论里用“拆:”列出单元。AI 初判不进入待审 observation 的 input、output 或 metadata，人工标完后由 `export-attribution` 以 `AI初判负责方` 分数附到同一 observation，供 Score Analytics 比较。
+
+衔接：只有人工标为“gold 有误”的簇生成 `gold_item` 草稿，标为“评测 LLM 判错”的簇生成 `schema_field`（AG-3/AG-5）或 `matching`（AG-1/2/4）草稿，写入 `followup-review-tasks.json`；确认后用 `publish-review` 发布。gold 仍只通过打分队列修改，打分队列不反向生成归因任务。

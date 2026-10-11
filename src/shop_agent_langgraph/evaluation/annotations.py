@@ -15,6 +15,9 @@ from .rubric import review_questions
 
 QUEUE_NAME = "market-dimension-review"
 SCORE_NAME = "human_correct"
+QUEUE_DESCRIPTION = ("固定商品集评测的人工标注队列，按 task_kind 筛选。打分任务（gold_item、gold_collection、matching、"
+                     "schema_field）只填 human_correct；归因任务（cluster、unit，名称以“归因-”开头）只填“失败负责方”。")
+SCORE_DESCRIPTION = "True 表示该题所问内容正确，False 表示错误；无法判断时不要标，保持待审。"
 REVIEW_VERSION = "v2"  # v2: schema-field questions render from rubrics/aggregation.yaml
 
 
@@ -68,31 +71,39 @@ def review_tasks(case, report: EvalReport | None = None):
     return tasks
 
 
-def ensure_queue():
-    configs = [c for c in all_items("score-configs", "list") if c["name"] == SCORE_NAME and not c.get("isArchived")]
-    if len(configs) > 1 or (configs and configs[0]["dataType"] != "BOOLEAN"):
-        raise ValueError("human_correct has ambiguous or incompatible score configs")
-    config = configs[0] if configs else api("score-configs", "create", body={
-        "name": SCORE_NAME, "dataType": "BOOLEAN", "description": "1 means the specific review question is correct; 0 means incorrect. Leave unresolved tasks pending."})
-    queues = [q for q in all_items("annotation-queues", "list") if q["name"] == QUEUE_NAME]
+def ensure_score_config(name, data_type, description, categories=None):
+    configs = [c for c in all_items("score-configs", "list") if c["name"] == name and not c.get("isArchived")]
+    if len(configs) > 1 or (configs and configs[0]["dataType"] != data_type):
+        raise ValueError(f"{name} has ambiguous or incompatible score configs")
+    if configs:
+        return configs[0]
+    body = {"name": name, "dataType": data_type, "description": description}
+    if categories:
+        body["categories"] = [{"label": label, "value": value} for value, label in enumerate(categories)]
+    return api("score-configs", "create", body=body)
+
+
+def ensure_queue(name=QUEUE_NAME, config=None, description=QUEUE_DESCRIPTION):
+    config = config or ensure_score_config(SCORE_NAME, "BOOLEAN", SCORE_DESCRIPTION)
+    queues = [q for q in all_items("annotation-queues", "list") if q["name"] == name]
     if len(queues) > 1:
         raise ValueError("review queue name is ambiguous")
     queue = queues[0] if queues else api("annotation-queues", "create", body={
-        "name": QUEUE_NAME, "scoreConfigIds": [config["id"]], "description": "Fixed-product gold, matching and schema field review. Filter by task_kind."})
+        "name": name, "scoreConfigIds": [config["id"]], "description": description})
     if config["id"] not in queue["scoreConfigIds"]:
         raise ValueError("existing review queue does not use the expected score config")
     return queue, config
 
 
-def publish_tasks(tasks, *, client, ledger_path):
-    queue, config = ensure_queue()
+def publish_tasks(tasks, *, client, ledger_path, queue=None):
+    queue, config = queue or ensure_queue()
     ledger_path = Path(ledger_path)
     ledger = json.loads(ledger_path.read_text(encoding="utf-8")) if ledger_path.exists() else {}
     existing = {item["objectId"] for item in all_items("annotation-queues", "list-items", queue["id"])}
     for task in tasks:
         entry = ledger.get(task["id"])
         if entry is None:
-            with client.start_as_current_observation(name=f"review-{task['task_kind']}", input=task["input"],
+            with client.start_as_current_observation(name=task.get("observation_name", f"review-{task['task_kind']}"), input=task["input"],
                     output=task["output"], metadata={**task["metadata"], "review_task_id": task["id"]}) as span:
                 entry = {"task": task, "trace_id": span.trace_id, "observation_id": span.id,
                          "queue_id": queue["id"], "config_id": config["id"]}
@@ -108,13 +119,13 @@ def publish_tasks(tasks, *, client, ledger_path):
     return ledger
 
 
-def collect_reviews(ledger):
+def collect_reviews(ledger, score_name=SCORE_NAME, data_type="BOOLEAN"):
     queue_ids = {entry["queue_id"] for entry in ledger.values()}
     if len(queue_ids) != 1:
         raise ValueError("review ledger must belong to one queue")
     queue_id = next(iter(queue_ids))
     completed = {item["objectId"] for item in all_items("annotation-queues", "list-items", queue_id, "--status", "COMPLETED")}
-    labels = all_items("scores", "list", "--queue-id", queue_id, "--name", SCORE_NAME,
+    labels = all_items("scores", "list", "--queue-id", queue_id, "--name", score_name,
                        "--source", "ANNOTATION", "--fields", "subject,details,annotation")
     by_subject = {}
     for score in labels:
@@ -129,14 +140,15 @@ def collect_reviews(ledger):
         if len(scores) != 1 or scores[0].get("configId") != entry["config_id"]:
             raise ValueError(f"task {task_id} needs exactly one human label under the expected config")
         score = scores[0]
-        if score["dataType"] != "BOOLEAN" or type(score["value"]) is not bool:
-            raise ValueError("human label must be BOOLEAN")
+        if score["dataType"] != data_type or (data_type == "BOOLEAN" and type(score["value"]) is not bool):
+            raise ValueError(f"human label must be {data_type}")
         corrections = all_items("scores", "list", "--trace-id", entry["trace_id"],
             "--observation-id", entry["observation_id"], "--data-type", "CORRECTION", "--fields", "subject,details,annotation")
         if len(corrections) > 1:
             raise ValueError("task has ambiguous corrections")
         correction = json.loads(corrections[0]["value"]) if corrections else None
-        reviews.append({**entry, "task_id": task_id, "human_score": int(score["value"]),
+        human = int(score["value"]) if data_type == "BOOLEAN" else score.get("stringValue", score["value"])
+        reviews.append({**entry, "task_id": task_id, "human_score": human,
                         "comment": score.get("comment", ""), "correction": correction,
                         "score_id": score["id"], "reviewer": score.get("authorUserId")})
     return reviews

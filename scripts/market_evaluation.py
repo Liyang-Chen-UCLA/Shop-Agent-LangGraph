@@ -10,6 +10,7 @@ import sys
 
 from shop_agent_langgraph.agents.eval.jev import JevJudge
 from shop_agent_langgraph.agents.eval.schemas import EvalReport
+from shop_agent_langgraph.core.llm import build_deepseek_model
 from shop_agent_langgraph.core.tracing import get_tracing_client, load_environment
 from shop_agent_langgraph.evaluation.annotations import attach_judge_scores, collect_reviews, export_candidates, publish_tasks, review_tasks
 from shop_agent_langgraph.evaluation.cases import load_case, prepare_case, write_json
@@ -17,6 +18,8 @@ from shop_agent_langgraph.evaluation.experiment import run_experiment
 from shop_agent_langgraph.evaluation.calibration import calibrate, compare_runs
 from shop_agent_langgraph.evaluation.rubric import render_gate_markdown
 from shop_agent_langgraph.evaluation.rubric_run import gate_runs
+from shop_agent_langgraph.evaluation.failure_clusters import cluster_failures, write_clusters
+from shop_agent_langgraph.evaluation import attribution
 from shop_agent_langgraph.evaluation.datasets import DATASET_NAME, case_from_dataset, dataset_draft, publish_dataset
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,6 +80,19 @@ def main():
     gate.add_argument("--overlay", type=Path, help="Gold-dependent rubric overlay (default: gamepad)")
     gate.add_argument("--output", type=Path, help="Also write gate.json and gate.md into this directory")
     gate.add_argument("--fail-on-review", action="store_true", help="Treat needs_review as a failure too")
+    cluster = sub.add_parser("cluster", help="Group rubric failures of saved runs into root-cause clusters for review")
+    cluster.add_argument("--runs", nargs="+", type=Path, required=True, help="Run directories of one case and gold version")
+    cluster.add_argument("--output", type=Path, required=True, help="Directory for clusters.json and clusters.md")
+    attribute = sub.add_parser("attribute", help="AI initial owners and attribution task drafts for a clustering result")
+    attribute.add_argument("--clusters", type=Path, required=True, help="clusters.json from the cluster command")
+    attribute.add_argument("--output", type=Path, required=True)
+    publish_attribution = sub.add_parser("publish-attribution")
+    publish_attribution.add_argument("--tasks", type=Path, required=True)
+    publish_attribution.add_argument("--ledger", type=Path, default=ROOT / ".cache/eval/gamepad/attribution-ledger.json")
+    export_attribution = sub.add_parser("export-attribution", help="Collect owners, attach ai_owner, draft scoring-queue follow-ups")
+    export_attribution.add_argument("--ledger", type=Path, default=ROOT / ".cache/eval/gamepad/attribution-ledger.json")
+    export_attribution.add_argument("--ai", type=Path, required=True, help="ai-attribution.json written by attribute")
+    export_attribution.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "prepare":
         case = prepare_case(args.gold)
@@ -148,6 +164,32 @@ def main():
         print(f"GATE: {report.conclusion}")
         if report.conclusion == "block" or (args.fail_on_review and report.conclusion == "needs_review"):
             sys.exit(1)
+    elif args.command == "cluster":
+        result = cluster_failures(args.runs, build_deepseek_model())
+        write_clusters(result, args.output)
+        print(f"{len(result['clusters'])} clusters from {len(result['groups'])} groups: {args.output / 'clusters.md'}")
+    elif args.command == "attribute":
+        result = json.loads(args.clusters.read_text(encoding="utf-8"))
+        tasks, ai = attribution.attribution_tasks(result, attribution.propose_owners(result, build_deepseek_model()))
+        write_json(args.output / "attribution-tasks.json", tasks)
+        write_json(args.output / "ai-attribution.json", ai)  # local only; attached after human review
+        print(f"Prepared {len(tasks)} attribution tasks: {args.output / 'attribution-tasks.json'}")
+    elif args.command == "publish-attribution":
+        tasks = json.loads(args.tasks.read_text(encoding="utf-8"))
+        ledger = publish_tasks(tasks, client=tracing_client(True), ledger_path=args.ledger,
+                               queue=attribution.ensure_attribution_queue())
+        print(f"Attribution ledger: {args.ledger}; tracked tasks: {len(ledger)}")
+    elif args.command == "export-attribution":
+        reviews = attribution.owner_codes(collect_reviews(json.loads(args.ledger.read_text(encoding="utf-8")),
+                                                          attribution.SCORE_NAME, "CATEGORICAL"))
+        ai = json.loads(args.ai.read_text(encoding="utf-8"))
+        attribution.attach_ai_scores(reviews, ai, tracing_client(True))
+        summary = attribution.summarize(reviews, ai)
+        followups = attribution.followup_tasks(reviews)
+        write_json(args.output / "attribution-export.json", summary)
+        write_json(args.output / "followup-review-tasks.json", followups)
+        print(f"Exported {summary['count']} attributions (agreement {summary['agreement']}); "
+              f"{len(followups)} scoring-queue drafts: {args.output / 'followup-review-tasks.json'}")
     else:
         write_json(args.output, compare_runs(args.baseline, args.candidate))
         print(args.output)
