@@ -1,7 +1,7 @@
 from __future__ import annotations
 from collections import Counter
 from ...domain.criteria import CriteriaAttributeSet
-from .schemas import MatchingReport, SchemaReview
+from .schemas import EvalGroup, MatchingReport, SchemaReview
 
 SCHEMA_FIELDS = {"type", "units", "formula", "direction", "values", "value_domain"}
 
@@ -30,14 +30,35 @@ def validate_scope(gold: CriteriaAttributeSet, actual: CriteriaAttributeSet):
         raise ValueError("gold and actual must use the same fixed product item IDs")
 
 
+def merge_shared_groups(report: MatchingReport) -> None:
+    """A ref listed in several match groups means those groups are one many-to-many group."""
+    merged: list[EvalGroup] = []
+    for group in report.match:
+        refs = set(group.gold_ids) | set(group.actual_ids)
+        overlapping = [g for g in merged if refs & (set(g.gold_ids) | set(g.actual_ids))]
+        for g in overlapping:
+            merged.remove(g)
+        parts = overlapping + [group]
+        merged.append(EvalGroup(gold_ids=list(dict.fromkeys(r for g in parts for r in g.gold_ids)),
+                                actual_ids=list(dict.fromkeys(r for g in parts for r in g.actual_ids)),
+                                reason=" / ".join(g.reason for g in parts)))
+    report.match = merged
+
+
 def validate_eval_report(report: MatchingReport, gold: CriteriaAttributeSet, actual: CriteriaAttributeSet):
+    merge_shared_groups(report)
     _, gold_refs, actual_refs = source_references(gold, actual)
     submitted = [ref for g in report.match for ref in g.gold_ids + g.actual_ids]
     submitted += [i.ref for i in report.missing + report.extra]
     counts = Counter(submitted)
     expected = gold_refs | actual_refs
     if set(counts) != expected or any(count != 1 for count in counts.values()):
-        raise ValueError("matching must cover every source exactly once without unknown IDs")
+        # Name the offending refs so the judge's single retry can repair a large report.
+        problems = {"omitted": sorted(expected - set(counts)),
+                    "repeated": sorted(ref for ref, count in counts.items() if count > 1 and ref in expected),
+                    "unknown": sorted(set(counts) - expected)}
+        detail = "; ".join(f"{name}: {', '.join(refs)}" for name, refs in problems.items() if refs)
+        raise ValueError(f"matching must cover every source exactly once without unknown IDs ({detail})")
     for group in report.match:
         if not set(group.gold_ids) <= gold_refs or not set(group.actual_ids) <= actual_refs:
             raise ValueError("match references are on the wrong side")

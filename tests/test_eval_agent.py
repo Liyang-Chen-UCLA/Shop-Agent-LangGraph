@@ -87,6 +87,27 @@ def test_two_stages_cover_both_sides_and_do_not_mutate_inputs(async_run):
     assert next(s.score for s in result.reviews[0].fields if s.field == "granularity") == 1
 
 
+def test_deterministic_fields_override_extra_judge_fields():
+    gold, actual = pair()
+    # The judge re-scores code-determined fields (and gets kind wrong); only aliases is its to answer.
+    model = model_for(matching(), {"items": [review(fields=("kind", "type", "units", "aliases"), failed=("kind",))]})
+    result = EvalAgent(model, use_deterministic_fields=True).invoke(gold, actual)
+    fields = {s.field: s for s in result.reviews[0].fields}
+    assert set(fields) == {"aliases", "kind", "type", "granularity"}
+    assert fields["kind"].score == 1 and fields["kind"].reason.startswith("Determined")
+    assert result.metrics.classification_error_count == 0
+    assert len(model.messages_seen) == 2
+
+
+def test_deterministic_review_still_requires_every_judge_field():
+    gold, actual = pair()
+    without_aliases = {"items": [review(fields=("kind", "type"))]}
+    model = RecordingModel(responses=[call("MatchingReport", matching()),
+                                      call("SchemaReview", without_aliases), call("SchemaReview", without_aliases)])
+    with pytest.raises(ValueError, match="gold:0.*aliases"):
+        EvalAgent(model, use_deterministic_fields=True).invoke(gold, actual)
+
+
 def test_merged_items_remain_matched_but_each_gold_item_loses_granularity():
     gold, actual = pair()
     actual = collection(attributes=[boolean("composite", "震动功能", "提供震动反馈并能调节震动强度")])
@@ -147,6 +168,32 @@ def test_matching_requires_exact_coverage_and_correct_sides(problem):
         validate_eval_report(MatchingReport.model_validate(payload), gold, actual)
 
 
+def test_groups_sharing_an_actual_item_merge_into_one_group():
+    gold, actual = pair()
+    payload = dict(match=[dict(gold_ids=["gold:0"], actual_ids=["actual:0"], reason="同为震动反馈"),
+                          dict(gold_ids=["gold:1"], actual_ids=["actual:0"], reason="同一维度含强度调节")],
+                   missing=[], extra=[dict(ref="actual:1", reason="gold没有RGB维度")])
+    report = MatchingReport.model_validate(payload)
+    validate_eval_report(report, gold, actual)
+    assert [(g.gold_ids, g.actual_ids) for g in report.match] == [(["gold:0", "gold:1"], ["actual:0"])]
+
+
+@pytest.mark.parametrize(("problem", "detail"), [("missing", "omitted: gold:1"),
+                                                  ("duplicate", "repeated: gold:1"),
+                                                  ("unknown", "unknown: actual:99")])
+def test_coverage_error_names_offending_refs(problem, detail):
+    gold, actual = pair()
+    payload = matching()
+    if problem == "missing":
+        payload["missing"] = []
+    elif problem == "duplicate":
+        payload["match"][0]["gold_ids"].append("gold:1")
+    else:
+        payload["extra"][0]["ref"] = "actual:99"
+    with pytest.raises(ValueError, match=detail):
+        validate_eval_report(MatchingReport.model_validate(payload), gold, actual)
+
+
 @pytest.mark.parametrize("score", [True, False, 0.5, -1, 2, "1"])
 def test_scores_must_be_binary_integers(score):
     with pytest.raises(ValidationError):
@@ -163,6 +210,9 @@ def test_invalid_matching_gets_one_bounded_correction():
     assert result.metrics.extra_count == 1
     assert model.position == 3
     assert any("rejected" in str(m.content) for m in model.messages_seen[1])
+    assert any("omitted: actual:1" in str(m.content) for m in model.messages_seen[1])
+    # A replayed tool call without its tool reply is rejected by the real API.
+    assert not any(getattr(m, "tool_calls", None) for m in model.messages_seen[1])
 
 
 @pytest.mark.parametrize("failure", ["incomplete", "duplicate_field", "kind_contradiction", "unknown_gold"])

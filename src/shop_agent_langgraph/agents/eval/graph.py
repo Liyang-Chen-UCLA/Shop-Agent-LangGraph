@@ -42,16 +42,18 @@ class EvalAgent:
                 state = graph.invoke({"messages": messages}, config={**(config or {}), "recursion_limit": 6})
             else:
                 state = await graph.ainvoke({"messages": messages}, config={**(config or {}), "recursion_limit": 6})
+            raw = state["structured_response"]
             try:
-                raw = state["structured_response"]
                 result = raw if isinstance(raw, schema) else schema.model_validate(raw)
                 validate(result)
                 return result
             except ValueError as error:
                 if attempt:
                     raise
-                messages = list(state["messages"])
-                messages.append({"role": "user", "content": f"Previous report rejected: {error}. Return a complete corrected report."})
+                # Replaying the tool-call history leaves unanswered tool_call IDs, which the API rejects.
+                previous = raw.model_dump_json() if isinstance(raw, schema) else json.dumps(raw, ensure_ascii=False, default=str)
+                messages = messages[:1] + [{"role": "user", "content": f"Your previous report: {previous}\n"
+                    f"It was rejected: {error}. Return a complete corrected report for the original input."}]
         raise AssertionError("unreachable")
 
     async def ainvoke(self, gold: CriteriaAttributeSet, actual: CriteriaAttributeSet) -> EvalReport:
@@ -87,13 +89,17 @@ class EvalAgent:
                     expected_refs = {r for g in matching_scope.match for r in g.gold_ids}
                     if {r.gold_ref for r in result.items} != expected_refs or len(result.items) != len(expected_refs):
                         raise ValueError(f"review must cover these gold_ref keys exactly once: {sorted(expected_refs)}; received: {[r.gold_ref for r in result.items]}")
+                    required = {item.gold_ref: set(review_fields(item.gold_ref,
+                        next(g for g in matching_scope.match if item.gold_ref in g.gold_ids), items)) - set(known[item.gold_ref])
+                        for item in result.items}
+                    wrong = {ref: sorted(fields) for ref, fields in required.items()
+                             if any([s.field for s in item.fields].count(f) != 1 for item in result.items
+                                    if item.gold_ref == ref for f in fields)}
+                    if wrong:
+                        raise ValueError(f"Return ALL gold refs {sorted(expected_refs)}. Score each listed field exactly once: {wrong}")
                     for item in result.items:
-                        expected_fields = set(review_fields(item.gold_ref,
-                            next(g for g in matching_scope.match if item.gold_ref in g.gold_ids), items)) - set(known[item.gold_ref])
-                        if {s.field for s in item.fields} != expected_fields or len(item.fields) != len(expected_fields):
-                            raise ValueError(f"Return ALL gold refs {sorted(expected_refs)}, not just the corrected item. "
-                                f"For {item.gold_ref} return only these fields: {sorted(expected_fields)}. "
-                                "For every other gold ref use its required_fields from the original payload.")
+                        # Code-determined scores win; fields outside required_fields are not applicable.
+                        item.fields = [s for s in item.fields if s.field in required[item.gold_ref]]
                         item.fields.extend(FieldScore(field=f, score=s,
                             reason="Determined from supplied classification/type or field presence") for f, s in known[item.gold_ref].items())
                 validate_schema_review(result, matching_scope, items)
