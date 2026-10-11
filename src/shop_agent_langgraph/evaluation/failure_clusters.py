@@ -1,9 +1,9 @@
 """Cluster rubric failures of saved runs into root causes for human review.
 
-1. normalize (code): failing units -> (run, rubric, object, field, signature); free-text
-   llm reasons are typed by the LLM from a fixed list; research units get text features.
-2. cascade (code): failures implied by an upstream failure on the same object are attached
-   to that root instead of being clustered.
+1. normalize (code): failing units -> (run, rubric, object, field, signature); research
+   units get text features.
+2. cascade (code): failures implied by an upstream failure (a merge, a kind/type error)
+   are attached to that root instead of being clustered.
 3. group (code): roots with the same rubric + signature form one initial group, across runs.
 4. merge/split (LLM): roots that one fix would remove together form a cluster with a
    hypothesis; coverage is checked by code.
@@ -16,27 +16,20 @@ import json
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Literal
 
 from pydantic import BaseModel, Field
 
 from .cases import write_json
-from .rubric import load_rubrics
-from .rubric_run import gate_runs
+from .rubric import load_rubrics, rubric_file_hashes
+from .rubric_run import load_runs
 
-ERROR_TYPES = ("单位选项缺失", "取值不完整", "取值命名不一致", "多个维度的值混在一起", "排序或方向错误", "公式错误", "其他")
-CLUSTER_VERSION = "v2"  # v2: stable signature-based cluster IDs and rubric-style unit references
-DERIVED_FROM_TYPE = "Determined from supplied classification/type or field presence"
-
-TYPING_PROMPT = """你在整理商品维度评测的失败原因。每条是裁判对某个维度某个字段写的英文理由。
-为每条选一个错误类型（只能从给定列表中选），并用一句中文概括具体错在哪。选"其他"时 note 必须说明为什么都不合适。
-错误类型：""" + "、".join(ERROR_TYPES)
+CLUSTER_VERSION = "v3"  # v3: MVP rubrics (AG-4 merged into AG-1; AG-2/AG-5/RS-4/RS-5 removed)
 
 CLUSTER_PROMPT = """你在为 Agent 评测的失败做根因聚类。输入是程序按"rubric + 错误签名"分好的初始组，每组带全部根失败单元和代表样例。
 连带失败已由程序挂到根失败下，不需要再处理。
 
 判断标准只有一条：如果只改一处，这些失败会不会一起消失？
-- 会一起消失：合并，即使跨 rubric（例如同一次维度合并同时造成核心维度缺失、粒度错误和取值混杂）。
+- 会一起消失：合并，即使跨 rubric（例如同一次维度合并同时造成核心维度未一对一匹配和 kind/type 不一致）。
 - 改法不同：拆开，即使签名相同。
 - 没有充分理由时保持程序分组不变。
 
@@ -49,16 +42,6 @@ CLUSTER_PROMPT = """你在为 Agent 评测的失败做根因聚类。输入是�
   不能暗示谁该负责：不写"按 gold 修正""补齐 gold"，也不写"Agent 错了""规则太严"。
 - evidence 列 1-3 个最能支撑假设的单元 ID，必须属于该聚类。
 - name 用简短中文。"""
-
-
-class TypedReason(BaseModel):
-    unit_id: str
-    error_type: Literal[ERROR_TYPES]
-    note: str
-
-
-class ReasonTyping(BaseModel):
-    items: list[TypedReason]
 
 
 class ProposedCluster(BaseModel):
@@ -82,7 +65,7 @@ TEMPLATES = [
      lambda m, f: "多个 gold 合并为 1 个输出" if int(m[1]) > 1 else "1 个 gold 拆成多个输出"),
     (re.compile(r"excluded keywords"), lambda m, f: "输出含排除类关键词"),
     (re.compile(r"\[(.*)\] not found in source_text"), lambda m, f: f"{m[1].replace(chr(39), '')} 不在引文中"),
-    (re.compile(re.escape(DERIVED_FROM_TYPE)), lambda m, f: f"{f}: 由 kind/type 推导"),
+    (re.compile(r"core dimension is missing"), lambda m, f: "核心维度缺失"),
 ]
 
 
@@ -122,7 +105,7 @@ def research_feature(rubric: str, evidence: dict) -> str:
 
 
 def load_units(run_dirs: list[Path]) -> tuple[list[dict], list[dict]]:
-    _, runs = gate_runs(run_dirs)
+    runs = load_runs(run_dirs)
     units, contexts = [], []
     for index, (run_dir, run) in enumerate(zip(run_dirs, runs)):
         run_dir = Path(run_dir)
@@ -157,20 +140,6 @@ def load_units(run_dirs: list[Path]) -> tuple[list[dict], list[dict]]:
     return units, contexts
 
 
-def type_free_text(units: list[dict], model) -> None:
-    """LLM picks an error type for llm-written reasons that no template covers."""
-    pending = [u for u in units if template(u["reason"], u["field"]) is None and u["rubric"] in ("AG-5", "RS-4", "RS-5")]
-    if not pending:
-        return
-    payload = [dict(unit_id=u["id"], field=u["field"], reason=u["reason"]) for u in pending]
-    typed = structured(model, ReasonTyping, TYPING_PROMPT, payload)
-    by_id = {t.unit_id: t for t in typed.items}
-    for u in pending:
-        if t := by_id.get(u["id"]):
-            u["signature"] = f"{u['field']}: {t.error_type}"
-            u["note"] = t.note
-
-
 # --- 2. cascade ----------------------------------------------------------------------
 
 def gold_groups(report: dict | None) -> dict[str, set[str]]:
@@ -187,28 +156,24 @@ def gold_groups(report: dict | None) -> dict[str, set[str]]:
 
 
 def attach_cascades(units: list[dict], contexts: list[dict]) -> None:
+    """AG-3 failures on a dimension merged into one output hang off that AG-1 merge; field-presence
+    failures hang off the same dimension's kind/type failure."""
     for index, context in enumerate(contexts):
         run = [u for u in units if u["run"] == index]
-        missing = {u["object"]: u for u in run if u["rubric"] in ("AG-1", "AG-2")}
-        ag3 = defaultdict(list)
+        kind_type = {}
         for u in run:
-            if u["rubric"] == "AG-3":
-                ag3[u["object"]].append(u)
-        kind_type = {obj: next((u for u in us if u["field"] in ("kind", "type")), None) for obj, us in ag3.items()}
-        merges = {u["object"]: u for u in run if u["rubric"] == "AG-4" and u["signature"].startswith("多个 gold")}
+            if u["rubric"] == "AG-3" and u["field"] in ("kind", "type"):
+                kind_type.setdefault(u["object"], u)
+        merges = {u["object"]: u for u in run if u["rubric"] == "AG-1" and u["signature"].startswith("多个 gold")}
         groups = gold_groups(context["report"])
         merged_into = {member: root for obj, root in merges.items() for member in groups.get(obj, {obj})}
         for u in run:
-            obj = u["object"]
-            if u["rubric"] == "AG-4" and obj in missing:
-                u["root"] = missing[obj]["id"]
-            elif u["rubric"] == "AG-3" and u["field"] not in ("kind", "type") and kind_type.get(obj):
-                u["root"] = kind_type[obj]["id"]
-            elif u["rubric"] == "AG-5" and u["reason"] == DERIVED_FROM_TYPE and obj in ag3:
-                same_field = next((x for x in ag3[obj] if x["field"] == u["field"]), None)
-                u["root"] = (kind_type[obj] or same_field or ag3[obj][0])["id"]
-            elif u["rubric"] == "AG-5" and obj in merged_into:
-                u["root"] = merged_into[obj]["id"]
+            if u["rubric"] != "AG-3":
+                continue
+            if u["object"] in merged_into:
+                u["root"] = merged_into[u["object"]]["id"]
+            elif u["field"] not in ("kind", "type") and u["object"] in kind_type:
+                u["root"] = kind_type[u["object"]]["id"]
     by_id = {u["id"]: u for u in units}
     for u in units:  # point every derived unit at its ultimate root
         while u["root"] and by_id[u["root"]]["root"]:
@@ -349,7 +314,7 @@ def build_clusters(proposal: ClusterProposal, groups: list[dict], units: list[di
             derived_units=[by_id[d]["ref"] for u in roots for d in derived[u]],
             item_ids=sorted({u["object"] for u in research}),
             dimension_ids=sorted({by_id[u]["object"] for u in roots if not by_id[u]["rubric"].startswith("RS-")}),
-            examples=[dict(unit=by_id[e]["ref"], reason=by_id[e].get("note") or by_id[e]["reason"],
+            examples=[dict(unit=by_id[e]["ref"], reason=by_id[e]["reason"],
                            **sample_context(by_id[e], contexts))
                       for e in [e for e in c.evidence if e in roots] or roots[:1]]))  # examples only illustrate
     return clusters
@@ -358,7 +323,6 @@ def build_clusters(proposal: ClusterProposal, groups: list[dict], units: list[di
 def cluster_failures(run_dirs: list[str | Path], model) -> dict:
     run_dirs = [Path(d) for d in run_dirs]
     units, contexts = load_units(run_dirs)
-    type_free_text(units, model)
     attach_cascades(units, contexts)
     groups = initial_groups(units)
     if groups:
@@ -366,7 +330,7 @@ def cluster_failures(run_dirs: list[str | Path], model) -> dict:
                               check=lambda p: check_proposal(p, groups))
     else:
         proposal = ClusterProposal(clusters=[])
-    return {"version": CLUSTER_VERSION, "runs": [dict(run_dir=c["run_dir"], trace_id=c["trace_id"],
+    return {"version": CLUSTER_VERSION, "rubric_hashes": rubric_file_hashes(), "runs": [dict(run_dir=c["run_dir"], trace_id=c["trace_id"],
                                                       experiment_url=c["experiment_url"]) for c in contexts],
             "groups": groups, "clusters": build_clusters(proposal, groups, units, contexts), "units": units}
 

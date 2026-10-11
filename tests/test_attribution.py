@@ -16,21 +16,21 @@ def clustered(tmp_path):
     run = replay(tmp_path, "run")
     rubric = json.loads((run / "rubric.json").read_text(encoding="utf-8"))
     rubric["trial"]["AG-6"].append({"unit": "delivery/warranty", "status": "fail", "reason": "excluded keywords: ['质保']"})
-    rubric["trial"]["AG-5"].append({"unit": "delivery/runtime.units", "status": "fail",
-                                    "reason": "Gold allows hours and minutes; actual only hours"})
+    rubric["trial"]["AG-3"].append({"unit": "delivery/runtime.units", "status": "fail",
+                                    "reason": "field exists on gold only"})
     (run / "rubric.json").write_text(json.dumps(rubric, ensure_ascii=False), encoding="utf-8")
     return fc.cluster_failures([run], FakeModel())
 
 
 class OwnerModel:
-    """Owns the cluster as agent and marks the injected AG-5 unit as a gold exception."""
+    """Owns the cluster as agent and marks the injected AG-3 unit as a gold exception."""
 
     def with_structured_output(self, schema, method):
         class Bound:
             def invoke(self, messages):
                 payload = json.loads(messages[1]["content"])
                 assert "ai_owner" not in json.dumps(payload)
-                key = next(k for k, u in payload["units"].items() if u["rubric"] == "AG-5")
+                key = next(k for k, u in payload["units"].items() if u["rubric"] == "AG-3")
                 return schema(ai_owner="agent", reason=AI_REASON,
                               exceptions=[dict(unit=key, ai_owner="gold", reason="gold 单位不全")])
         return Bound()
@@ -54,7 +54,7 @@ def test_tasks_split_exceptions_and_hide_ai_owner(clustered):
     assert {"单元", "失败原因"} <= set(example) and all(not k.isascii() or k == "gold 维度" for k in example if k != "单元")
     assert set(tasks[0]["output"]) == {"涉及规则", "涉及商品", "涉及维度", "失败单元"}
     [why] = tasks[1]["input"]["为什么判为失败"]
-    assert "units" in why["说明"] and why["检查器原始理由"].startswith("Gold allows")
+    assert "units" in why["说明"] and why["检查器原始理由"].startswith("field exists")
     assert [t["id"] for t in at.attribution_tasks(clustered, owners)[0]] == [t["id"] for t in tasks]   # stable
 
 
@@ -145,8 +145,8 @@ def test_rules_and_failures_are_explained_in_plain_words():
     from shop_agent_langgraph.evaluation.rubric import load_overlay, load_rubrics
     from shop_agent_langgraph.evaluation.rubric_run import DEFAULT_OVERLAY
     rule = at.rule_explanation("AG-6", load_rubrics(), load_overlay(DEFAULT_OVERLAY))
-    assert "质保" in rule["排除关键词"] and rule["级别"].startswith("一票否决") and rule["是否依赖 gold"].startswith("否")
-    assert "0.95" in at.rule_explanation("AG-3", load_rubrics(), load_overlay(DEFAULT_OVERLAY))["级别"]
+    assert "质保" in rule["排除关键词"] and list(rule) == ["规则", "通过条件", "失败条件", "数据来源", "排除关键词"]
+    assert "report_rate" in at.rule_explanation("AG-1", load_rubrics(), load_overlay(DEFAULT_OVERLAY))["核心维度"]
 
     def explain(rubric, unit, reason, **extra):
         obj, field = fc.split_unit(rubric, unit)
@@ -156,8 +156,8 @@ def test_rules_and_failures_are_explained_in_plain_words():
     assert "「质保时长」" in explain("AG-6", "delivery/warranty", "excluded keywords: ['质保']", name="质保时长")
     kind = explain("AG-3", "delivery/bt.kind", "gold is attribute, actual is ['criterion']")
     assert "attributes（分类属性" in kind and "criteria（质量标准" in kind
-    assert "合并成了一个" in explain("AG-4", "delivery/motor", "3 gold to 1 actual")
-    assert "拆成了多个" in explain("AG-4", "delivery/conn", "1 gold to 2 actual")
-    assert "只做监控" in explain("AG-2", "delivery/x", "dimension is missing from Market")
+    assert "合并成了一个" in explain("AG-1", "delivery/motor", "3 gold to 1 actual")
+    assert "拆成了多个" in explain("AG-1", "delivery/conn", "1 gold to 2 actual")
+    assert "核心维度必须全部出现" in explain("AG-1", "delivery/x", "core dimension is missing from Market")
     assert "冻结原文里找不到" in explain("RS-1", "p1/e3", "source_text must be a substring of the product text")
-    assert "单位只给了小时" in explain("AG-5", "delivery/t.units", "Gold allows hours", note="单位只给了小时")
+    assert "只在gold里有" in explain("AG-3", "delivery/t.units", "field exists on gold only")

@@ -1,110 +1,23 @@
 module: aggregation
-version: 1
+version: 2
 rubrics:
   - id: AG-1
-    question: "核心维度是否全部被 match？"
-    pass: "overlay.core_ids 中的每个 gold 维度都出现在某个 match 组中。"
-    fail: "任一核心维度被判为 missing。"
-    judge: code
-    severity: gate
-    threshold: 1.0
-    maturity: active
-    depends_on_gold: true
-    data_source: "EvalReport.match / missing；overlay.core_ids"
-  - id: AG-2
-    question: "非核心维度的覆盖率是多少？"
-    pass: "非核心 gold 维度出现在某个 match 组中。"
-    fail: "非核心 gold 维度被判为 missing（仅监控）。"
-    judge: code
-    severity: monitor
-    maturity: active
-    depends_on_gold: true
+    question: "核心维度是否全部一对一匹配？"
+    pass: "overlay.core_ids 中的每个 gold 维度所在 match 组恰为 1 个 gold 对 1 个 actual。"
+    fail: "核心维度被判为 missing，或属于合并（多个 gold 对 1 个 actual）/拆分（1 个 gold 对多个 actual）组。"
     data_source: "EvalReport.match / missing；overlay.core_ids"
   - id: AG-3
     question: "已匹配维度的 kind、type 与字段存在性是否正确？"
     pass: "单一 kind/type 的匹配与 gold 一致；units/formula/direction/values/value_domain 在 gold 与 actual 两侧的存在性一致（由 deterministic_score 判定）。"
     fail: "kind 或 type 与 gold 不同，或某字段只在一侧存在。混合 kind/type 的合并组无法由代码判定，记为 unresolved。"
-    judge: code
-    severity: gate
-    threshold: 0.95
-    maturity: active
-    depends_on_gold: true
     data_source: "EvalReport.items / match；agents.eval.jev.deterministic_score"
-    review_question: "Does the actual representation preserve the gold dimension's `{field}` semantics? Score the field itself, not agreement with an automatic judge."
-    fields:
-      - name: kind
-        definition: >-
-          Is the gold dimension represented as the correct criterion or attribute?
-          A uniform actual kind must agree with gold. For mixed-kind groups identify the
-          actual representation of this dimension using its name/description.
-      - name: type
-        definition: >-
-          Numeric, boolean and categorical meanings must agree. Combining dimensions
-          with incompatible types does not preserve a correct type.
-  - id: AG-4
-    question: "核心维度是否一对一匹配？"
-    pass: "每个核心 gold 维度所在 match 组恰为 1 个 gold 对 1 个 actual（granularity=1）。"
-    fail: "核心维度未匹配，或属于合并/拆分组。"
-    judge: code
-    severity: gate
-    threshold: 1.0
-    maturity: active
-    depends_on_gold: true
-    data_source: "EvalReport.match；overlay.core_ids"
-  - id: AG-5
-    question: "units、direction、values、formula、value_domain 的语义是否正确？"
-    pass: "现有 LLM 裁判对适用字段给出 1。"
-    fail: "裁判给出 0（缺失、不支持、语义不同或无法判定）。"
-    judge: llm
-    severity: gate
-    threshold: 0.9
-    maturity: shadow
-    depends_on_gold: true
-    data_source: "EvalReport.reviews 的字段分"
-    review_question: "Does the actual representation preserve the gold dimension's `{field}` semantics? Score the field itself, not agreement with an automatic judge."
-    fields:
-      - name: units
-        definition: >-
-          Equivalent or convertible units pass for the same quantity when conversion
-          preserves schema semantics. Unrelated, unsupported or missing required units fail.
-          Order and harmless format differences do not matter.
-      - name: formula
-        definition: >-
-          Compare mathematical meaning and conditions, not string spelling.
-          null on both sides passes. Missing/extra formulas changing meaning fail.
-      - name: direction
-        definition: >-
-          Compare preference semantics and conditions. Reversed direction,
-          unsupported preferred values/order, or missing required direction fails.
-      - name: values
-        definition: >-
-          Compare semantic coverage independently of order, wording and synonyms.
-          Missing options or added non-equivalent options fail. An open domain allows
-          future values; it does not erase differences in the current set.
-      - name: value_domain
-        definition: >-
-          Open and closed have distinct semantics and must agree.
-      - name: aliases
-        auxiliary: true
-        definition: >-
-          Judge synonym correctness, not identical list coverage. Empty/different
-          synonym lists are acceptable; aliases naming a different dimension fail.
-          This auxiliary field is excluded from main schema metrics.
   - id: AG-6
     question: "输出维度是否不含排除类别？"
     pass: "每个输出维度的名称与别名都不含 overlay.excluded_keywords 中的关键词。"
     fail: "出现价格、质保、销量等排除类别的维度。"
-    judge: code
-    severity: veto
-    maturity: active
-    depends_on_gold: false
     data_source: "actual criteria / attributes 的 name 与 aliases；overlay.excluded_keywords"
   - id: AG-7
     question: "输出 ID 是否唯一，且 source_item_ids 等于输入？"
     pass: "criteria 与 attributes 的 ID 全部唯一，source_item_ids 与输入商品 ID 列表完全相同。"
     fail: "ID 重复，或 source_item_ids 与输入不同。"
-    judge: code
-    severity: veto
-    maturity: active
-    depends_on_gold: false
     data_source: "actual CriteriaAttributeSet；输入商品 ID"

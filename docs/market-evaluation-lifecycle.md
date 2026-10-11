@@ -84,8 +84,8 @@ uv run python scripts/market_evaluation.py publish-attribution --tasks <目录>/
 uv run python scripts/market_evaluation.py export-attribution --ai <目录>/ai-attribution.json --output <目录>/export
 ```
 
-聚类：程序把失败单元按“rubric + 错误签名”分组，并把连带失败（漏维度导致的 AG-4、kind/type 错导致的字段缺失和 AG-5 推导分、合并组上的 AG-5）挂到根失败下；LLM 只负责跨组合并、拆分和写摘要。`cluster_id` 是簇中最大初始组的签名，只要签名规则不变，跨 run 保持稳定。单元引用为 `{run_dir, rubric_id, unit}`，`unit` 与 rubric 写法一致。聚类不做归因，摘要也不暗示负责方。
+聚类：程序把失败单元按“rubric + 错误签名”分组，并把连带失败（合并组上的 AG-3 挂到 AG-1 的合并失败下，字段存在性失败挂到同一维度的 kind/type 失败下）挂到根失败下；LLM 只负责跨组合并、拆分和写摘要。`cluster_id` 是簇中最大初始组的签名，只要签名规则不变，跨 run 保持稳定。单元引用为 `{run_dir, rubric_id, unit}`，`unit` 与 rubric 写法一致。聚类不做归因，摘要也不暗示负责方。
 
 归因：每个簇一个任务，AI 判为负责方不同的单元单独成任务。标签 `失败负责方`（CATEGORICAL）的选项为“Agent 行为错误 / 规则或检查器问题 / gold 有误 / 评测 LLM 判错 / 无法判断或需拆分”，在文件和代码中分别对应 `agent / rubric / gold / judge / unclear`，定义写在任务里。每个任务先给出规则说明和每个失败单元的白话失败原因。簇不纯时选“无法判断或需拆分”，在评论里用“拆:”列出单元。AI 初判不进入待审 observation 的 input、output 或 metadata，人工标完后由 `export-attribution` 以 `AI初判负责方` 分数附到同一 observation，供 Score Analytics 比较。
 
-衔接：只有人工标为“gold 有误”的簇生成 `gold_item` 草稿，标为“评测 LLM 判错”的簇生成 `schema_field`（AG-3/AG-5）或 `matching`（AG-1/2/4）草稿，写入 `followup-review-tasks.json`；确认后用 `publish-review` 发布。gold 仍只通过打分队列修改，打分队列不反向生成归因任务。
+衔接：只有人工标为“gold 有误”的簇生成 `gold_item` 草稿，标为“评测 LLM 判错”的簇生成 `schema_field`（AG-3）或 `matching`（AG-1）草稿，写入 `followup-review-tasks.json`；确认后用 `publish-review` 发布。gold 仍只通过打分队列修改，打分队列不反向生成归因任务。

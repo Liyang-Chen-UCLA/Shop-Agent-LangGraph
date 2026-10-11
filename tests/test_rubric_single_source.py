@@ -1,6 +1,5 @@
 import asyncio
 import json
-import shutil
 
 import httpx2
 import pytest
@@ -75,15 +74,12 @@ def test_prompt_jev_and_human_wording_all_render_from_the_yaml():
 def test_editing_a_yaml_definition_changes_prompt_jev_and_human_question_together(tmp_path, monkeypatch):
     before = (llm_prompt()[0], jev_instructions()["direction"], human_questions()["direction"])
     task_ids_before = {t["id"] for t in annotations.review_tasks(small_case(), llm_prompt()[1]) if t["field"] == "direction"}
-    edited = tmp_path / "rubrics"
-    shutil.copytree(rb.RUBRIC_DIR, edited)
-    path = edited / "aggregation.yaml"
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    ag5 = next(r for r in data["rubrics"] if r["id"] == "AG-5")
+    path = tmp_path / "schema_fields.yaml"
+    data = yaml.safe_load(rb.SCHEMA_FIELDS_PATH.read_text(encoding="utf-8"))
     new = "ZZ-NEW direction wording: compare preference semantics only."
-    next(f for f in ag5["fields"] if f["name"] == "direction")["definition"] = new
+    next(f for f in data["fields"] if f["name"] == "direction")["definition"] = new
     path.write_text(yaml.safe_dump(data, allow_unicode=True), encoding="utf-8")
-    monkeypatch.setattr(rb, "RUBRIC_DIR", edited)
+    monkeypatch.setattr(rb, "SCHEMA_FIELDS_PATH", path)
     after = (llm_prompt()[0], jev_instructions()["direction"], human_questions()["direction"])
     for old, changed in zip(before, after):
         assert new not in old and new in changed
@@ -100,13 +96,10 @@ def test_prompt_template_needs_exactly_one_placeholder():
         rb.render_schema_prompt("{{FIELD_DEFINITIONS}} {{FIELD_DEFINITIONS}}")
 
 
-def test_a_field_cannot_be_defined_in_both_schema_rubrics(tmp_path):
-    edited = tmp_path / "rubrics"
-    shutil.copytree(rb.RUBRIC_DIR, edited)
-    path = edited / "aggregation.yaml"
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    ag3 = next(r for r in data["rubrics"] if r["id"] == "AG-3")
-    ag3["fields"].append({"name": "units", "definition": "duplicate"})
+def test_a_field_cannot_be_defined_twice(tmp_path):
+    path = tmp_path / "schema_fields.yaml"
+    data = yaml.safe_load(rb.SCHEMA_FIELDS_PATH.read_text(encoding="utf-8"))
+    data["fields"].append({"name": "units", "definition": "duplicate"})
     path.write_text(yaml.safe_dump(data, allow_unicode=True), encoding="utf-8")
-    with pytest.raises(ValueError, match="only one of AG-3/AG-5"):
-        rb.field_definitions(edited)
+    with pytest.raises(ValueError, match="duplicate field definitions"):
+        rb.field_definitions(path)

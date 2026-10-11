@@ -1,4 +1,4 @@
-"""Compute, persist and gate rubric results for saved fixed-product experiment runs."""
+"""Compute and persist rubric pass rates for saved fixed-product experiment runs."""
 from __future__ import annotations
 
 import json
@@ -8,17 +8,12 @@ from langfuse import Evaluation
 
 from ..agents.eval.schemas import EvalReport
 from .cases import write_json
-from .rubric import (GateReport, GoldOverlay, RubricSet, UnitResult, evaluate_gate, load_overlay, load_rubrics,
-                     render_gate_markdown, rubric_file_hashes)
+from .rubric import (GoldOverlay, RubricOutcome, RubricSet, UnitResult, load_overlay, load_rubrics, render_markdown,
+                     rubric_file_hashes, summarize)
 from .rubric_checks import CheckContext, run_module
 
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_OVERLAY = ROOT / "eval/cases/gamepad/rubric.yaml"
-RUN_MODULES = ("research", "aggregation")
-
-
-def gold_approved(case: dict, overlay: GoldOverlay) -> bool:
-    return case["metadata"].get("status") == "approved" and overlay.approved
 
 
 def compute_trial(case: dict, output: dict, report: EvalReport | dict | None, overlay: GoldOverlay,
@@ -46,30 +41,26 @@ def compute_trial(case: dict, output: dict, report: EvalReport | dict | None, ov
 
 
 def write_rubric_artifacts(directory: str | Path, trial: dict[str, list[UnitResult]], case: dict,
-                           overlay: GoldOverlay, rubrics: RubricSet | None = None) -> GateReport:
+                           overlay: GoldOverlay, rubrics: RubricSet | None = None) -> list[RubricOutcome]:
     rubrics = rubrics or load_rubrics()
-    approved = gold_approved(case, overlay)
-    report = evaluate_gate(rubrics, [trial], gold_approved=approved, modules=list(RUN_MODULES))
+    outcomes = summarize(rubrics, trial)
     directory = Path(directory)
     write_json(directory / "rubric.json", {
         "rubric_hashes": rubric_file_hashes(), "input_sha256": case["metadata"]["input_sha256"],
-        "overlay_status": overlay.status, "gold_approved": approved,
+        "overlay_status": overlay.status,
         "trial": {rid: [u.model_dump(mode="json") for u in units] for rid, units in trial.items()},
-        "gate": report.model_dump(mode="json")})
-    (directory / "rubric.md").write_text(render_gate_markdown(report), encoding="utf-8")
-    return report
+        "summary": [o.model_dump(mode="json") for o in outcomes]})
+    (directory / "rubric.md").write_text(render_markdown(outcomes, rubrics), encoding="utf-8")
+    return outcomes
 
 
-def rubric_scores(report: GateReport) -> list[Evaluation]:
-    scores = [Evaluation(name=f"rubric.{o.id}", value=float(o.pass_rate), data_type="NUMERIC", comment=o.verdict)
-              for o in report.outcomes if o.pass_rate is not None]
-    scores.append(Evaluation(name="rubric.gate", value=report.conclusion, data_type="CATEGORICAL",
-                             comment=f"blockers={report.blockers}; needs_review={report.reviews}"))
-    return scores
+def rubric_scores(outcomes: list[RubricOutcome]) -> list[Evaluation]:
+    return [Evaluation(name=f"rubric.{o.id}", value=float(o.pass_rate), data_type="NUMERIC")
+            for o in outcomes if o.pass_rate is not None]
 
 
 def load_run_trial(run_dir: str | Path, overlay: GoldOverlay, rubrics: RubricSet) -> dict:
-    """Read a run's saved rubric trial, or recompute it from market.json/report.json/case.json."""
+    """Read a run's saved rubric trial, or recompute it when missing or scored with other rubric files."""
     run_dir = Path(run_dir)
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8")) if (run_dir / "manifest.json").exists() else {}
     if manifest and manifest.get("status") != "completed":
@@ -78,27 +69,22 @@ def load_run_trial(run_dir: str | Path, overlay: GoldOverlay, rubrics: RubricSet
     saved = run_dir / "rubric.json"
     if saved.exists():
         data = json.loads(saved.read_text(encoding="utf-8"))
-        trial = {rid: [UnitResult.model_validate(u) for u in units] for rid, units in data["trial"].items()}
-        return dict(trial=trial, case=case, hashes=data["rubric_hashes"], source="rubric.json")
+        if data["rubric_hashes"] == rubric_file_hashes():
+            trial = {rid: [UnitResult.model_validate(u) for u in units] for rid, units in data["trial"].items()}
+            return dict(trial=trial, case=case, source="rubric.json")
     output = json.loads((run_dir / "market.json").read_text(encoding="utf-8"))
     report_path = run_dir / "report.json"
     report = EvalReport.model_validate_json(report_path.read_text(encoding="utf-8")) if report_path.exists() else None
-    return dict(trial=compute_trial(case, output, report, overlay, rubrics), case=case,
-                hashes=rubric_file_hashes(), source="recomputed")
+    return dict(trial=compute_trial(case, output, report, overlay, rubrics), case=case, source="recomputed")
 
 
-def gate_runs(run_dirs: list[str | Path], overlay_path: str | Path | None = None) -> tuple[GateReport, list[dict]]:
-    """Treat several run directories as trials of the same case and gate them together."""
+def load_runs(run_dirs: list[str | Path], overlay_path: str | Path | None = None) -> list[dict]:
+    """Load several runs of the same case and gold version with their rubric trials."""
     if not run_dirs:
-        raise ValueError("gate needs at least one run directory")
+        raise ValueError("need at least one run directory")
     overlay = load_overlay(overlay_path or DEFAULT_OVERLAY)
     rubrics = load_rubrics()
     runs = [load_run_trial(d, overlay, rubrics) for d in run_dirs]
-    if len({json.dumps(r["hashes"], sort_keys=True) for r in runs}) != 1:
-        raise ValueError("cannot gate runs scored with different rubric files")
-    if len({r["case"]["metadata"]["input_sha256"] for r in runs}) != 1 or \
-            len({r["case"]["metadata"]["expected_output_sha256"] for r in runs}) != 1:
-        raise ValueError("cannot gate runs of different cases or gold versions")
-    approved = gold_approved(runs[0]["case"], overlay)
-    modules = [m for m in RUN_MODULES if any(x.id in r["trial"] for r in runs for x in rubrics.module(m))]
-    return evaluate_gate(rubrics, [r["trial"] for r in runs], gold_approved=approved, modules=modules or list(RUN_MODULES)), runs
+    if len({r["case"]["metadata"]["input_sha256"] for r in runs}) != 1 or             len({r["case"]["metadata"]["expected_output_sha256"] for r in runs}) != 1:
+        raise ValueError("runs belong to different cases or gold versions")
+    return runs

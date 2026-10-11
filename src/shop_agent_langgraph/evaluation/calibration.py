@@ -10,7 +10,7 @@ from ..agents.eval.schemas import FieldScore, ItemReview, SchemaReview
 from .cases import digest, write_json
 
 
-RUBRIC_PREFIXES = ("evaluation/rubrics/", "eval/cases/")
+RUBRIC_PREFIXES = ("evaluation/rubrics/", "evaluation/schema_fields.yaml", "eval/cases/")
 
 
 def calibrate(samples, jev, directory, *, client=None):

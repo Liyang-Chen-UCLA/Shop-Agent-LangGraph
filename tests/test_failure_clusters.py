@@ -22,30 +22,29 @@ def test_signatures_drop_specific_values():
     assert fc.template("gold is attribute, actual is ['criterion']", "kind") == "kind: attribute→criterion"
     assert fc.template("3 gold to 1 actual", "") == "多个 gold 合并为 1 个输出"
     assert fc.template("excluded keywords: ['质保']", "") == fc.template("excluded keywords: ['销量']", "")
-    assert fc.template("Gold allows hours and minutes", "units") is None   # free text goes to the LLM
+    assert fc.template("core dimension is missing from Market", "") == "核心维度缺失"
+    assert fc.template("something new", "units") is None                   # falls back to the raw reason
     assert fc.research_feature("RS-3", {"value": "≤8", "source_text": "距离： $ \\leq8M $"}) == "引文含 LaTeX/公式写法"
     assert fc.research_feature("RS-3", {"value": "PC/安卓", "source_text": "PC 电脑 安卓"}) == "value 由多处原文拼接"
 
 
-def test_cascades_attach_to_root_on_same_object():
+def test_cascades_attach_to_merge_or_kind_type_root():
     units = [
-        unit("AG-1", "delivery/vibration", "core dimension is missing from Market"),
-        unit("AG-4", "delivery/vibration", "core dimension is missing"),
         unit("AG-3", "delivery/grip.kind", "gold is attribute, actual is ['criterion']"),
         unit("AG-3", "delivery/grip.direction", "field exists on actual only"),
-        unit("AG-5", "delivery/grip.direction", fc.DERIVED_FROM_TYPE),
-        unit("AG-4", "delivery/motor_type", "2 gold to 1 actual"),
-        unit("AG-5", "delivery/motor_count.values", "Actual mixes motor count with type"),
-        unit("AG-5", "delivery/battery.units", "Gold allows hours and minutes"),
+        unit("AG-1", "delivery/motor_type", "2 gold to 1 actual"),
+        unit("AG-3", "delivery/motor_count.kind", "gold is attribute, actual is ['criterion']"),
+        unit("AG-3", "delivery/motor_count.direction", "field exists on actual only"),
+        unit("AG-3", "delivery/battery.units", "field exists on gold only"),
     ]
     fc.attach_cascades(units, [{"report": REPORT}])
     roots = {u["id"]: u["root"] for u in units}
-    assert roots["r0|AG-4|delivery/vibration"] == "r0|AG-1|delivery/vibration"
-    assert roots["r0|AG-3|delivery/grip.direction"] == roots["r0|AG-5|delivery/grip.direction"] == "r0|AG-3|delivery/grip.kind"
-    assert roots["r0|AG-5|delivery/motor_count.values"] == "r0|AG-4|delivery/motor_type"   # same matching group
-    assert roots["r0|AG-5|delivery/battery.units"] is None
+    assert roots["r0|AG-3|delivery/grip.direction"] == "r0|AG-3|delivery/grip.kind"
+    merge = "r0|AG-1|delivery/motor_type"                          # same matching group
+    assert roots["r0|AG-3|delivery/motor_count.kind"] == roots["r0|AG-3|delivery/motor_count.direction"] == merge
+    assert roots["r0|AG-3|delivery/battery.units"] is None and roots[merge] is None
     groups = fc.initial_groups(units)
-    assert sorted(len(g["units"]) for g in groups) == [1, 1, 1, 1]
+    assert sorted(len(g["units"]) for g in groups) == [1, 1, 1]
 
 
 def test_initial_groups_pool_runs_by_signature():
@@ -88,8 +87,6 @@ class FakeModel:
             def invoke(self, messages):
                 model.calls.append((schema.__name__, messages))
                 payload = json.loads(messages[1]["content"])
-                if schema is fc.ReasonTyping:
-                    return schema(items=[dict(unit_id=u["unit_id"], error_type="其他", note="测试") for u in payload])
                 ids = [g["id"] for g in payload["groups"]]
                 first = sum(1 for name, _ in model.calls if name == "ClusterProposal") == 1
                 chosen = ids[:-1] if first and len(ids) > 1 else ids
@@ -122,6 +119,7 @@ def test_cluster_failures_on_saved_run(tmp_path):
     assert "被拒绝" in model.calls[-1][1][-1]["content"]
     markdown = (tmp_path / "out" / "clusters.md").read_text(encoding="utf-8")
     assert "⚠ 全部" in markdown and "如果改 X" in markdown
+    assert result["rubric_hashes"] == rubric["rubric_hashes"]
 
 
 def test_cluster_ids_depend_only_on_signatures():

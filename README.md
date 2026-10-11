@@ -238,8 +238,8 @@ Fixed-product experiments evaluate Research and Market delivery against a versio
 gold draft, with TypeSafe Jev shadow judgments and native Langfuse annotation tasks.
 See [the evaluation lifecycle and commands](docs/market-evaluation-lifecycle.md).
 
-## Rubric gate
+## Rubrics
 
-Explicit yes/no rubrics (YAML, code- or LLM-judged) cover the chain up to Market Agent, with a
-veto/gate/monitor scoring gate. `uv run python scripts/market_evaluation.py gate --runs <run dir>`
-scores saved runs and exits 1 on block. See [the rubric catalogue and gate rules](docs/rubric.md).
+Seven code-checked yes/no rubrics (YAML) cover Research and Market aggregation. Each experiment
+reports their pass rates (`rubric.json`, `rubric.md`, Langfuse `rubric.<id>`); there is no gate.
+See [the rubric catalogue](docs/rubric.md).

@@ -18,7 +18,7 @@ SCORE_NAME = "human_correct"
 QUEUE_DESCRIPTION = ("固定商品集评测的人工标注队列，按 task_kind 筛选。打分任务（gold_item、gold_collection、matching、"
                      "schema_field）只填 human_correct；归因任务（cluster、unit，名称以“归因-”开头）只填“失败负责方”。")
 SCORE_DESCRIPTION = "True 表示该题所问内容正确，False 表示错误；无法判断时不要标，保持待审。"
-REVIEW_VERSION = "v2"  # v2: schema-field questions render from rubrics/aggregation.yaml
+REVIEW_VERSION = "v2"  # v2: schema-field questions render from schema_fields.yaml
 
 
 def review_tasks(case, report: EvalReport | None = None):

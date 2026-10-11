@@ -24,14 +24,14 @@ from pydantic import BaseModel
 from ..agents.eval.schemas import EvalReport
 from .annotations import QUEUE_NAME, all_items, ensure_score_config, review_tasks
 from .cases import digest
-from .failure_clusters import DERIVED_FROM_TYPE, split_unit, structured
+from .failure_clusters import split_unit, structured
 from .rubric import GoldOverlay, RubricSet, load_overlay, load_rubrics
 from .rubric_run import DEFAULT_OVERLAY
 
 ROOT = Path(__file__).resolve().parents[3]
 SCORE_NAME = "失败负责方"
 AI_SCORE_NAME = "AI初判负责方"
-ATTRIBUTION_VERSION = "v3"  # v3: Chinese task names, keys and category labels
+ATTRIBUTION_VERSION = "v4"  # v4: MVP rubrics, no gate wording
 OWNERS = ("agent", "rubric", "gold", "judge", "unclear")
 # Category labels shown in the queue; codes stay English in files and code.
 OWNER_LABELS = {"agent": "Agent 行为错误", "rubric": "规则或检查器问题", "gold": "gold 有误",
@@ -41,9 +41,9 @@ OBSERVATION_NAMES = {"cluster": "归因-失败簇", "unit": "归因-单个失败
 # One wording for the AI prompt and the human question.
 OWNER_DEFINITIONS = {
     "agent": "Agent 的输出违背商品原文或已定规则（Research 抽取、Market 聚合的行为本身有错）。",
-    "rubric": "规则、检查器、阈值或评分政策不合适：检查器误判、overlay 关键词、AG-4 是否接受拆分等。",
+    "rubric": "规则、检查器或评分政策不合适：检查器误判、overlay 关键词、AG-1 是否接受拆分等。",
     "gold": "gold 项的定义、取值、kind/type 或证据有错或有遗漏。",
-    "judge": "评测器中的 LLM 判错：EvalAgent 的维度匹配（会造成缺失/合并/拆分）或字段打分。",
+    "judge": "评测器中的 LLM 判错：EvalAgent 的维度匹配（会造成缺失/合并/拆分）。",
     "unclear": "证据不足以判断，或簇内单元的负责方不一致（在评论里用“拆:”列出单元）。",
 }
 OWNER_DESCRIPTION = "这类失败该由谁负责：" + "；".join(f"{OWNER_LABELS[k]} = {v}" for k, v in OWNER_DEFINITIONS.items())
@@ -51,9 +51,6 @@ QUESTION = "这类失败该由谁负责？只看本任务给出的证据，在�
 MATCH_RESULTS = {"missing": "缺失：gold 有这个维度，Agent 输出里没有配上的", "extra": "多出：Agent 输出有，gold 里没有对应维度"}
 LABELS = {"criterion": "criteria（质量标准，有优劣方向）", "attribute": "attributes（分类属性，无优劣）",
           "boolean": "boolean（有/无）", "numeric": "numeric（数值）", "categorical": "categorical（枚举）"}
-SEVERITY = {"veto": "一票否决：任一单元失败，整次交付即被阻断（block）",
-            "gate": "门槛：通过率低于阈值 {threshold} 时阻断",
-            "monitor": "仅监控：只报告通过率，不影响门禁结论"}
 GLOSSARY = {
     "Agent 输出（actual）": "Market Agent 读完 9 款手柄的商品页后，整理出的选购维度清单。",
     "gold": "人工整理的参考维度清单，含每个维度的定义和商品原文证据。目前是草稿，尚未整体批准，本身也可能有错。",
@@ -65,8 +62,8 @@ GLOSSARY = {
     "根失败 / 连带失败": "程序把由同一处错误推出来的失败挂到上游那一条（根失败）下面，例如 kind 判错后 direction 字段必然多出或缺少；连带失败不单独计数。",
     "run": "一次完整的评测实验，用 run 目录名（时间戳）区分。",
 }
-MATCHING_RUBRICS = {"AG-1", "AG-2", "AG-4"}
-FIELD_RUBRICS = {"AG-3", "AG-5"}
+MATCHING_RUBRICS = {"AG-1"}
+FIELD_RUBRICS = {"AG-3"}
 
 OWNER_PROMPT = """你在为商品维度评测的失败簇做初步归因：这类失败该由谁负责。负责方只能从下列取值中选：
 """ + "\n".join(f"- {k}：{v}" for k, v in OWNER_DEFINITIONS.items()) + """
@@ -108,18 +105,12 @@ def label(value: str) -> str:
 
 
 def rule_explanation(rubric_id: str, rubrics: RubricSet, overlay: GoldOverlay) -> dict:
-    """The rule as a reviewer needs it: what is checked, how, and what a failure blocks."""
+    """The rule as a reviewer needs it: what is checked and from which data (all checks are code)."""
     r = rubrics.by_id[rubric_id]
-    rule = {"规则": f"{r.id}：{r.question}", "通过条件": r.pass_, "失败条件": r.fail,
-            "判定方式": "代码确定性检查（不经过 LLM）" if r.judge == "code"
-                        else "LLM 裁判打分（shadow：只报告，不影响门禁）",
-            "级别": SEVERITY[r.severity].format(threshold=r.threshold),
-            "是否依赖 gold": "是：gold 未批准时，失败只记为待复核（needs_review），不直接阻断" if r.depends_on_gold
-                             else "否：不参照 gold，只看输出本身",
-            "数据来源": r.data_source}
+    rule = {"规则": f"{r.id}：{r.question}", "通过条件": r.pass_, "失败条件": r.fail, "数据来源": r.data_source}
     if rubric_id == "AG-6":
         rule["排除关键词"] = overlay.excluded_keywords
-    if rubric_id in ("AG-1", "AG-4"):
+    if rubric_id == "AG-1":
         rule["核心维度"] = overlay.core_ids
     return rule
 
@@ -138,12 +129,10 @@ def explain_unit(unit: dict) -> str:
     if m := re.search(r"(\d+) gold to (\d+) actual", reason):
         if int(m[1]) > 1:
             return (f"匹配时，{m[1]} 个 gold 维度（含核心维度{name}）对应到同 1 个输出维度，"
-                    f"即 Agent 把它们合并成了一个。AG-4 要求核心维度一对一。")
-        return f"匹配时，核心维度{name}对应到 {m[2]} 个输出维度，即 Agent 把它拆成了多个。AG-4 要求核心维度一对一。"
+                    f"即 Agent 把它们合并成了一个。AG-1 要求核心维度一对一。")
+        return f"匹配时，核心维度{name}对应到 {m[2]} 个输出维度，即 Agent 把它拆成了多个。AG-1 要求核心维度一对一。"
     if reason.startswith("core dimension is missing"):
         return f"核心维度{name}在 Agent 输出中找不到对应维度（匹配结果为 missing）。核心维度必须全部出现。"
-    if reason == "dimension is missing from Market":
-        return f"非核心维度{name}在 Agent 输出中找不到对应维度（匹配结果为 missing）。AG-2 只做监控，不影响门禁。"
     if m := re.search(r"excluded keywords: \[(.*)\]", reason):
         return f"Agent 输出的维度{name}的名称或别名含排除关键词 {m[1]}，被视为与商品本身无关的维度。"
     if "mixed group" in reason:
@@ -152,10 +141,6 @@ def explain_unit(unit: dict) -> str:
         return f"Research 对{name}记录的引文 source_text 在该商品冻结原文里找不到（去掉空白后逐字比对，不做其他归一化）。"
     if m := re.search(r"\[(.*)\] not found in source_text", reason):
         return f"Research 对{name}抽取的 {m[1]} 没有逐字出现在它自己的引文 source_text 中。"
-    if reason == DERIVED_FROM_TYPE:
-        return f"{name}的 {field} 分不是 LLM 判的，而是根据 kind/type 或字段是否存在推导出来的。"
-    if unit["rubric"] == "AG-5":
-        return f"LLM 字段裁判认为{name}的 {field} 与 gold 语义不一致：{unit.get('note') or reason}"
     return f"{name}：{reason}"
 
 
@@ -215,7 +200,7 @@ def attribution_tasks(result: dict, owners: dict) -> tuple[list[dict], dict]:
     """One task per cluster plus one per exception unit; returns (tasks, AI owner by task ID)."""
     first_run = Path(result["runs"][0]["run_dir"])
     case = read_json(first_run / "case.json")
-    rubric_hashes = read_json(first_run / "rubric.json")["rubric_hashes"]
+    rubric_hashes = result["rubric_hashes"]
     records = {unit_key(u["ref"]): u for u in result["units"]}
     experiment = {r["run_dir"]: r.get("experiment_url") for r in result["runs"]}
     rubrics, overlay = load_rubrics(), load_overlay(DEFAULT_OVERLAY)

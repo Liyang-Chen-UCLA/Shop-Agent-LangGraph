@@ -20,7 +20,7 @@ from ..core.llm import build_deepseek_model
 from ..core.tracing import redact
 from ..domain.criteria import CriteriaAttributeSet
 from .cases import validate_case, write_json
-from .rubric import load_overlay, load_rubrics, rubric_file_hashes
+from .rubric import load_overlay, load_rubrics, rubric_file_hashes, schema_fields_hash
 from .rubric_run import DEFAULT_OVERLAY, compute_trial, rubric_scores, write_rubric_artifacts
 
 
@@ -39,7 +39,7 @@ def versions():
             "code_hashes": {str(p.relative_to(root / "src/shop_agent_langgraph")).replace("\\", "/"):
                 hashlib.sha256(p.read_bytes()).hexdigest() for p in (root / "src/shop_agent_langgraph").rglob("*.py")},
             "prompt_hashes": {**{name: hashlib.sha256((root / "src/shop_agent_langgraph" / name).read_bytes()).hexdigest() for name in files},
-                              **rubric_file_hashes(), OVERLAY_KEY: hashlib.sha256(DEFAULT_OVERLAY.read_bytes()).hexdigest()}}
+                              **rubric_file_hashes(), **schema_fields_hash(), OVERLAY_KEY: hashlib.sha256(DEFAULT_OVERLAY.read_bytes()).hexdigest()}}
 
 
 def report_scores(report):
@@ -120,10 +120,8 @@ def run_experiment(case, output_dir, *, client=None, jev=None, actual_path=None,
         manifest["evaluation_complete"] = True
         manifest["metrics"] = report.metrics.model_dump(mode="json")
         write_json(directory / "manifest.json", manifest)
-        gate = write_rubric_artifacts(directory, compute_trial(case, output, report, overlay, rubrics), case, overlay, rubrics)
-        manifest["rubric_gate"] = dict(conclusion=gate.conclusion, blockers=gate.blockers, needs_review=gate.reviews)
-        write_json(directory / "manifest.json", manifest)
-        return report_scores(report) + rubric_scores(gate)
+        outcomes = write_rubric_artifacts(directory, compute_trial(case, output, report, overlay, rubrics), case, overlay, rubrics)
+        return report_scores(report) + rubric_scores(outcomes)
 
     try:
         if client:

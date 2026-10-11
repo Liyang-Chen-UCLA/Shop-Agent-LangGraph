@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
-import sys
 
 from shop_agent_langgraph.agents.eval.jev import JevJudge
 from shop_agent_langgraph.agents.eval.schemas import EvalReport
@@ -16,8 +15,6 @@ from shop_agent_langgraph.evaluation.annotations import attach_judge_scores, col
 from shop_agent_langgraph.evaluation.cases import load_case, prepare_case, write_json
 from shop_agent_langgraph.evaluation.experiment import run_experiment
 from shop_agent_langgraph.evaluation.calibration import calibrate, compare_runs
-from shop_agent_langgraph.evaluation.rubric import render_gate_markdown
-from shop_agent_langgraph.evaluation.rubric_run import gate_runs
 from shop_agent_langgraph.evaluation.failure_clusters import cluster_failures, write_clusters
 from shop_agent_langgraph.evaluation import attribution
 from shop_agent_langgraph.evaluation.datasets import DATASET_NAME, case_from_dataset, dataset_draft, publish_dataset
@@ -75,11 +72,6 @@ def main():
     compare.add_argument("--baseline", type=Path, required=True)
     compare.add_argument("--candidate", type=Path, required=True)
     compare.add_argument("--output", type=Path, required=True)
-    gate = sub.add_parser("gate", help="Score saved runs (trials of one case) against the rubrics; exit 1 on block")
-    gate.add_argument("--runs", nargs="+", type=Path, required=True, help="Run directories holding market.json")
-    gate.add_argument("--overlay", type=Path, help="Gold-dependent rubric overlay (default: gamepad)")
-    gate.add_argument("--output", type=Path, help="Also write gate.json and gate.md into this directory")
-    gate.add_argument("--fail-on-review", action="store_true", help="Treat needs_review as a failure too")
     cluster = sub.add_parser("cluster", help="Group rubric failures of saved runs into root-cause clusters for review")
     cluster.add_argument("--runs", nargs="+", type=Path, required=True, help="Run directories of one case and gold version")
     cluster.add_argument("--output", type=Path, required=True, help="Directory for clusters.json and clusters.md")
@@ -153,17 +145,6 @@ def main():
         result = calibrate(labels, JevJudge(model=os.getenv("JEV_MODEL", "jev-1.13.0")),
                            args.output, client=tracing_client(args.langfuse))
         print(json.dumps(result, ensure_ascii=False))
-    elif args.command == "gate":
-        report, _ = gate_runs(args.runs, args.overlay)
-        markdown = render_gate_markdown(report)
-        if args.output:
-            write_json(args.output / "gate.json", report.model_dump(mode="json"))
-            (args.output / "gate.md").write_text(markdown, encoding="utf-8")
-        sys.stdout.reconfigure(encoding="utf-8")
-        print(markdown)
-        print(f"GATE: {report.conclusion}")
-        if report.conclusion == "block" or (args.fail_on_review and report.conclusion == "needs_review"):
-            sys.exit(1)
     elif args.command == "cluster":
         result = cluster_failures(args.runs, build_deepseek_model())
         write_clusters(result, args.output)
