@@ -2209,6 +2209,170 @@
           "note": ""
         }
       ]
+    },
+    {
+      "id": "motion_control",
+      "name": "体感功能",
+      "description": "将姿态/运动用作游戏输入。原生体感、PC映射、六轴传感与AI算法分开注明；360度摇杆文案不证明体感。",
+      "aliases": [
+        "体感输入"
+      ],
+      "type": "boolean",
+      "direction": {
+        "type": "true_better"
+      },
+      "evidence_item_ids": [
+        "788146516430",
+        "844285076150",
+        "837987833992",
+        "830675215338",
+        "688995695211",
+        "855985116346"
+      ],
+      "evidence": [
+        {
+          "item_id": "788146516430",
+          "record_id": "788146516430@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/788146516430/002.jpg"
+          ],
+          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
+          "quote": "支持体感游戏",
+          "source_context": "，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
+          "note": "电竞/机械款。"
+        },
+        {
+          "item_id": "844285076150",
+          "record_id": "844285076150@2026-08-31",
+          "page_id": "page-0007",
+          "source_image_paths": [
+            "images/游戏手柄/844285076150/007.jpg"
+          ],
+          "page_text_sha256": "8af56cfd1969c2b8cdaaad1495a4e0ca6c731a4d8af04787188933192fd077d8",
+          "quote": "PC电脑游戏强开体感",
+          "source_context": "# 黑科技！ AKP $ ^{™} $ 高精准体感 映射技术\n\nPC电脑游戏强开体感，电脑游戏轻松实现体感功能，简简单单，轻松过关。",
+          "note": ""
+        },
+        {
+          "item_id": "837987833992",
+          "record_id": "837987833992@2026-08-31",
+          "page_id": "page-0014",
+          "source_image_paths": [
+            "images/游戏手柄/837987833992/037.gif",
+            "images/游戏手柄/837987833992/038.jpg"
+          ],
+          "page_text_sha256": "78a2d222b7d495cdc19b61b6ea9b3b429c83c6aae90ad2c1c9ce16562577cd80",
+          "quote": "AI锚定体感技术",
+          "source_context": "※语音功能需下载北通游戏厅开启AI语音功能，保持北通游戏厅在电脑后台开启并连接音箱/耳机等音频设备\n# AI锚定体感技术 灵敏升级 角色动作跟随无延迟\n智能识别有效操作和无效抖动，指令传递迅速、直接、无延迟，角色动作与你如出一辙",
+          "note": ""
+        },
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0022",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/023.jpg"
+          ],
+          "page_text_sha256": "62a17397d62e6ef66c2476c6b551262457b8c5009b782dff0781462e39cb0488",
+          "quote": "六轴体感",
+          "source_context": "## 六轴体感 将动作指令直观输入游戏场景",
+          "note": ""
+        },
+        {
+          "item_id": "688995695211",
+          "record_id": "688995695211@2026-08-31",
+          "page_id": "page-0019",
+          "source_image_paths": [
+            "images/游戏手柄/688995695211/020.jpg",
+            "images/游戏手柄/688995695211/021.jpg"
+          ],
+          "page_text_sha256": "5b8e5429a16f6da1ead9d09f70ee89c6367c3cb17e14c4e9206228d057b594f1",
+          "quote": "原子式六轴体感映射",
+          "source_context": "不止硬件更有调校\n①专利体感技术\n真六轴超强BUFF\n大幅提升子弹命中率\n北通自研原子式六轴体感映射\n全方位灵活体感，紧贴手势快速输出",
+          "note": ""
+        },
+        {
+          "item_id": "855985116346",
+          "record_id": "855985116346@2026-08-31",
+          "page_id": "page-0002",
+          "source_image_paths": [
+            "images/游戏手柄/855985116346/002.png"
+          ],
+          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
+          "quote": "六轴体感陀螺仪",
+          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "nfc",
+      "name": "NFC功能",
+      "description": "支持Switch Amiibo等NFC用途。前页NEC为OCR歧义，但后页有明确NFC与用途，可据后页标注。",
+      "aliases": [],
+      "type": "boolean",
+      "direction": {
+        "type": "true_better"
+      },
+      "evidence_item_ids": [
+        "830675215338"
+      ],
+      "evidence": [
+        {
+          "item_id": "830675215338",
+          "record_id": "830675215338@2026-08-31",
+          "page_id": "page-0023",
+          "source_image_paths": [
+            "images/游戏手柄/830675215338/024.jpg"
+          ],
+          "page_text_sha256": "1c99fcbd12f587290e8d44c24c7c2e97738e7b34fcf744ba0ed8f76188d099e0",
+          "quote": "支持连接Switch使用NFC功能刷Amiibo",
+          "source_context": "## NFC+唤醒NS主机 体验再进一步\n唤醒主机即刻启动游戏，\n支持连接Switch使用NFC功能刷Amiibo来获取道具，\n带来更丰富的游戏互动和道具获取方式",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "headset_jack",
+      "name": "耳麦接口",
+      "description": "明确的音频孔，记录孔径；Type-C充电孔不证明音频支持。",
+      "aliases": [
+        "耳机接口"
+      ],
+      "type": "boolean",
+      "direction": {
+        "type": "true_better"
+      },
+      "evidence_item_ids": [
+        "876074628579"
+      ],
+      "evidence": [
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0011",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/011.jpg"
+          ],
+          "page_text_sha256": "1de4cf9631f9f8cfd6ad8b07b16c926729e880e78a22020b88dd6982bde26971",
+          "quote": "3.5mm耳机孔",
+          "source_context": "Volume Controls\n## 声音控制\n不得不说，有些时候，我们很需要这个3.5mm耳机孔，不管是防止打扰，联机交流，还是增加沉浸感，小身材，大用处。",
+          "note": ""
+        },
+        {
+          "item_id": "876074628579",
+          "record_id": "876074628579@2026-08-31",
+          "page_id": "page-0015",
+          "source_image_paths": [
+            "images/游戏手柄/876074628579/015.jpg"
+          ],
+          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
+          "quote": "3.5mm耳麦孔",
+          "source_context": "|  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清单 | 手柄1台、数据线1条、说明书1份 |  |\n\n服务电话 400-963-9188",
+          "note": ""
+        }
+      ]
     }
   ],
   "attributes": [
@@ -2908,99 +3072,6 @@
       ]
     },
     {
-      "id": "motion_control",
-      "name": "体感功能",
-      "description": "将姿态/运动用作游戏输入。原生体感、PC映射、六轴传感与AI算法分开注明；360度摇杆文案不证明体感。",
-      "aliases": [
-        "体感输入"
-      ],
-      "type": "boolean",
-      "evidence_item_ids": [
-        "788146516430",
-        "844285076150",
-        "837987833992",
-        "830675215338",
-        "688995695211",
-        "855985116346"
-      ],
-      "evidence": [
-        {
-          "item_id": "788146516430",
-          "record_id": "788146516430@2026-08-31",
-          "page_id": "page-0002",
-          "source_image_paths": [
-            "images/游戏手柄/788146516430/002.jpg"
-          ],
-          "page_text_sha256": "65adac97f3861c4df5ceb76eb1209588b2f2a842ce8928188f4c534ed1e73876",
-          "quote": "支持体感游戏",
-          "source_context": "，车机配置不够跑起来不流畅。\n蓝牙手柄续航多久？\nA 充电2小时，续航8小时（电竞款/机械款10-12小时），车机上不支持边冲边玩。\nQ 几款手柄有什么差别？\nA 车机上玩买69元那款即可。贵的手柄在用料/手感/功能上更好，电竞款外观炫酷，支持体感游戏，灯光和马达可调节，按键更多；机械款功能与电竞款相似，机械按键响应更快，适合对手柄手感功能有更高要求的客户。",
-          "note": "电竞/机械款。"
-        },
-        {
-          "item_id": "844285076150",
-          "record_id": "844285076150@2026-08-31",
-          "page_id": "page-0007",
-          "source_image_paths": [
-            "images/游戏手柄/844285076150/007.jpg"
-          ],
-          "page_text_sha256": "8af56cfd1969c2b8cdaaad1495a4e0ca6c731a4d8af04787188933192fd077d8",
-          "quote": "PC电脑游戏强开体感",
-          "source_context": "# 黑科技！ AKP $ ^{™} $ 高精准体感 映射技术\n\nPC电脑游戏强开体感，电脑游戏轻松实现体感功能，简简单单，轻松过关。",
-          "note": ""
-        },
-        {
-          "item_id": "837987833992",
-          "record_id": "837987833992@2026-08-31",
-          "page_id": "page-0014",
-          "source_image_paths": [
-            "images/游戏手柄/837987833992/037.gif",
-            "images/游戏手柄/837987833992/038.jpg"
-          ],
-          "page_text_sha256": "78a2d222b7d495cdc19b61b6ea9b3b429c83c6aae90ad2c1c9ce16562577cd80",
-          "quote": "AI锚定体感技术",
-          "source_context": "※语音功能需下载北通游戏厅开启AI语音功能，保持北通游戏厅在电脑后台开启并连接音箱/耳机等音频设备\n# AI锚定体感技术 灵敏升级 角色动作跟随无延迟\n智能识别有效操作和无效抖动，指令传递迅速、直接、无延迟，角色动作与你如出一辙",
-          "note": ""
-        },
-        {
-          "item_id": "830675215338",
-          "record_id": "830675215338@2026-08-31",
-          "page_id": "page-0022",
-          "source_image_paths": [
-            "images/游戏手柄/830675215338/023.jpg"
-          ],
-          "page_text_sha256": "62a17397d62e6ef66c2476c6b551262457b8c5009b782dff0781462e39cb0488",
-          "quote": "六轴体感",
-          "source_context": "## 六轴体感 将动作指令直观输入游戏场景",
-          "note": ""
-        },
-        {
-          "item_id": "688995695211",
-          "record_id": "688995695211@2026-08-31",
-          "page_id": "page-0019",
-          "source_image_paths": [
-            "images/游戏手柄/688995695211/020.jpg",
-            "images/游戏手柄/688995695211/021.jpg"
-          ],
-          "page_text_sha256": "5b8e5429a16f6da1ead9d09f70ee89c6367c3cb17e14c4e9206228d057b594f1",
-          "quote": "原子式六轴体感映射",
-          "source_context": "不止硬件更有调校\n①专利体感技术\n真六轴超强BUFF\n大幅提升子弹命中率\n北通自研原子式六轴体感映射\n全方位灵活体感，紧贴手势快速输出",
-          "note": ""
-        },
-        {
-          "item_id": "855985116346",
-          "record_id": "855985116346@2026-08-31",
-          "page_id": "page-0002",
-          "source_image_paths": [
-            "images/游戏手柄/855985116346/002.png"
-          ],
-          "page_text_sha256": "031a7aca88e2e201db52c132a2f50429d8f54d88b99d3ea36f2b518e7021142d",
-          "quote": "六轴体感陀螺仪",
-          "source_context": "# 高颜值 强悍配置\n六轴体感陀螺仪\n\n一键回连/换醒\n\n一键配对\n\n一键截屏\n\n双马达震动\n\nSwitch对应按键印花",
-          "note": ""
-        }
-      ]
-    },
-    {
       "id": "vibration_symmetry",
       "name": "震动对称配置",
       "description": "按原文记录对称/非对称的马达或震动配置，保留部件、平台、模式和SKU条件。厂商未说明具体实现时不推定机械布局或马达结构；数量单列。",
@@ -3152,68 +3223,6 @@
           "page_text_sha256": "c4ecf02529c40ff68efeafe27c9bab71697c30bb4accf171f09c45e9372a04be",
           "quote": "可化身为一款拓展坞",
           "source_context": "# 智能交互充电底座 从此告别电量焦虑\n智能启停 | 自动回连 | HUB拓展\n手柄放下自动休眠充电，手柄拿起自动唤醒无线回连支持hub拓展\n\n## 拓展坞功能\n当底座连接到电脑时，可化身为一款拓展坞2.4G接收器安装在底座背部获得良好的抗干扰能力",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "id": "headset_jack",
-      "name": "耳麦接口",
-      "description": "明确的音频孔，记录孔径；Type-C充电孔不证明音频支持。",
-      "aliases": [
-        "耳机接口"
-      ],
-      "type": "boolean",
-      "evidence_item_ids": [
-        "876074628579"
-      ],
-      "evidence": [
-        {
-          "item_id": "876074628579",
-          "record_id": "876074628579@2026-08-31",
-          "page_id": "page-0011",
-          "source_image_paths": [
-            "images/游戏手柄/876074628579/011.jpg"
-          ],
-          "page_text_sha256": "1de4cf9631f9f8cfd6ad8b07b16c926729e880e78a22020b88dd6982bde26971",
-          "quote": "3.5mm耳机孔",
-          "source_context": "Volume Controls\n## 声音控制\n不得不说，有些时候，我们很需要这个3.5mm耳机孔，不管是防止打扰，联机交流，还是增加沉浸感，小身材，大用处。",
-          "note": ""
-        },
-        {
-          "item_id": "876074628579",
-          "record_id": "876074628579@2026-08-31",
-          "page_id": "page-0015",
-          "source_image_paths": [
-            "images/游戏手柄/876074628579/015.jpg"
-          ],
-          "page_text_sha256": "cbd165ae739fdd32b23b497f340e82382cfe2a468cb5d5ff91a382f02f4e5b1e",
-          "quote": "3.5mm耳麦孔",
-          "source_context": "|  |\n| ABXY | 统一按力曲线 | 硅胶按键 |\n| 十字键 | 多层次，转动轴心 | 轻触+硅胶按键 |\n| 表面材料 | 像素圆形晒纹 | ABS |\n| 连接方式 | 2.5米优质线材 | 接口可拔插设计 |\n| 声音 | 3.5mm耳麦孔 |  |\n| 支持平台 | Xbox Series X / S | Xbox One |\n| 包装清单 | 手柄1台、数据线1条、说明书1份 |  |\n\n服务电话 400-963-9188",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "id": "nfc",
-      "name": "NFC功能",
-      "description": "支持Switch Amiibo等NFC用途。前页NEC为OCR歧义，但后页有明确NFC与用途，可据后页标注。",
-      "aliases": [],
-      "type": "boolean",
-      "evidence_item_ids": [
-        "830675215338"
-      ],
-      "evidence": [
-        {
-          "item_id": "830675215338",
-          "record_id": "830675215338@2026-08-31",
-          "page_id": "page-0023",
-          "source_image_paths": [
-            "images/游戏手柄/830675215338/024.jpg"
-          ],
-          "page_text_sha256": "1c99fcbd12f587290e8d44c24c7c2e97738e7b34fcf744ba0ed8f76188d099e0",
-          "quote": "支持连接Switch使用NFC功能刷Amiibo",
-          "source_context": "## NFC+唤醒NS主机 体验再进一步\n唤醒主机即刻启动游戏，\n支持连接Switch使用NFC功能刷Amiibo来获取道具，\n带来更丰富的游戏互动和道具获取方式",
           "note": ""
         }
       ]

@@ -200,6 +200,28 @@
         "body_dimensions": "categorical -> numeric(mm)"
       },
       "scope": "仅批准分类规则与本次切分，不代表整份gold获批准"
+    },
+    {
+      "id": "criteria_attribute_split_round2",
+      "date": "2026-10-10",
+      "answer": "NFC、体感、耳麦接口；连发调速档数、待机时间、电池续航时间、震动马达数量、马达类型这些也都是criteria",
+      "decision": "promote_scenario_features_confirm_existing_criteria",
+      "promoted_to_criteria": {
+        "boolean_true_better": [
+          "motion_control",
+          "nfc",
+          "headset_jack"
+        ]
+      },
+      "confirmed_criteria": [
+        "turbo_speed_levels",
+        "standby_time",
+        "battery_runtime",
+        "vibration_motor_count",
+        "vibration_motor_type"
+      ],
+      "supersedes": "criteria_attribute_split.kept_as_attributes_confirmed 中的 motion_control、nfc、headset_jack",
+      "scope": "仅批准这三项改类及五项保持criteria，不代表整份gold获批准"
     }
   ],
   "ai_policy_review": {
